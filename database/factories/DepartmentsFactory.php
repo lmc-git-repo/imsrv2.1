@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Department>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Departments>
  */
-class DepartmentFactory extends Factory
+class DepartmentsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,11 @@ class DepartmentFactory extends Factory
     {
         return [
             //
-            'dept_list'=> fake()->unique()->sentence(),
+            'dept_list'=> fake()->unique()->word(),
             'created_by'=> 1,
-            'updated_by'=> 1
+            'updated_by'=> 1,
+            'created_at'=> time(),
+            'updated_at'=> time()
         ];
     }
 }

@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account__users', function (Blueprint $table) {
+        Schema::create('account_users', function (Blueprint $table) {
             $table->id('account_id');
             $table->string('name');
-            $table->string('department');
-            $table->foreign('department')->references('dept_list')->on('departments');
+            $table->string('profile_path')->nullable();
+            $table->string('department_users');
+            $table->foreign('department_users')->references('dept_list')->on('departments');
             $table->string('initial')->unique();
-            $table->enum('status', ['Employed','Resigned','Terminated'])->unique();
+            $table->enum('status', ['Employed','Resigned','Terminated']);
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account__users');
+        Schema::dropIfExists('account_users');
     }
 };
