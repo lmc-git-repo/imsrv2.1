@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DepartmentsResource;
 use App\Models\Departments;
 use App\Http\Requests\StoreDepartmentsRequest;
 use App\Http\Requests\UpdateDepartmentsRequest;
@@ -14,8 +15,12 @@ class DepartmentsController extends Controller
     public function index()
     {
         //
+        $query = Departments::query();
+
+        $departments = $query->paginate(10)->onEachSide(1);
+
         return inertia("Departments/Index", [
-            
+            'departments' => DepartmentsResource::collection($departments)
         ]);
     }
 
