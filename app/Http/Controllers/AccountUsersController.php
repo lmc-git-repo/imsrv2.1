@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AccountUsersResource;
 use App\Models\AccountUsers;
 use App\Http\Requests\StoreAccountUsersRequest;
 use App\Http\Requests\UpdateAccountUsersRequest;
@@ -14,6 +15,13 @@ class AccountUsersController extends Controller
     public function index()
     {
         //
+        $query = AccountUsers::query();
+
+        $accountUsers = $query->paginate(10)->onEachSide(1);
+
+        return inertia("AccountUsers/Index", [
+            'accountUsers' => AccountUsersResource::collection($accountUsers)
+        ]);
     }
 
     /**

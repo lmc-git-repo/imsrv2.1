@@ -33,8 +33,8 @@ export default function Index({auth, departments}){
                                             <td className="px-3 py-2">{department.createdBy.name}</td>
                                             <td className="px-3 py-2 text-nowrap">{department.created_at}</td>
                                             <td className="px-3 py-2 text-right">
-                                                <Link href={route('departments.edit', department.dept_id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">Edit</Link>
-                                                <Link href={route('departments.destroy', department.dept_id)} className="font-medium text-red-500 dark:text-red-500 hover:underline mx-1">Delete</Link>
+                                                <Link href={route('departments.edit', department.dept_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link>
+                                                <Link href={route('departments.destroy', department.dept_id)} className="font-medium inline-block py-1 px-2 rounded-lg text-white bg-red-500 hover:bg-red-700 mx-1">Delete</Link>
                                             </td>
                                         </tr>
                                     ))}

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('department_users');
             $table->foreign('department_users')->references('dept_list')->on('departments');
             $table->string('initial')->unique();
-            $table->enum('status', ['Employed','Resigned','Terminated']);
+            $table->enum('status', ['Employed','Resigned','Terminated'])->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
