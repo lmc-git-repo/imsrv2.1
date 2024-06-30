@@ -35,14 +35,16 @@ export default function Index({auth, accountUsers}) {
                                     <tr className="text-nowrap">
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3">
-                                            <TextInput></TextInput>
+                                            <TextInput />
                                         </th>
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3">
+                                            
+                                        </th>
+                                        <th className="px-3 py-3">
                                             <TextInput />
                                         </th>
-                                        <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
