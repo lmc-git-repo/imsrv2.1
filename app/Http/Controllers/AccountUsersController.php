@@ -17,10 +17,23 @@ class AccountUsersController extends Controller
         //
         $query = AccountUsers::query();
 
-        $accountUsers = $query->paginate(10)->onEachSide(1);
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", "desc");
+
+        if(request("name")){
+            $query->where("name","like","%". request("name") .'%');
+        }
+
+        if(request('status')){
+            $query->where('status', request('status'));
+        }
+
+        $accountUsers = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)->onEachSide(1);
 
         return inertia("AccountUsers/Index", [
-            'accountUsers' => AccountUsersResource::collection($accountUsers)
+            'accountUsers' => AccountUsersResource::collection($accountUsers),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 
