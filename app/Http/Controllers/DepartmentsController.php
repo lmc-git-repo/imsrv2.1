@@ -15,12 +15,32 @@ class DepartmentsController extends Controller
     public function index()
     {
         //
+        // $query = Departments::query();
+
+        // $departments = $query->paginate(10)->onEachSide(1);
+
+        // return inertia("Departments/Index", [
+        //     'departments' => DepartmentsResource::collection($departments)
+        // ]);
         $query = Departments::query();
 
-        $departments = $query->paginate(10)->onEachSide(1);
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", "desc");
+
+        if(request("dept_list")){
+            $query->where("dept_list","like","%". request("dept_list") .'%');
+        }
+
+        // if(request('status')){
+        //     $query->where('status', request('status'));
+        // }
+
+        $departments = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)->onEachSide(1);
 
         return inertia("Departments/Index", [
-            'departments' => DepartmentsResource::collection($departments)
+            'departments' => DepartmentsResource::collection($departments),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 

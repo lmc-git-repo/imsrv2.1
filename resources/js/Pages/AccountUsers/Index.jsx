@@ -56,6 +56,17 @@ export default function Index({auth, accountUsers, queryParams = null}) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(accountUsers, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
+                                <div className="flex justify-end py-2">
+                                    <div>
+                                        <TextInput 
+                                            className="w-full"
+                                            defaultValue={queryParams.name} 
+                                            placeholder="Employee Name"
+                                            onBlur={e => searchFieldChanged('name', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('name', e)} 
+                                        />
+                                    </div>
+                                </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
@@ -115,15 +126,7 @@ export default function Index({auth, accountUsers, queryParams = null}) {
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <TextInput 
-                                                    className="w-full"
-                                                    defaultValue={queryParams.name} 
-                                                    placeholder="Employee Name"
-                                                    onBlur={e => searchFieldChanged('name', e.target.value)}
-                                                    onKeyPress={ e => onKeyPress('name', e)} 
-                                                />
-                                            </th>
+                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3">
@@ -131,7 +134,7 @@ export default function Index({auth, accountUsers, queryParams = null}) {
                                             </th>
                                             <th className="px-3 py-3">
                                                 <SelectInput 
-                                                    className="w-full"
+                                                    className="w-full text-sm h-8 py-1"
                                                     defaultValue={queryParams.status} 
                                                     onChange={ e => searchFieldChanged('status', e.target.value)}
                                                 >
