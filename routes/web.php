@@ -24,5 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/accountUsers/{account_id}', [AccountUsersController::class, 'show'])->name('accountUsers.show');
 
 require __DIR__.'/auth.php';

@@ -56,9 +56,16 @@ class AccountUsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(AccountUsers $accountUsers)
+
+    public function show($account_id)
     {
         //
+        // $accountUser = AccountUsers::findOrFail($account_id);
+        $accountUser = AccountUsers::where('account_id', $account_id)->firstOrFail();
+
+        return inertia("AccountUsers/Show", [
+            'accountUsers' => new AccountUsersResource($accountUser),
+        ]);
     }
 
     /**
