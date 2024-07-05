@@ -4,16 +4,20 @@ import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { ACCOUNTUSERS_STATUS_CLASS_MAP, ACCOUNTUSERS_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
-import { useState } from 'react';
+import { useState } from 'react'
+// import ModalComponent from '@/Components/ModalComponent' -old component on show accountUser showModal
+import Show from './Show'
+import useModal from './hooks/useModal'
+import useCreateModal from './hooks/useCreateModal'
+import CreateModalComponent from './Create'
 
 export default function Index({auth, accountUsers, queryParams = null}) {
     
     queryParams = queryParams || {}
-    const [showModal, setShowModal] = useState(false) // Initialize showModal state
-    const [selectedUser, setSelectedUser] = useState(null) // Initialize selectedUser state
+    const { showModal, selectedUser, openModal, closeModal } = useModal();
+    const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
 
     const searchFieldChanged = (name, value) =>{
         if(value){
@@ -46,23 +50,16 @@ export default function Index({auth, accountUsers, queryParams = null}) {
         }
         router.get(route('accountUsers.index'), queryParams)
     }
-     
-    //MODAL:
-    const openModal = (user, e) => {
-        e.preventDefault(); // Prevent default link behavior
-        setSelectedUser(user);
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-        setSelectedUser(null);
-    };
 
   return (
     <AuthenticatedLayout
         user={auth.user}
-        header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Employees</h2>}
+        header={
+            <div className='flex justify-between items-center'>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Employees</h2>
+                <Button onClick={() => openCreateModal()} className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'>Add</Button>
+            </div>
+        }
     >
         <Head title="Employees" />
         <div className="py-12">
@@ -200,42 +197,9 @@ export default function Index({auth, accountUsers, queryParams = null}) {
                     </div>
                 </div>
             </div>
-            {selectedUser && (
-                <Modal
-                    show={showModal}
-                    // size="lg"
-                    // onClose={closeModal}
-                    onClose={() => closeModal(false)}
-                >
-                    <Modal.Header className='p-4'>
-                        {selectedUser.name}
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="space-y-6">
-                            <div className='flex justify-center'>
-                                <img src={selectedUser.profile_path} alt={`${selectedUser.name}'s profile`} className="mt-3 size-3/4" />
-                            </div>
-                            <div className='flex justify-around'>
-                                <div className='border p-3 w-full'>
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Account ID:</strong> {selectedUser.account_id}</p>
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Department:</strong> {selectedUser.department_users}</p>
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Initials:</strong> {selectedUser.initial}</p>
-                                </div>
-                                <div className="border p-3 w-full">
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Status:</strong> {selectedUser.status}</p>
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Created By:</strong> {selectedUser.createdBy.name}</p>
-                                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'><strong>Created At:</strong> {selectedUser.created_at}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={closeModal} color="blue">
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            )}
+            <Show show={showModal} onClose={closeModal} user={selectedUser} />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
+
     </AuthenticatedLayout>
   )
 }

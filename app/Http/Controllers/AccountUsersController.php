@@ -40,9 +40,10 @@ class AccountUsersController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function CreateModalComponent()
     {
         //
+        return inertia("AccountUsers/Create");
     }
 
     /**
