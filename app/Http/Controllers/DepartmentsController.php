@@ -91,4 +91,12 @@ class DepartmentsController extends Controller
     {
         //
     }
+
+    //
+    public function list()
+    {
+        $departments = Departments::select('dept_id', 'dept_list as name')->get();
+        return response()->json($departments);
+    }
+
 }

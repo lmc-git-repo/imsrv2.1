@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class AccountUsersResource extends JsonResource
 {
@@ -19,7 +20,7 @@ class AccountUsersResource extends JsonResource
         return [
             'account_id' => $this->account_id,
             'name' => $this->name,
-            'profile_path' => $this->profile_path,
+            'profile_path' => $this->profile_path ? Storage::url($this->profile_path) : '',
             'department_users' => $this->department_users,
             'initial' => $this->initial,
             'status' => $this->status,

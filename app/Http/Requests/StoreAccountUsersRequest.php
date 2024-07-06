@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreAccountUsersRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreAccountUsersRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +24,11 @@ class StoreAccountUsersRequest extends FormRequest
     {
         return [
             //
+            "name" => ['required', 'max:255'],
+            "department_users" => ['required', Rule::in(['Testing', 'Test'])],
+            "initial" => ['required', 'max:255'],
+            "status" => ['required', Rule::in(['Employed','Resigned','Terminated'])],
+            "profile_path" => ['nullable', 'image'],
         ];
     }
 }

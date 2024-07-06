@@ -6,7 +6,8 @@ use App\Http\Resources\AccountUsersResource;
 use App\Models\AccountUsers;
 use App\Http\Requests\StoreAccountUsersRequest;
 use App\Http\Requests\UpdateAccountUsersRequest;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 class AccountUsersController extends Controller
 {
     /**
@@ -34,13 +35,14 @@ class AccountUsersController extends Controller
         return inertia("AccountUsers/Index", [
             'accountUsers' => AccountUsersResource::collection($accountUsers),
             'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function CreateModalComponent()
+    public function Create()
     {
         //
         return inertia("AccountUsers/Create");
@@ -52,6 +54,22 @@ class AccountUsersController extends Controller
     public function store(StoreAccountUsersRequest $request)
     {
         //
+        $data = $request->validated();
+        /** @var $profile_path \Illuminate\Http\UploadedFile */
+        $profile_path = $data['profile_path'] ?? null;
+        $data['created_by'] = Auth::id(); 
+        $data['updated_by'] = Auth::id();
+        if($profile_path){
+            $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
+        }
+
+        //?Checking if there's a data is posting after submission 
+        dd($data);
+
+        //*This is for passing the data to create a new employee
+        // AccountUsers::create($data);
+
+        return to_route('accountUsers.index')->with('success', 'New employee was created');
     }
 
     /**
