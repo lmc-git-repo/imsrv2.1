@@ -1,17 +1,15 @@
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { Link, useForm } from '@inertiajs/react';
-import axios from 'axios';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 
 
-
-const CreateModalComponent = ({ show, onClose }) => {
+const CreateModalComponent = ({ show, onClose, departmentsList }) => {
     if (!show) return null;
-    const [departments, setDepartments] = useState([]);
+
     const {data, setData, post, errors, reset} = useForm({
         name: '',
         department_users: '',
@@ -19,26 +17,29 @@ const CreateModalComponent = ({ show, onClose }) => {
         satus: '',
         profile_path: '',
     })
-
-    useEffect(() => {
-        if (show) {
-            axios.get(route('departments.list'))
-                .then(response => {
-                    setDepartments(response.data); // Assuming response.data is structured correctly
-                })
-                .catch(error => {
-                    console.error('Error fetching departments:', error);
-                    setDepartments([]); // Handle error by setting empty array
-                });
-        }
-    }, [show]);
+    const [imagePreview, setImagePreview] = useState(null);
 
     const onSubmit =(e) =>{
         e.preventDefault();
 
-        post(route("accountUsers.store"));
+        post(route("accountUsers.store"), {
+            onSuccess: () => {
+                onClose();
+                reset();
+            }
+        });
     }
-    
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setData("profile_path", file);
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setImagePreview(imageUrl);
+        } else {
+            setImagePreview(null);
+        }
+    };
+
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
@@ -60,6 +61,7 @@ const CreateModalComponent = ({ show, onClose }) => {
                                 // placeholder=""
                                 // isFocused={true}
                                 onChange={(e) => setData("name", e.target.value)}
+                                required
                             />
                             <InputError message={errors.name} className='mt-2' />
                         </div>
@@ -70,12 +72,15 @@ const CreateModalComponent = ({ show, onClose }) => {
                             <SelectInput 
                                 name='department_users'
                                 id="department_users" 
-                                onChange={(e) => setData("department_users", e.target.value)} 
+                                value={data.department_users}
+                                onChange={(e) => setData("department_users", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Department:</option>
-                                {departments.map(dept => (
-                                    <option key={dept.id} value={dept.id}>{dept.name}</option>
+                                <option value="">Select Department</option>
+                                {departmentsList.map(dept => (
+                                    <option key={dept.dept_id} value={dept.dept_list}>
+                                        {dept.dept_list}
+                                    </option>
                                 ))}
                             </SelectInput>
                             <InputError message={errors.department_users} className='mt-2' />
@@ -118,30 +123,46 @@ const CreateModalComponent = ({ show, onClose }) => {
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                    <svg
-                                        className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 20 16"
-                                    >
-                                        <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                        />
-                                    </svg>
-                                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                        <span className="font-semibold">Click to upload</span> or drag and drop
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                    {
+                                        imagePreview ? (
+                                            <div className="mt-4">
+                                                <img src={imagePreview} alt="Profile Preview" className="h-52 w-52 object-cover rounded-full" />
+                                            </div>
+                                        ) : (
+                                        <div className='flex flex-col items-center justify-center'>
+                                            <svg
+                                                className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                            >
+                                                <path
+                                                stroke="currentColor"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                                />
+                                            </svg>
+                                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <span className="font-semibold">Click to upload</span> or drag and drop
+                                            </p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                        </div>
+                                        )
+                                    }
+                                    {/* {imagePreview && (
+                                        <div className="mt-4">
+                                            <img src={imagePreview} alt="Profile Preview" className="h-32 w-32 object-cover rounded-full" />
+                                        </div>
+                                    )} */}
                                 </div>
                                 <FileInput 
                                     id="accountusers_profile_path" 
                                     name='profile_path' 
-                                    onChange={(e) => setData("profile_path", e.target.files[0])} 
+                                    // onChange={(e) => setData("profile_path", e.target.files[0])} 
+                                    onChange={handleFileChange}
                                     className="hidden" 
                                 />
                             </Label>
@@ -159,7 +180,7 @@ const CreateModalComponent = ({ show, onClose }) => {
                 </form>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={onClose } color="blue">
+                <Button onClick={onClose} color="blue">
                     Close
                 </Button>
             </Modal.Footer>
@@ -168,11 +189,3 @@ const CreateModalComponent = ({ show, onClose }) => {
 };
 
 export default CreateModalComponent;
-
-// export default function Create() {
-//     return (
-//         <AuthenticatedLayout>
-//             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
-//         </AuthenticatedLayout>
-//     )
-// }

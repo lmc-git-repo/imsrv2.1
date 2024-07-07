@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Departments extends Model
 {
     use HasFactory;
-
-    protected $table = 'departments';
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');
     }

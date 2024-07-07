@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AccountUsersResource;
+use App\Http\Resources\DepartmentsResource;
 use App\Models\AccountUsers;
 use App\Http\Requests\StoreAccountUsersRequest;
 use App\Http\Requests\UpdateAccountUsersRequest;
+use App\Models\Departments;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 class AccountUsersController extends Controller
@@ -32,8 +34,12 @@ class AccountUsersController extends Controller
         $accountUsers = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)->onEachSide(1);
 
+        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
+        
+
         return inertia("AccountUsers/Index", [
             'accountUsers' => AccountUsersResource::collection($accountUsers),
+            'departmentsList' => DepartmentsResource::collection($departmentsList),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -63,11 +69,11 @@ class AccountUsersController extends Controller
             $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
         }
 
-        //?Checking if there's a data is posting after submission 
-        dd($data);
+        //?Checking if there's a data is posted after submission 
+        // dd($data);
 
         //*This is for passing the data to create a new employee
-        // AccountUsers::create($data);
+        AccountUsers::create($data);
 
         return to_route('accountUsers.index')->with('success', 'New employee was created');
     }

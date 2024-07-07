@@ -13,7 +13,7 @@ import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
 import CreateModalComponent from './Create'
 
-export default function Index({auth, accountUsers, queryParams = null, success}) {
+export default function Index({auth, accountUsers, departmentsList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
     const { showModal, selectedUser, openModal, closeModal } = useModal();
@@ -62,7 +62,7 @@ export default function Index({auth, accountUsers, queryParams = null, success})
         }
     >
         <Head title="Employees" />
-        
+
         <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
@@ -204,7 +204,7 @@ export default function Index({auth, accountUsers, queryParams = null, success})
                 </div>
             </div>
             <Show show={showModal} onClose={closeModal} user={selectedUser} />
-            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} />
 
     </AuthenticatedLayout>
   )

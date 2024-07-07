@@ -17,9 +17,6 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);
-
-    // (for fetching the dept_list file)
-    Route::get('/departments/list', [DepartmentsController::class, 'list'])->name('departments.list');
 });
 
 Route::middleware('auth')->group(function () {
@@ -28,6 +25,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/accountUsers/{account_id}', [AccountUsersController::class, 'show'])->name('accountUsers.show');
-// Route::get('/departments/list', [DepartmentsController::class, 'show'])->name('departments.list');
 
 require __DIR__.'/auth.php';
