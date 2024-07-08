@@ -112,11 +112,10 @@ class AccountUsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AccountUsers $accountUsers)
+    public function destroy(AccountUsers $accountUser)
     {
-        //
-        // $name = $accountUsers->name;
-        $accountUsers->delete();
-        return to_route('accountUsers.index')->with('success', "Employee was successfully deleted!");
+        $name = $accountUser->name;
+        $accountUser->delete();
+        return to_route('accountUsers.index')->with('success', "Employee - \" $name\" successfully deleted!");
     }
 }

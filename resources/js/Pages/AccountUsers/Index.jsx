@@ -49,17 +49,15 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
             queryParams.sort_direction = 'asc';
         }
         router.get(route('accountUsers.index'), queryParams)
-    }
-
-    const deleteAccountUsers = (accountusers) => {
-        if(!window.confirm('Are you sure you want to delete?'))
-        {
-            return;
-        }
-        router.delete(route("accountUsers.destroy", accountusers.account_id));
-        
     };
 
+    const deleteAccountUsers = (accountusers) => {
+        if (!window.confirm('Are you sure you want to delete this employee?')) {
+            return;
+        }
+        router.delete(route('accountUsers.destroy', accountusers.account_id))
+    };    
+    
   return (
     <AuthenticatedLayout
         user={auth.user}

@@ -9,6 +9,7 @@ class AccountUsers extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'account_id';  // Add this line
     protected $fillable = ['name', 'department_users', 'initial', 'status', 'profile_path', 'created_by', 'updated_by'];
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');
