@@ -57,7 +57,7 @@ const ModalComponent = ({ show, onClose, user }) => {
       <Modal.Body>
         <div className="space-y-6">
           <div className="flex justify-center">
-            <img src={user.profile_path} alt={`${user.name}'s profile`} className="mt-3 size-3/4" />
+            <img src={user.profile_path} alt={`${user.name}'s profile`} className="mt-3 size-2/4" />
           </div>
           <div className="flex justify-around">
             <div className="border rounded p-3 w-full">

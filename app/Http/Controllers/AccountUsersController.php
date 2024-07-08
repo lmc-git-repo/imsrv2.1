@@ -115,5 +115,8 @@ class AccountUsersController extends Controller
     public function destroy(AccountUsers $accountUsers)
     {
         //
+        // $name = $accountUsers->name;
+        $accountUsers->delete();
+        return to_route('accountUsers.index')->with('success', "Employee was successfully deleted!");
     }
 }
