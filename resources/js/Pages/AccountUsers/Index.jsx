@@ -21,7 +21,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
     const { showModal, selectedUser, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, openEditModal, closeEditModal } = useEditModal();
-
+    
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -236,7 +236,13 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
             </div>
             <Show show={showModal} onClose={closeModal} user={selectedUser} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} />
-            <EditModalComponent show={showEditModal} onClose={closeEditModal} departmentsList={departmentsList.data} />
+            <EditModalComponent 
+                show={showEditModal} 
+                onClose={closeEditModal} 
+                listDepartments={departmentsList.data}
+                accountUsersEdit={accountUsers}
+
+            />
 
     </AuthenticatedLayout>
   )

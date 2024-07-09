@@ -7,16 +7,15 @@ import { useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, departmentsList }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, accountUsersEdit }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        name: accountusers.name || '',
-        department_users: accountusers.department_users || '',
-        initial: accountusers.initial || '',
-        satus: accountusers.status || '',
+        name: '',
+        department_users: '',
+        initial: '',
+        satus: '',
         profile_path: '',
-        profile_path: accountusers.profile_path || '',
     })
 
     const [imagePreview, setImagePreview] = useState(null);
@@ -45,7 +44,10 @@ const EditModalComponent = ({ show, onClose, departmentsList }) => {
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit employee
+                Edit employee - {accountUsersEdit.name}
+                {console.log(accountUsersEdit.data.map(user => (
+                    user.name
+                )))}
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
@@ -79,7 +81,7 @@ const EditModalComponent = ({ show, onClose, departmentsList }) => {
                                 required 
                             >
                                 <option value="">Select Department</option>
-                                {departmentsList.map(dept => (
+                                {listDepartments.map(dept => (
                                     <option key={dept.dept_id} value={dept.dept_list}>
                                         {dept.dept_list}
                                     </option>

@@ -35,11 +35,12 @@ class AccountUsersController extends Controller
             ->paginate(10)->onEachSide(1);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        
+        $accountUsersAllData = AccountUsers::orderBy('account_id')->get();
 
         return inertia("AccountUsers/Index", [
             'accountUsers' => AccountUsersResource::collection($accountUsers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'accountUsersAllData' => AccountUsersResource::collection($accountUsersAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -50,7 +51,7 @@ class AccountUsersController extends Controller
      */
     public function Create()
     {
-        //
+        //This code block can work even without this only works for separate page.
         return inertia("AccountUsers/Create");
     }
 
@@ -91,6 +92,8 @@ class AccountUsersController extends Controller
         return inertia("AccountUsers/Show", [
             'accountUsers' => new AccountUsersResource($accountUser),
         ]);
+
+        //This code block can work even without this only works for separate page.
     }
 
     /**
