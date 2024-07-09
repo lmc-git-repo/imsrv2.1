@@ -12,12 +12,15 @@ import Show from './Show'
 import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
 import CreateModalComponent from './Create'
+import EditModalComponent from './Edit'
+import useEditModal from './hooks/useEditModal'
 
 export default function Index({auth, accountUsers, departmentsList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
     const { showModal, selectedUser, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
+    const { showEditModal, openEditModal, closeEditModal } = useEditModal();
 
     const searchFieldChanged = (name, value) =>{
         if(value){
@@ -207,7 +210,13 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                 <td className="px-3 py-2">{accountusers.createdBy.name}</td>
                                                 <td className="px-3 py-2 text-nowrap">{accountusers.created_at}</td>
                                                 <td className="px-3 py-2 text-right">
-                                                    <Link href={route('accountUsers.edit', accountusers.account_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link>
+                                                    {/* <Link href={route('accountUsers.edit', accountusers.account_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
+                                                    <button
+                                                        className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1" 
+                                                        onClick={() => openEditModal()}
+                                                    >
+                                                        Edit
+                                                    </button>
                                                     <button 
                                                         onClick={(e) => deleteAccountUsers(accountusers)}
                                                         className="font-medium inline-block py-1 px-2 rounded-lg text-white bg-red-500 hover:bg-red-700 mx-1"
@@ -227,6 +236,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
             </div>
             <Show show={showModal} onClose={closeModal} user={selectedUser} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} />
+            <EditModalComponent show={showEditModal} onClose={closeEditModal} departmentsList={departmentsList.data} />
 
     </AuthenticatedLayout>
   )

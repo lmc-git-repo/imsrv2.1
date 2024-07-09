@@ -99,6 +99,9 @@ class AccountUsersController extends Controller
     public function edit(AccountUsers $accountUsers)
     {
         //
+        return inertia('AccountUsers/Edit', [
+            'accountUsers' => new AccountUsersResource($accountUsers),
+        ]);
     }
 
     /**
