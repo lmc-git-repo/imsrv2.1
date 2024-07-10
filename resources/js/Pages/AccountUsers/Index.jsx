@@ -20,7 +20,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
     queryParams = queryParams || {}
     const { showModal, selectedUser, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditUser, openEditModal, closeEditModal } = useEditModal();
     
     const searchFieldChanged = (name, value) =>{
         if(value){
@@ -213,7 +213,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                     {/* <Link href={route('accountUsers.edit', accountusers.account_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                     <button
                                                         className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1" 
-                                                        onClick={() => openEditModal()}
+                                                        onClick={() => openEditModal(accountusers)}
                                                     >
                                                         Edit
                                                     </button>
@@ -240,8 +240,8 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                accountUsersEdit={accountUsers}
-
+                // accountUsersEdit={accountUsers}
+                selectedEditUser={selectedEditUser}
             />
 
     </AuthenticatedLayout>

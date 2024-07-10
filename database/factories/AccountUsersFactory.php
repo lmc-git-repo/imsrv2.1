@@ -23,7 +23,7 @@ class AccountUsersFactory extends Factory
             // 'department_users'=> fake()->randomElement(['Admin','HR','IT','Accounting','Purchasing','COOP','GA','GA/Nurse','Safety','Finance','Guard House','Sales','Facilities','IMS','CMM','QC','Assembly','Die Casting','Die Mold','Die Casting Engineering','PPC','Machining','Machine Engineering','Deburring','New Project','MRO Warehouse','N/A','Learning and Development']),
             'department_users' => fake()->word(),
             'initial' => fake()->unique()->lexify('?.????'),
-            'status' => fake()->randomElement(['Employed','Resigned','Terminated']),
+            'status' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,
             'created_at'=> time(),

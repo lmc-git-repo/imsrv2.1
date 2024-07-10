@@ -2,12 +2,12 @@ import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, accountUsersEdit }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
@@ -17,6 +17,20 @@ const EditModalComponent = ({ show, onClose, listDepartments, accountUsersEdit }
         satus: '',
         profile_path: '',
     })
+    useEffect(() => {
+        if (selectedEditUser) {
+            setData({
+                name: selectedEditUser.name,
+                department_users: selectedEditUser.department_users,
+                initial: selectedEditUser.initial,
+                status: selectedEditUser.status,
+                profile_path: selectedEditUser.profile_path,
+            });
+            if (selectedEditUser.profile_path) {
+                setImagePreview(selectedEditUser.profile_path);
+            }
+        }
+    }, [selectedEditUser]);
 
     const [imagePreview, setImagePreview] = useState(null);
 
@@ -44,15 +58,11 @@ const EditModalComponent = ({ show, onClose, listDepartments, accountUsersEdit }
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit employee - {accountUsersEdit.name}
-                {console.log(accountUsersEdit.data.map(user => (
-                    user.name
-                )))}
+                Edit employee - {selectedEditUser && selectedEditUser.name}
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
                     <div className="space-y-6">
-                        {/* <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3> */}
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="name" value="Enter Full Name" />
