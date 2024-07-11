@@ -9,6 +9,7 @@ use App\Http\Requests\StoreAccountUsersRequest;
 use App\Http\Requests\UpdateAccountUsersRequest;
 use App\Models\Departments;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 class AccountUsersController extends Controller
 {
@@ -113,6 +114,19 @@ class AccountUsersController extends Controller
     public function update(UpdateAccountUsersRequest $request, AccountUsers $accountUsers)
     {
         //
+        $data = $request->validated();
+        
+        // Handle profile_path if it exists
+        $profile_path = $data['profile_path'] ?? null;
+        $data['updated_by'] = Auth::id();
+        if($profile_path){
+            if($accountUsers->profile_path){
+                Storage::disk('public')->deleteDirectory(dirname($accountUsers->profile_path));
+            }
+            $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
+        }
+        $accountUsers->update($data);
+        return to_route('accountUsers.index')->with('success', "Employee \" $accountUsers->name\" was updated");
     }
 
     /**
@@ -122,6 +136,9 @@ class AccountUsersController extends Controller
     {
         $name = $accountUser->name;
         $accountUser->delete();
+        if($accountUser->profile_path){
+            Storage::disk('public')->deleteDirectory(dirname($accountUser->profile_path));
+        }
         return to_route('accountUsers.index')->with('success', "Employee - \" $name\" successfully deleted!");
     }
 }

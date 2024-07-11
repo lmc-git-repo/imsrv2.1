@@ -11,36 +11,28 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        name: '',
-        department_users: '',
-        initial: '',
-        satus: '',
-        profile_path: '',
-    })
-    useEffect(() => {
-        if (selectedEditUser) {
-            setData({
-                name: selectedEditUser.name,
-                department_users: selectedEditUser.department_users,
-                initial: selectedEditUser.initial,
-                status: selectedEditUser.status,
-                profile_path: selectedEditUser.profile_path,
-            });
-            if (selectedEditUser.profile_path) {
-                setImagePreview(selectedEditUser.profile_path);
-            }
-        }
-    }, [selectedEditUser]);
+        name: selectedEditUser.name || "",
+        department_users: selectedEditUser.department_users || "",
+        initial: selectedEditUser.initial || "",
+        status: selectedEditUser.status || "",
+        profile_path: "",
+        _method: 'PUT',
+    });
+
 
     const [imagePreview, setImagePreview] = useState(null);
 
     const onSubmit =(e) =>{
         e.preventDefault();
 
-        post(route("accountUsers.store"), {
+        post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
             onSuccess: () => {
                 onClose();
                 reset();
+            },
+            onError: (errors) => {
+                // Handle errors if needed
+                console.error(errors);
             }
         });
     }
@@ -62,6 +54,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
+                    <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre>
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
@@ -119,7 +112,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                             </div>
                             <SelectInput 
                                 name='status' 
-                                id="status" 
+                                id="status"
+                                value={data.status}  // Add this line to set the value 
                                 onChange={(e) => setData("status", e.target.value)}
                                 required 
                             >
@@ -137,7 +131,13 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                    {
+                                    {/* Show selected user profile image */}
+                                    {selectedEditUser.profile_path &&
+                                        <div className="mt-4">
+                                            <img src={selectedEditUser.profile_path} alt="" className="h-52 w-52 object-cover rounded-full" />
+                                        </div>
+                                    }
+                                    {   
                                         imagePreview ? (
                                             <div className="mt-4">
                                                 <img src={imagePreview} alt="Profile Preview" className="h-52 w-52 object-cover rounded-full" />
@@ -164,7 +164,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                             </p>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                         </div>
-                                        )
+                                        )                                        
                                     }
                                     {/* {imagePreview && (
                                         <div className="mt-4">
