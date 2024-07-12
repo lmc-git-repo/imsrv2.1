@@ -11,20 +11,29 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        name: selectedEditUser.name || "",
-        department_users: selectedEditUser.department_users || "",
-        initial: selectedEditUser.initial || "",
-        status: selectedEditUser.status || "",
+        name: selectedEditUser?.name || "",
+        department_users: selectedEditUser?.department_users || "",
+        initial: selectedEditUser?.initial || "",
+        status: selectedEditUser?.status || "",
         profile_path: "",
+        // profile_path: selectedEditUser?.profile_path || "",
         _method: 'PUT',
     });
 
 
     const [imagePreview, setImagePreview] = useState(null);
 
+    useEffect(() => {
+        if (selectedEditUser?.profile_path) {
+            setImagePreview(selectedEditUser.profile_path);
+        } else {
+            setImagePreview(null);
+        }
+    }, [selectedEditUser]);
+
     const onSubmit =(e) =>{
         e.preventDefault();
-
+        console.log("Form Data:", data); // Add this line to log form data
         post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
             onSuccess: () => {
                 onClose();
@@ -131,12 +140,6 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                    {/* Show selected user profile image */}
-                                    {selectedEditUser.profile_path &&
-                                        <div className="mt-4">
-                                            <img src={selectedEditUser.profile_path} alt="" className="h-52 w-52 object-cover rounded-full" />
-                                        </div>
-                                    }
                                     {   
                                         imagePreview ? (
                                             <div className="mt-4">
@@ -166,16 +169,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                         </div>
                                         )                                        
                                     }
-                                    {/* {imagePreview && (
-                                        <div className="mt-4">
-                                            <img src={imagePreview} alt="Profile Preview" className="h-32 w-32 object-cover rounded-full" />
-                                        </div>
-                                    )} */}
                                 </div>
                                 <FileInput 
                                     id="accountusers_profile_path" 
-                                    name='profile_path' 
-                                    // onChange={(e) => setData("profile_path", e.target.files[0])} 
+                                    name='profile_path'
                                     onChange={handleFileChange}
                                     className="hidden" 
                                 />

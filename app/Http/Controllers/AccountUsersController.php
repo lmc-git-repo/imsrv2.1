@@ -111,22 +111,23 @@ class AccountUsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAccountUsersRequest $request, AccountUsers $accountUsers)
+    public function update(UpdateAccountUsersRequest $request, AccountUsers $accountUsersEdit)
     {
         //
         $data = $request->validated();
-        
+        \Log::info('Update data: ', $data);
         // Handle profile_path if it exists
         $profile_path = $data['profile_path'] ?? null;
         $data['updated_by'] = Auth::id();
         if($profile_path){
-            if($accountUsers->profile_path){
-                Storage::disk('public')->deleteDirectory(dirname($accountUsers->profile_path));
+            if($accountUsersEdit->profile_path){
+                Storage::disk('public')->deleteDirectory(dirname($accountUsersEdit->profile_path));
             }
             $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
         }
-        $accountUsers->update($data);
-        return to_route('accountUsers.index')->with('success', "Employee \" $accountUsers->name\" was updated");
+        $name = $accountUsersEdit->name;
+        $accountUsersEdit->update($data);
+        return to_route('accountUsers.index')->with('success', "Employee \" $name\" was updated");
     }
 
     /**
