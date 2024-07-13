@@ -25,6 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/accountUsers/{account_id}', [AccountUsersController::class, 'show'])->name('accountUsers.show');
-Route::put('/accountUsers/{accountUser}', [AccountUsersController::class, 'update'])->name('accountUsers.update');
+Route::put('/accountUsers/{selectedEditUser}', [AccountUsersController::class, 'update'])->name('accountUsers.update');
 
 require __DIR__.'/auth.php';

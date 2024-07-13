@@ -11,10 +11,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        name: selectedEditUser?.name || "",
-        department_users: selectedEditUser?.department_users || "",
-        initial: selectedEditUser?.initial || "",
-        status: selectedEditUser?.status || "",
+        name: selectedEditUser.name || "",
+        department_users: selectedEditUser.department_users || "",
+        initial: selectedEditUser.initial || "",
+        status: selectedEditUser.status || "",
         profile_path: "",
         // profile_path: selectedEditUser?.profile_path || "",
         _method: 'PUT',
@@ -36,6 +36,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
         console.log("Form Data:", data); // Add this line to log form data
         post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
             onSuccess: () => {
+                console.log("Update Successful"); 
                 onClose();
                 reset();
             },
@@ -63,7 +64,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
-                    <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre>
+                    {/* <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre> */}
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">

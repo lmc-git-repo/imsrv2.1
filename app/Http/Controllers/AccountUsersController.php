@@ -127,6 +127,7 @@ class AccountUsersController extends Controller
         }
         $name = $accountUsersEdit->name;
         $accountUsersEdit->update($data);
+        \Log::info('Updated account user: ', $accountUsersEdit->toArray());
         return to_route('accountUsers.index')->with('success', "Employee \" $name\" was updated");
     }
 
