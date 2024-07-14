@@ -111,24 +111,25 @@ class AccountUsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAccountUsersRequest $request, AccountUsers $accountUsersEdit)
+    public function update(UpdateAccountUsersRequest $request, AccountUsers $accountUser)
     {
         //
         $data = $request->validated();
-        \Log::info('Update data: ', $data);
+        // \Log::info('Update data: ', $data);
+
         // Handle profile_path if it exists
         $profile_path = $data['profile_path'] ?? null;
         $data['updated_by'] = Auth::id();
         if($profile_path){
-            if($accountUsersEdit->profile_path){
-                Storage::disk('public')->deleteDirectory(dirname($accountUsersEdit->profile_path));
+            if($accountUser->profile_path){
+                Storage::disk('public')->deleteDirectory(dirname($accountUser->profile_path));
             }
             $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
         }
-        $name = $accountUsersEdit->name;
-        $accountUsersEdit->update($data);
-        \Log::info('Updated account user: ', $accountUsersEdit->toArray());
-        return to_route('accountUsers.index')->with('success', "Employee \" $name\" was updated");
+
+        $accountUser->update($data);
+        // \Log::info('Updated account user: ', $accountUser->toArray());
+        return to_route('accountUsers.index')->with('success', "Employee \" $accountUser->name\" was updated");
     }
 
     /**
@@ -136,11 +137,10 @@ class AccountUsersController extends Controller
      */
     public function destroy(AccountUsers $accountUser)
     {
-        $name = $accountUser->name;
         $accountUser->delete();
         if($accountUser->profile_path){
             Storage::disk('public')->deleteDirectory(dirname($accountUser->profile_path));
         }
-        return to_route('accountUsers.index')->with('success', "Employee - \" $name\" successfully deleted!");
+        return to_route('accountUsers.index')->with('success', "Employee - \" $accountUser->name\" successfully deleted!");
     }
 }

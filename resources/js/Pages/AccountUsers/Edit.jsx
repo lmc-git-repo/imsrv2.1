@@ -33,10 +33,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
 
     const onSubmit =(e) =>{
         e.preventDefault();
-        console.log("Form Data:", data); // Add this line to log form data
+        // console.log("Form Data:", data); // Add this line to log form data
         post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
             onSuccess: () => {
-                console.log("Update Successful"); 
+                // console.log("Update Successful"); 
                 onClose();
                 reset();
             },
