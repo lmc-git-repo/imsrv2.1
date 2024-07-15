@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountUsersController;
+use App\Http\Controllers\ComputersController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -14,6 +15,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
         ->name('dashboard');
 
+    Route::resource('computers', ComputersController::class);
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);
