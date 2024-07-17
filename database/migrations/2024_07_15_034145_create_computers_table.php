@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('computers', function (Blueprint $table) {
             $table->id('CID')->unique();
             $table->string('comp_name')->unique();
+            $table ->string('img_path')->nullable();
             $table->string('comp_model');
             $table->enum('comp_type',['Desktop','Laptop']);   
             $table->string('comp_user');

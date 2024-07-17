@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ComputersResource;
+use App\Http\Resources\DepartmentsResource;
 use App\Models\Computers;
 use App\Http\Requests\StoreComputersRequest;
 use App\Http\Requests\UpdateComputersRequest;
+use App\Models\Departments;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ComputersController extends Controller
 {
@@ -14,8 +21,36 @@ class ComputersController extends Controller
     public function index()
     {
         //
-        return inertia("Computers/Index", [
+        // return inertia("Computers/Index", [
 
+        // ]);
+        $query = Computers::query();
+
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", "desc");
+
+        if(request("name")){
+            $query->where("name","like","%". request("name") .'%');
+        }
+
+        if(request('status')){
+            $query->where('status', request('status'));
+        }
+
+        $computers = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)->onEachSide(1);
+
+        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
+        $computersAllData = Computers::orderBy('CID')->get();
+
+        // echo $computersAllData;
+
+        return inertia("Computers/Index", [
+            'computers' => ComputersResource::collection($computers),
+            'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'computersAllData' => ComputersResource::collection($computersAllData),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
         ]);
     }
 
@@ -25,6 +60,7 @@ class ComputersController extends Controller
     public function create()
     {
         //
+        return inertia("Computers/Create");
     }
 
     /**
@@ -33,6 +69,22 @@ class ComputersController extends Controller
     public function store(StoreComputersRequest $request)
     {
         //
+        $data = $request->validated();
+        /** @var $img_path \Illuminate\Http\UploadedFile */
+        $img_path = $data['img_path'] ?? null;
+        $data['created_by'] = Auth::id(); 
+        $data['updated_by'] = Auth::id();
+        if($img_path){
+            $data['img_path'] = $img_path->store('Computers/'.Str::random(), 'public');
+        }
+
+        //?Checking if there's a data is posted after submission 
+        // dd($data);
+
+        //*This is for passing the data to create a new employee
+        Computers::create($data);
+
+        return to_route('Computers.index')->with('success', 'New employee was created');
     }
 
     /**
@@ -57,6 +109,22 @@ class ComputersController extends Controller
     public function update(UpdateComputersRequest $request, Computers $computers)
     {
         //
+        $data = $request->validated();
+        // \Log::info('Update data: ', $data);
+
+        // Handle img_path if it exists
+        $img_path = $data['img_path'] ?? null;
+        $data['updated_by'] = Auth::id();
+        if($img_path){
+            if($computers->img_path){
+                Storage::disk('public')->deleteDirectory(dirname($computers->img_path));
+            }
+            $data['img_path'] = $img_path->store('computers/'.Str::random(), 'public');
+        }
+
+        $computers->update($data);
+        // \Log::info('Updated computer: ', $computers->toArray());
+        return to_route('computers.index')->with('success', "Computer \" $computers->name\" was updated");
     }
 
     /**
@@ -65,5 +133,10 @@ class ComputersController extends Controller
     public function destroy(Computers $computers)
     {
         //
+        $computers->delete();
+        if($computers->img_path){
+            Storage::disk('public')->deleteDirectory(dirname($computers->img_path));
+        }
+        return to_route('computers.index')->with('success', "Computer - \" $computers->name\" successfully deleted!");
     }
 }
