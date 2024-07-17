@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\ComputersResource;
 use App\Http\Resources\DepartmentsResource;
+use App\Models\AccountUsers;
 use App\Models\Computers;
 use App\Http\Requests\StoreComputersRequest;
 use App\Http\Requests\UpdateComputersRequest;
@@ -29,18 +31,19 @@ class ComputersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("name")){
-            $query->where("name","like","%". request("name") .'%');
+        if(request("comp_name")){
+            $query->where("comp_name","like","%". request("comp_name") .'%');
         }
 
-        if(request('status')){
-            $query->where('status', request('status'));
+        if(request('comp_status')){
+            $query->where('comp_status', request('comp_status'));
         }
 
         $computers = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)->onEachSide(1);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
+        $compUsersList = AccountUsers::orderBy('initial')->get();
         $computersAllData = Computers::orderBy('CID')->get();
 
         // echo $computersAllData;
@@ -48,6 +51,7 @@ class ComputersController extends Controller
         return inertia("Computers/Index", [
             'computers' => ComputersResource::collection($computers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'compUsersList' => AccountUsersResource::collection($compUsersList),
             'computersAllData' => ComputersResource::collection($computersAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -84,7 +88,7 @@ class ComputersController extends Controller
         //*This is for passing the data to create a new employee
         Computers::create($data);
 
-        return to_route('Computers.index')->with('success', 'New employee was created');
+        return to_route('computers.index')->with('success', 'New employee was created');
     }
 
     /**
@@ -124,19 +128,19 @@ class ComputersController extends Controller
 
         $computers->update($data);
         // \Log::info('Updated computer: ', $computers->toArray());
-        return to_route('computers.index')->with('success', "Computer \" $computers->name\" was updated");
+        return to_route('computers.index')->with('success', "Computer \" $computers->comp_name\" was updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Computers $computers)
+    public function destroy(Computers $computer)
     {
         //
-        $computers->delete();
-        if($computers->img_path){
-            Storage::disk('public')->deleteDirectory(dirname($computers->img_path));
+        $computer->delete();
+        if($computer->img_path){
+            Storage::disk('public')->deleteDirectory(dirname($computer->img_path));
         }
-        return to_route('computers.index')->with('success', "Computer - \" $computers->name\" successfully deleted!");
+        return to_route('computers.index')->with('success', "Computer - \" $computer->comp_name\" successfully deleted!");
     }
 }

@@ -19,7 +19,7 @@ class ComputersResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'CID' => $this->cid,
+            'CID' => $this->CID,
             'comp_name' => $this->comp_name,
             'img_path' => $this->img_path ? Storage::url($this->img_path) : '',
             'comp_model' => $this->comp_model,

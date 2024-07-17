@@ -169,7 +169,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                                 id="comp_storage" 
                                 type="text"
                                 name='comp_storage' 
-                                value={data.comp_os}
+                                value={data.comp_storage}
                                 onChange={(e) => setData("comp_storage", e.target.value)}
                                 required 
                             />
@@ -184,7 +184,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                                 id="comp_serial" 
                                 type="text"
                                 name='comp_serial' 
-                                value={data.comp_os}
+                                value={data.comp_serial}
                                 onChange={(e) => setData("comp_serial", e.target.value)}
                                 required 
                             />
@@ -199,7 +199,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                                 id="comp_asset" 
                                 type="text"
                                 name='comp_asset' 
-                                value={data.comp_os}
+                                value={data.comp_asset}
                                 onChange={(e) => setData("comp_asset", e.target.value)}
                                 required 
                             />
@@ -214,7 +214,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                                 id="comp_cpu" 
                                 type="text"
                                 name='comp_cpu' 
-                                value={data.comp_os}
+                                value={data.comp_cpu}
                                 onChange={(e) => setData("comp_cpu", e.target.value)}
                                 required 
                             />
