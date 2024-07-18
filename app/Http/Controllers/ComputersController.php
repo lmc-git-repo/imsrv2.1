@@ -110,7 +110,7 @@ class ComputersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateComputersRequest $request, Computers $computers)
+    public function update(UpdateComputersRequest $request, Computers $computer)
     {
         //
         $data = $request->validated();
@@ -120,15 +120,15 @@ class ComputersController extends Controller
         $img_path = $data['img_path'] ?? null;
         $data['updated_by'] = Auth::id();
         if($img_path){
-            if($computers->img_path){
-                Storage::disk('public')->deleteDirectory(dirname($computers->img_path));
+            if($computer->img_path){
+                Storage::disk('public')->deleteDirectory(dirname($computer->img_path));
             }
-            $data['img_path'] = $img_path->store('computers/'.Str::random(), 'public');
+            $data['img_path'] = $img_path->store('Computers/'.Str::random(), 'public');
         }
 
-        $computers->update($data);
+        $computer->update($data);
         // \Log::info('Updated computer: ', $computers->toArray());
-        return to_route('computers.index')->with('success', "Computer \" $computers->comp_name\" was updated");
+        return to_route('computers.index')->with('success', "Computer \" $computer->comp_name\" was updated");
     }
 
     /**

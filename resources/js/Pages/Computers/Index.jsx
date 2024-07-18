@@ -10,17 +10,17 @@ import { useState } from 'react'
 
 // import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
-// import useEditModal from './hooks/useEditModal'
+import useEditModal from './hooks/useEditModal'
 // import Show from './Show'
 import CreateModalComponent from './Create'
-// import EditModalComponent from './Edit'
+import EditModalComponent from './Edit'
 
 export default function Index({auth, computers, departmentsList, compUsersList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
     // const { showModal, selectedComp, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    // const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -325,7 +325,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                         <td className="px-3 py-2">{computer.comp_gen}</td>
                                                         <td className="px-3 py-2">{computer.comp_address}</td>
                                                         <td className="px-3 py-2">{computer.comp_prdctkey}</td>
-                                                        <td className="px-3 py-2">
+                                                        <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[computer.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[computer.comp_status]}</span>
                                                         </td>
                                                         <td className="px-3 py-2">{computer.remarks}</td>
@@ -372,14 +372,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             </div>
             {/* <Show show={showModal} onClose={closeModal} user={selectedComp} /> */}
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} compUsersList={compUsersList.data}  />
-            {/* <EditModalComponent 
+            <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
                 listCompUsers={compUsersList.data}
                 // accountUsersEdit={computers}
                 selectedEditComp={selectedEditComp}
-            /> */}
+            />
     </AuthenticatedLayout>
   )
 }
