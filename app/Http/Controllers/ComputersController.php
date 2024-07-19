@@ -117,15 +117,18 @@ class ComputersController extends Controller
         // \Log::info('Update data: ', $data);
 
         // Handle img_path if it exists
-        $img_path = $data['img_path'] ?? null;
-        $data['updated_by'] = Auth::id();
+        $img_path = $request->file('img_path');
+
         if($img_path){
             if($computer->img_path){
                 Storage::disk('public')->deleteDirectory(dirname($computer->img_path));
             }
             $data['img_path'] = $img_path->store('Computers/'.Str::random(), 'public');
+        } else {
+            unset($data['img_path']);
         }
 
+        $data['updated_by'] = Auth::id();
         $computer->update($data);
         // \Log::info('Updated computer: ', $computers->toArray());
         return to_route('computers.index')->with('success', "Computer \" $computer->comp_name\" was updated");

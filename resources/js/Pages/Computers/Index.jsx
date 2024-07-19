@@ -8,17 +8,17 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useState } from 'react'
 
-// import useModal from './hooks/useModal'
+import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
 import useEditModal from './hooks/useEditModal'
-// import Show from './Show'
+import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
 export default function Index({auth, computers, departmentsList, compUsersList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
-    // const { showModal, selectedComp, openModal, closeModal } = useModal();
+    const { showModal, selectedComp, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
@@ -370,7 +370,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                     </div>
                 </div>
             </div>
-            {/* <Show show={showModal} onClose={closeModal} user={selectedComp} /> */}
+            <Show show={showModal} onClose={closeModal} user={selectedComp} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} compUsersList={compUsersList.data}  />
             <EditModalComponent 
                 show={showEditModal} 

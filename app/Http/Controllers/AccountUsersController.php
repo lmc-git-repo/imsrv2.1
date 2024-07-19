@@ -118,15 +118,19 @@ class AccountUsersController extends Controller
         // \Log::info('Update data: ', $data);
 
         // Handle profile_path if it exists
-        $profile_path = $data['profile_path'] ?? null;
-        $data['updated_by'] = Auth::id();
+        // $profile_path = $data['profile_path'] ?? null;
+        $profile_path = $request->file('profile_path');
+
         if($profile_path){
             if($accountUser->profile_path){
                 Storage::disk('public')->deleteDirectory(dirname($accountUser->profile_path));
             }
             $data['profile_path'] = $profile_path->store('accountUsers/'.Str::random(), 'public');
+        } else {
+            unset($data['profile_path']);
         }
 
+        $data['updated_by'] = Auth::id();
         $accountUser->update($data);
         // \Log::info('Updated account user: ', $accountUser->toArray());
         return to_route('accountUsers.index')->with('success', "Employee \" $accountUser->name\" was updated");

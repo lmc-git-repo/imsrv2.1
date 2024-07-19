@@ -12,7 +12,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
 
     const {data, setData, post, errors, reset} = useForm({
         comp_name: selectedEditComp.comp_name || '',
-        img_path: '',
+        // img_path: '',
+        img_path: null,
         comp_model: selectedEditComp.comp_model || '',
         comp_type: selectedEditComp.comp_type || '',
         comp_user: selectedEditComp.comp_user || '',
@@ -58,12 +59,13 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
     }
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setData("img_path", file);
         if (file) {
+            setData("img_path", file);
             const imageUrl = URL.createObjectURL(file);
             setImagePreview(imageUrl);
         } else {
-            setImagePreview(null);
+            setData("img_path", null);
+            setImagePreview(selectedEditComp.img_path || null);
         }
     };
 

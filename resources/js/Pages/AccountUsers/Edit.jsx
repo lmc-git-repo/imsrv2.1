@@ -1,9 +1,8 @@
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 
 
@@ -15,11 +14,11 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
         department_users: selectedEditUser.department_users || "",
         initial: selectedEditUser.initial || "",
         status: selectedEditUser.status || "",
-        profile_path: selectedEditUser.profile_path || "",
+        // profile_path: selectedEditUser.profile_path || "",
+        profile_path: null,
         _method: 'PUT',
     });
 
-    const { csrf_token } = usePage().props;
     const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
@@ -30,38 +29,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
         }
     }, [selectedEditUser]);
 
-    const onSubmit = async (e) =>{
+    const onSubmit = (e) =>{
         e.preventDefault();
-        console.log("Form Data:", data); // Add this line to log form data
+        // console.log("Form Data:", data); // Add this line to log form data
 
-        const formData = new FormData();
-
-        formData.append('name', data.name);
-        formData.append('department_users', data.department_users);
-        formData.append('initial', data.initial);
-        formData.append('status', data.status);
-        formData.append('_method', 'PUT');
-
-
-        if (data.profile_path instanceof File) {
-            formData.append('profile_path', data.profile_path);
-        }
-
-        try {
-            const response = await axios.post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'X-CSRF-TOKEN': csrf_token // Include CSRF token in headers
-                }
-            });
-            // Update the selected user with the new data
-            setData(response.data);
-            onClose();
-            reset();
-            
-        } catch (errors) {
-            console.error(errors.response.data);
-        }
+        post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
+            onSuccess: () => {
+                // console.log("Update Successful"); 
+                onClose();
+                reset();
+            },
+            onError: (errors) => {
+                // Handle errors if needed
+                console.error(errors);
+            }
+        });
     }
 
     const handleFileChange = (e) => {
@@ -71,7 +53,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
             const imageUrl = URL.createObjectURL(file);
             setImagePreview(imageUrl);
         } else {
-            setData("profile_path", selectedEditUser.profile_path);
+            // setData("profile_path", selectedEditUser.profile_path);
+            setData("profile_path", null);
             setImagePreview(selectedEditUser.profile_path || null);
         }
     };
