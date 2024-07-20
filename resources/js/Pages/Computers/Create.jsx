@@ -160,7 +160,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                                 <option value="">Select Operating System: </option>
                                 <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
                                 <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 10 Pro 64bit">Windows 8.1 Pro 64bit</option>
+                                <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
                                 <option value="Windows 11 Pro">Windows 11 Pro</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
