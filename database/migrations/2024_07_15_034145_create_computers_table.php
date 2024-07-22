@@ -25,12 +25,12 @@ return new class extends Migration
             $table->string('comp_storage');
             $table->string('comp_serial');
             $table->string('comp_asset');
-            $table->string('comp_cpu');
+            $table->longText('comp_cpu');
             $table->enum('comp_gen',['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A']);
-            $table->string('comp_address');
-            $table->string('comp_prdctkey');
+            $table->longText('comp_address');
+            $table->longText('comp_prdctkey');
             $table->enum('comp_status',['Deployed','Spare','For Disposal','Already Disposed','Barrow']);
-            $table->string('remarks');
+            $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

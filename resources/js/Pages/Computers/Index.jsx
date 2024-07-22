@@ -113,6 +113,20 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             onKeyPress={ e => onKeyPress('comp_name', e)} 
                                         />
                                     </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={queryParams.comp_status} 
+                                            onChange={ e => searchFieldChanged('comp_status', e.target.value)}
+                                        >
+                                            <option value="">Select Status</option>
+                                            <option value="Deployed">Deployed</option>
+                                            <option value="Spare">Spare</option>
+                                            <option value="For Disposal">For Disposal</option>
+                                            <option value="Already Disposed">Already Disposed</option>
+                                            <option value="Barrow">Barrow</option>
+                                        </SelectInput>
+                                    </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
@@ -302,7 +316,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 computers.data.map(computer => (
                                                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={computer.CID}>
                                                         <td className="px-3 py-2">{computer.CID}</td>
-                                                        <th className="px-3 py-2 hover:underline hover:text-white">
+                                                        <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("computers.show", { CID: computer.CID })}>
                                                                 {computer.comp_name}
                                                             </Link> */}
