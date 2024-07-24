@@ -2,7 +2,7 @@ import Pagination from '@/Components/Pagination'
 import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+import { SERVERUPS_STATUS_CLASS_MAP, SERVERUPS_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
@@ -15,12 +15,12 @@ import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
-export default function Index({auth, computers, departmentsList, compUsersList, queryParams = null, success}) {
+export default function Index({auth, serverUps, departmentsList, serverUpsUsersList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
-    const { showModal, selectedComp, openModal, closeModal } = useModal();
+    const { showModal, selectedServerUps, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditServerUps, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -28,7 +28,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
         else{
             delete queryParams[name];
         }
-        router.get(route('computers.index'), queryParams)
+        router.get(route('serverUps.index'), queryParams)
     };
 
     const onKeyPress = (name, e) => {
@@ -50,14 +50,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('computers.index'), queryParams)
+        router.get(route('serverUps.index'), queryParams)
     };
 
     const deleteComputers = (computer) => {
         if (!window.confirm('Are you sure you want to delete this employee?')) {
             return;
         }
-        router.delete(route('computers.destroy', computer.CID))
+        router.delete(route('serverUps.destroy', computer.S_UID))
     };    
     
   return (
@@ -65,7 +65,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
         user={auth.user}
         header={
             <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Computers</h2>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Server / UPS</h2>
                 <Button 
                     onClick={() => openCreateModal()} 
                     className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -80,7 +80,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             </div>
         }
     >
-        <Head title="Computers" />
+        <Head title="Server/Ups" />
         <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
@@ -91,7 +91,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                             <div className="ms-3 text-sm font-medium">
                                 {success}
                             </div>
-                            <button onClick={() => router.get(route('computers.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
+                            <button onClick={() => router.get(route('serverUps.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
                                 <span className="sr-only">Dismiss</span>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -101,23 +101,23 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                     )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {/* <pre>{JSON.stringify(computers, undefined, 2)}</pre> */}
+                            {/* <pre>{JSON.stringify(serverUps, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
                                 <div className="flex justify-end py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.comp_name} 
+                                            defaultValue={queryParams.S_UName} 
                                             placeholder="Computer Name"
-                                            onBlur={e => searchFieldChanged('comp_name', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('comp_name', e)} 
+                                            onBlur={e => searchFieldChanged('S_UName', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('S_UName', e)} 
                                         />
                                     </div>
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={queryParams.comp_status} 
-                                            onChange={ e => searchFieldChanged('comp_status', e.target.value)}
+                                            defaultValue={queryParams.S_UStatus} 
+                                            onChange={ e => searchFieldChanged('S_UStatus', e.target.value)}
                                         >
                                             <option value="">Select Status</option>
                                             <option value="Deployed">Deployed</option>
@@ -132,15 +132,15 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <TableHeading
-                                                name="CID"
+                                                name="S_UID"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                CID
+                                                S&UID
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_name"
+                                                name="S_UName"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -149,7 +149,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
                                             <TableHeading
-                                                name="comp_model"
+                                                name="S_UModel"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -157,7 +157,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Model
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_type"
+                                                name="S_UType"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -165,7 +165,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Type
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_user"
+                                                name="S_UUser"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -173,7 +173,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 User
                                             </TableHeading>
                                             <TableHeading
-                                                name="department_comp"
+                                                name="department_S_U"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -181,7 +181,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Department
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_os"
+                                                name="S_UOs"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -189,7 +189,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Operating System
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_storage"
+                                                name="S_UStorage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -197,7 +197,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Storage
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_serial"
+                                                name="S_USerial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -205,7 +205,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Serial
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_asset"
+                                                name="S_UAsset"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -213,7 +213,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Asset
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_cpu"
+                                                name="S_UCpu"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -221,7 +221,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Processor
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_gen"
+                                                name="S_UGen"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -229,7 +229,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Gen
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_address"
+                                                name="S_UAddress"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -237,7 +237,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Mac Address
                                             </TableHeading>
                                             <TableHeading
-                                                name="comp_prdctkey"
+                                                name="S_UPrdctkey"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -246,7 +246,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             </TableHeading>
 
                                             <TableHeading
-                                                name="comp_status"
+                                                name="S_UStatus"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -254,7 +254,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Status
                                             </TableHeading>
                                             <TableHeading
-                                                name="remarks"
+                                                name="S_URemarks"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -293,8 +293,8 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <th className="px-3 py-3">
                                                 <SelectInput 
                                                     className="w-full text-sm h-8 py-1"
-                                                    defaultValue={queryParams.comp_status} 
-                                                    onChange={ e => searchFieldChanged('comp_status', e.target.value)}
+                                                    defaultValue={queryParams.S_UStatus} 
+                                                    onChange={ e => searchFieldChanged('S_UStatus', e.target.value)}
                                                 >
                                                     <option value="">Select Status</option>
                                                     <option value="Deployed">Deployed</option>
@@ -312,44 +312,44 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {computers.data ? (
-                                                computers.data.map(computer => (
-                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={computer.CID}>
-                                                        <td className="px-3 py-2">{computer.CID}</td>
+                                        {serverUps.data ? (
+                                                serverUps.data.map(serverups => (
+                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={serverups.S_UID}>
+                                                        <td className="px-3 py-2">{serverups.S_UID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("computers.show", { CID: computer.CID })}>
-                                                                {computer.comp_name}
+                                                            {/* <Link href={route("serverUps.show", { S_UID: serverups.S_UID })}>
+                                                                {serverups.S_UName}
                                                             </Link> */}
-                                                            <Link href="#" onClick={(e) => openModal(computer, e)}>
-                                                                {computer.comp_name}
+                                                            <Link href="#" onClick={(e) => openModal(serverups, e)}>
+                                                                {serverups.S_UName}
                                                             </Link>
                                                         </th>
                                                         <td className="px-3 py-2">
-                                                            <img src={computer.img_path} alt="" style={{width: 60}} />
+                                                            <img src={serverups.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{computer.comp_model}</td>
-                                                        <td className="px-3 py-2">{computer.comp_type}</td>
-                                                        <td className="px-3 py-2">{computer.comp_user}</td>
-                                                        <td className="px-3 py-2">{computer.department_comp}</td>
-                                                        <td className="px-3 py-2">{computer.comp_os}</td>
-                                                        <td className="px-3 py-2">{computer.comp_storage}</td>
-                                                        <td className="px-3 py-2">{computer.comp_serial}</td>
-                                                        <td className="px-3 py-2">{computer.comp_asset}</td>
-                                                        <td className="px-3 py-2">{computer.comp_cpu}</td>
-                                                        <td className="px-3 py-2">{computer.comp_gen}</td>
-                                                        <td className="px-3 py-2">{computer.comp_address}</td>
-                                                        <td className="px-3 py-2">{computer.comp_prdctkey}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UModel}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UType}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UUser}</td>
+                                                        <td className="px-3 py-2">{serverups.department_S_U}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UOs}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UStorage}</td>
+                                                        <td className="px-3 py-2">{serverups.S_USerial}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UAsset}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UCpu}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UGen}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UAddress}</td>
+                                                        <td className="px-3 py-2">{serverups.S_UPrdctkey}</td>
                                                         <td className="px-3 py-2 text-nowrap">
-                                                            <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[computer.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[computer.comp_status]}</span>
+                                                            <span className={'px-2 rounded-e-full text-white ' + SERVERUPS_STATUS_CLASS_MAP[serverups.S_UStatus]}>{SERVERUPS_STATUS_TEXT_MAP[serverups.S_UStatus]}</span>
                                                         </td>
-                                                        <td className="px-3 py-2">{computer.remarks}</td>
-                                                        <td className="px-3 py-2">{computer.createdBy.name}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{computer.created_at}</td>
+                                                        <td className="px-3 py-2">{serverups.S_URemarks}</td>
+                                                        <td className="px-3 py-2">{serverups.createdBy.name}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{serverups.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('computers.edit', computer.CID)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
+                                                            {/* <Link href={route('computers.edit', serverups.S_UID)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(computer, e)}
+                                                                onClick={(e) => openModal(serverups, e)}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -358,7 +358,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                             </button>
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
-                                                                onClick={() => openEditModal(computer)}
+                                                                onClick={() => openEditModal(serverups)}
                                                             >
                                                                 <span className='flex items-center justify-center'>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -367,7 +367,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                                 </span>
                                                             </button>
                                                             <button 
-                                                                onClick={(e) => deleteComputers(computer)}
+                                                                onClick={(e) => deleteComputers(serverups)}
                                                                 className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                             >
                                                                 <span className='flex items-center justify-center'>
@@ -388,20 +388,20 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={computers.meta.links} />
+                            <Pagination links={serverUps.meta.links} />
                         </div>
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedComp} />
-            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} compUsersList={compUsersList.data}  />
+            <Show show={showModal} onClose={closeModal} user={selectedServerUps} />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} serverUpsUsersList={serverUpsUsersList.data}  />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                listCompUsers={compUsersList.data}
+                listServerUPSUsers={serverUpsUsersList.data}
                 // accountUsersEdit={computers}
-                selectedEditComp={selectedEditComp}
+                selectedEditServerUps={selectedEditServerUps}
             />
     </AuthenticatedLayout>
   )

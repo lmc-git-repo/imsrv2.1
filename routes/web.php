@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountUsersController;
 use App\Http\Controllers\ComputersController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServerUPSController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
         ->name('dashboard');
 
     Route::resource('computers', ComputersController::class);
+    Route::resource('serverUps', ServerUPSController::class);
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);
