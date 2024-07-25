@@ -28,7 +28,7 @@ class UpdateComputersRequest extends FormRequest
         $comp_users = AccountUsers::pluck('initial')->toArray();
         return [
             //
-            "comp_name" => ['required', 'max:255', Rule::unique('computers', 'comp_name')],
+            "comp_name" => ['required', 'max:255'],
             "img_path" => ['nullable', 'image'],
             "comp_model" => ['required', 'max:255'],
             "comp_type" => ['required', Rule::in(['Desktop','Laptop'])],

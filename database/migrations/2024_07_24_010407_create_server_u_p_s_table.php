@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('S_UName')->unique();
             $table ->string('img_path')->nullable();
             $table->string('S_UModel');
-            $table->enum('S_UType',['Desktop','Laptop']);   
+            $table->enum('S_UType',['SERVER','UPS']);   
             $table->string('S_UUser');
             $table->foreign('S_UUser')->references('initial')->on('account_users');
             $table->string('department_S_U');

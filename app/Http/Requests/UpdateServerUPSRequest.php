@@ -28,10 +28,10 @@ class UpdateServerUPSRequest extends FormRequest
         $comp_users = AccountUsers::pluck('initial')->toArray();
         return [
             //
-            "S_UName" => ['required', 'max:255', Rule::unique('computers', 'S_UName')],
+            "S_UName" => ['required', 'max:255'],
             "img_path" => ['nullable', 'image'],
             "S_UModel" => ['required', 'max:255'],
-            "S_UType" => ['required', Rule::in(['Desktop','Laptop'])],
+            "S_UType" => ['required', Rule::in(['SERVER','UPS'])],
             "S_UUser" => ['required', Rule::in($comp_users)],
             "department_S_U" => ['required', Rule::in($departments)],
             "S_UOs" => ['required', 'max:255'],

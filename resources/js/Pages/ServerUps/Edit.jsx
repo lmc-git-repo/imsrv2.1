@@ -45,7 +45,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
     const onSubmit =(e) =>{
         e.preventDefault();
         // console.log("Form Data:", data); // Add this line to log form data
-        post(route("computers.update", selectedEditServerUps && selectedEditServerUps.CID), {
+        post(route("serverUps.update", selectedEditServerUps && selectedEditServerUps.S_UID), {
             onSuccess: () => {
                 // console.log("Update Successful"); 
                 onClose();
@@ -122,8 +122,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 required 
                             >
                                 <option value="">Select Computer Type: </option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Laptop">Laptop</option>
+                                <option value="SERVER">SERVER</option>
+                                <option value="UPS">UPS</option>
                             </SelectInput>
                             <InputError message={errors.S_UType} className='mt-2' />
                         </div>
@@ -140,9 +140,9 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 required 
                             >
                                 <option value="">Select User</option>
-                                {listServerUPSUsers.map(comp => (
-                                    <option key={comp.CID} value={comp.initial}>
-                                        {comp.initial}
+                                {listServerUPSUsers.map(serverups => (
+                                    <option key={serverups.S_UID} value={serverups.initial}>
+                                        {serverups.initial}
                                     </option>
                                 ))}
                             </SelectInput>
@@ -182,6 +182,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 required 
                             >
                                 <option value="">Select Operating System: </option>
+                                <option value="Windows Server 2012 R2 Standard">Windows Server 2012 R2 Standard</option>
                                 <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
                                 <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
                                 <option value="Windows 10 Pro 64bit">Windows 8.1 Pro 64bit</option>
@@ -407,7 +408,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('computers.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('serverUps.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

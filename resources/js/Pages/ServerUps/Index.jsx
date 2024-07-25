@@ -53,11 +53,11 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
         router.get(route('serverUps.index'), queryParams)
     };
 
-    const deleteComputers = (computer) => {
+    const deleteComputers = (serverups) => {
         if (!window.confirm('Are you sure you want to delete this employee?')) {
             return;
         }
-        router.delete(route('serverUps.destroy', computer.S_UID))
+        router.delete(route('serverUps.destroy', serverups.S_UID))
     };    
     
   return (

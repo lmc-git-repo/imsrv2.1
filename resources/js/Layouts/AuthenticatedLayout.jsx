@@ -20,13 +20,32 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex border">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('computers.index')} active={route().current('computers.index')}>
-                                    Computers{/* List of Departments */}
-                                </NavLink>
+                                
+                                
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <div className='border text-gray-400'>
+                                            Inventory
+                                            <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <Dropdown.Link href={route('computers.index')} active={route().current('computers.index')}>
+                                            Computers
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('serverUps.index')} active={route().current('serverUps.index')}>
+                                            Server / UPS
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
+                                </Dropdown>
+
+
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
                                     Departments{/* List of Departments */}
                                 </NavLink>

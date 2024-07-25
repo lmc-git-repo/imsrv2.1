@@ -40,7 +40,7 @@ class ServerUPSController extends Controller
             ->paginate(10)->onEachSide(1);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $compUsersList = AccountUsers::orderBy('initial')->get();
+        $serverUpsUsersList = AccountUsers::orderBy('initial')->get();
         $serverUpsAllData = ServerUPS::orderBy('S_UID')->get();
 
         // echo $serverUpsAllData;
@@ -48,7 +48,7 @@ class ServerUPSController extends Controller
         return inertia("ServerUps/Index", [
             'serverUps' => ServerUPSResource::collection($serverUps),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
-            'compUsersList' => AccountUsersResource::collection($compUsersList),
+            'serverUpsUsersList' => AccountUsersResource::collection($serverUpsUsersList),
             'serverUpsAllData' => ServerUPSResource::collection($serverUpsAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -61,6 +61,7 @@ class ServerUPSController extends Controller
     public function create()
     {
         //
+        return inertia("ServerUps/Create");
     }
 
     /**
@@ -106,7 +107,7 @@ class ServerUPSController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateServerUPSRequest $request, ServerUPS $serverUPS)
+    public function update(UpdateServerUPSRequest $request, ServerUPS $serverUp)
     {
         //
         $data = $request->validated();
@@ -116,8 +117,8 @@ class ServerUPSController extends Controller
         $img_path = $request->file('img_path');
 
         if($img_path){
-            if($serverUPS->img_path){
-                Storage::disk('public')->deleteDirectory(dirname($serverUPS->img_path));
+            if($serverUp->img_path){
+                Storage::disk('public')->deleteDirectory(dirname($serverUp->img_path));
             }
             $data['img_path'] = $img_path->store('ServerUps/'.Str::random(), 'public');
         } else {
@@ -125,21 +126,21 @@ class ServerUPSController extends Controller
         }
 
         $data['updated_by'] = Auth::id();
-        $serverUPS->update($data);
-        // \Log::info('Updated computer: ', $serverUPS->toArray());
-        return to_route('serverUps.index')->with('success', "Server / UPS \" $serverUPS->S_UName\" was updated");
+        $serverUp->update($data);
+        // \Log::info('Updated serverups: ', $serverUp->toArray());
+        return to_route('serverUps.index')->with('success', "Server / UPS \" $serverUp->S_UName\" was updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ServerUPS $serverUPS)
+    public function destroy(ServerUPS $serverUp)
     {
         //
-        $serverUPS->delete();
-        if($serverUPS->img_path){
-            Storage::disk('public')->deleteDirectory(dirname($serverUPS->img_path));
+        $serverUp->delete();
+        if($serverUp->img_path){
+            Storage::disk('public')->deleteDirectory(dirname($serverUp->img_path));
         }
-        return to_route('serverUps.index')->with('success', "Server / UPS - \" $serverUPS->S_UName\" successfully deleted!");
+        return to_route('serverUps.index')->with('success', "Server / UPS - \" $serverUp->S_UName\" successfully deleted!");
     }
 }

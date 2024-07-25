@@ -102,7 +102,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, serverUpsUsersLi
                                 required 
                             >
                                 <option value="">Select Type: </option>
-                                <option value="Server">Server</option>
+                                <option value="SERVER">SERVER</option>
                                 <option value="UPS">UPS</option>
                             </SelectInput>
                             <InputError message={errors.S_UType} className='mt-2' />
@@ -158,6 +158,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, serverUpsUsersLi
                                 required 
                             >
                                 <option value="">Select Operating System: </option>
+                                <option value="Windows Server 2012 R2 Standard">Windows Server 2012 R2 Standard</option>
                                 <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
                                 <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
                                 <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
