@@ -54,7 +54,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
     };
 
     const deleteComputers = (serverups) => {
-        if (!window.confirm('Are you sure you want to delete this employee?')) {
+        if (!window.confirm('Are you sure you want to delete this Server / UPS?')) {
             return;
         }
         router.delete(route('serverUps.destroy', serverups.S_UID))
@@ -71,8 +71,8 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                     className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
                 >
                     <span className='flex items-center'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
                         </svg>
                         Add
                     </span>
@@ -108,7 +108,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                         <TextInput 
                                             className="w-full"
                                             defaultValue={queryParams.S_UName} 
-                                            placeholder="Computer Name"
+                                            placeholder="Server / UPS Name"
                                             onBlur={e => searchFieldChanged('S_UName', e.target.value)}
                                             onKeyPress={ e => onKeyPress('S_UName', e)} 
                                         />
@@ -145,7 +145,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Name
+                                                S & U Name
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
                                             <TableHeading
@@ -154,7 +154,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Model
+                                                S & U Model
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_UType"
@@ -162,7 +162,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Type
+                                                Type
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_UUser"
@@ -194,7 +194,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Storage
+                                                S & U Storage
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_USerial"
@@ -202,7 +202,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Serial
+                                                S & U Serial
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_UAsset"
@@ -210,7 +210,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Asset
+                                                S & U Asset
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_UCpu"
@@ -226,7 +226,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Gen
+                                                S & U Gen
                                             </TableHeading>
                                             <TableHeading
                                                 name="S_UAddress"
