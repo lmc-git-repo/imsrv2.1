@@ -88,7 +88,7 @@ class ComputersController extends Controller
         //*This is for passing the data to create a new employee
         Computers::create($data);
 
-        return to_route('computers.index')->with('success', 'New employee was created');
+        return to_route('computers.index')->with('success', 'New computer was created');
     }
 
     /**

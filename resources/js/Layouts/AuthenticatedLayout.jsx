@@ -37,10 +37,14 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         </Dropdown.Trigger>
                                         <Dropdown.Content>
                                             <Dropdown.Link href={route('computers.index')} active={route().current('computers.index')}>
-                                                Computers
+                                                <NavLink href={route('computers.index')} active={route().current('computers.index')}>
+                                                    Computers
+                                                </NavLink>
                                             </Dropdown.Link>
                                             <Dropdown.Link href={route('serverUps.index')} active={route().current('serverUps.index')}>
-                                                Server / UPS
+                                                <NavLink href={route('serverUps.index')} active={route().current('serverUps.index')}>
+                                                    Server / UPS
+                                                </NavLink>
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
