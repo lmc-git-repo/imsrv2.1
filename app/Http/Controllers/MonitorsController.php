@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\DepartmentsResource;
+use App\Http\Resources\MonitorsResource;
 use App\Models\AccountUsers;
 use App\Models\Departments;
 use App\Models\Monitors;

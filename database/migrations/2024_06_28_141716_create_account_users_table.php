@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('account_users', function (Blueprint $table) {
             $table->id('account_id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('profile_path')->nullable();
             $table->string('department_users');
             $table->foreign('department_users')->references('dept_list')->on('departments');
