@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AccountUsersResource;
+use App\Http\Resources\ComputersResource;
 use App\Http\Resources\DepartmentsResource;
 use App\Http\Resources\MonitorsResource;
 use App\Models\AccountUsers;
+use App\Models\Computers;
 use App\Models\Departments;
 use App\Models\Monitors;
 use App\Http\Requests\StoreMonitorsRequest;
@@ -41,12 +43,14 @@ class MonitorsController extends Controller
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $mntrUsersList = AccountUsers::orderBy('name')->get();
         $monitorsAllData = Monitors::orderBy('monitor_id')->get();
+        $compNameList = Computers::orderBy('comp_name')->get();
 
         // echo $monitorsAllData;
 
         return inertia("Monitors/Index", [
             'monitors' => MonitorsResource::collection($monitors),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'compNameList' => ComputersResource::collection($compNameList),
             'mntrUsersList' => AccountUsersResource::collection($mntrUsersList),
             'monitorsAllData' => MonitorsResource::collection($monitorsAllData),
             'queryParams' => request()->query() ?: null,
@@ -60,6 +64,7 @@ class MonitorsController extends Controller
     public function create()
     {
         //
+        return inertia("Monitors/Create");
     }
 
     /**
@@ -78,9 +83,9 @@ class MonitorsController extends Controller
         }
 
         //?Checking if there's a data is posted after submission 
-        // dd($data);
+        dd($data);
 
-        //*This is for passing the data to create a new employee
+        //*This is for passing the data to create a new monitor
         Monitors::create($data);
 
         return to_route('monitors.index')->with('success', 'New monitor was created');

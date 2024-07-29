@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\AccountUsers;
+use App\Models\Computers;
 use App\Models\Departments;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -26,9 +27,11 @@ class UpdateMonitorsRequest extends FormRequest
     {
         $departments = Departments::pluck('dept_list')->toArray();
         $mntr_users = AccountUsers::pluck('name')->toArray();
+        $compName = Computers::pluck('comp_name')->toArray();
+
         return [
             //
-            "compName" => ['required', 'max:255', Rule::unique('monitors', 'compName')],
+            "compName" => ['required', Rule::in($compName)],
             "img_path" => ['nullable', 'image'],
             "mntr_users" => ['required', Rule::in($mntr_users)],
             "mntr_department" => ['required', Rule::in($departments)],

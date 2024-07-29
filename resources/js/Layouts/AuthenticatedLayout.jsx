@@ -46,6 +46,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     Server / UPS
                                                 </NavLink>
                                             </Dropdown.Link>
+                                            <Dropdown.Link href={route('serverUps.index')} active={route().current('serverUps.index')}>
+                                                <NavLink href={route('monitors.index')} active={route().current('monitors.index')}>
+                                                    Monitors
+                                                </NavLink>
+                                            </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 </div>

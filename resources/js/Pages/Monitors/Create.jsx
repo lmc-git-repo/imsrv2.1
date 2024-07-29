@@ -24,7 +24,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
 
     const onSubmit =(e) =>{
         e.preventDefault();
-
+        console.log("Form Data:", data);
         post(route("monitors.store"), {
             onSuccess: () => {
                 onClose();
@@ -51,10 +51,10 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
                     <div className="space-y-6">
-                        //!Must be Select Input for compName
+                        {/* //!Must be Select Input for compName */}
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="compName" value="Enter Computer Name" />
+                                <Label htmlFor="compName" value="Choose Computer Name" />
                             </div>
                             <SelectInput 
                                 name='compName'
@@ -65,7 +65,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                             >
                                 <option value="">Select Computer</option>
                                 {compNameList.map(comp_mntr => (
-                                    <option key={comp_mntr.CID} value={comp_mntr.comp_name}>
+                                    <option key={comp_mntr.monitor_id} value={comp_mntr.comp_name}>
                                         {comp_mntr.comp_name}
                                     </option>
                                 ))}
@@ -74,7 +74,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                         </div>
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="mntr_model" value="Enter Computer Model" />
+                                <Label htmlFor="mntr_model" value="Enter Monitor Model" />
                             </div>
                             <TextInput
                                 id="mntr_model"
@@ -132,7 +132,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                         
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="mntr_serial" value="Enter Computer Serial" />
+                                <Label htmlFor="mntr_serial" value="Enter Monitor Serial" />
                             </div>
                             <TextInput 
                                 id="mntr_serial" 
