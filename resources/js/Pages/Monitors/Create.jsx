@@ -13,9 +13,9 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
     const {data, setData, post, errors, reset} = useForm({
         compName: '',
         img_path: '',
-        mntr_model: '',
         mntr_user: '',
         mntr_department: '',
+        mntr_model: '',
         mntr_serial: '',
         // mntr_asset: '',
         remarks: '',
@@ -24,12 +24,16 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
 
     const onSubmit =(e) =>{
         e.preventDefault();
-        console.log("Form Data:", data);
+        // console.log("Form Data:", data);
         post(route("monitors.store"), {
             onSuccess: () => {
+                // console.log("Success:", response);
                 onClose();
                 reset();
-            }
+            },
+            // onError: (errors) => {
+            //     console.log("Errors:", errors);
+            // }
         });
     }
     const handleFileChange = (e) => {
@@ -72,22 +76,6 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                             </SelectInput>
                             <InputError message={errors.compName} className='mt-2' />
                         </div>
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="mntr_model" value="Enter Monitor Model" />
-                            </div>
-                            <TextInput
-                                id="mntr_model"
-                                type='text'
-                                name='mntr_model'
-                                value={data.mntr_model}
-                                // placeholder=""
-                                // isFocused={true}
-                                onChange={(e) => setData("mntr_model", e.target.value)}
-                                required
-                            />
-                            <InputError message={errors.mntr_model} className='mt-2' />
-                        </div>
                         
                         <div>
                             <div className="mb-2 block">
@@ -109,6 +97,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                             </SelectInput>
                             <InputError message={errors.mntr_user} className='mt-2' />
                         </div>
+
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="mntr_department" value="Choose Department" />
@@ -128,6 +117,23 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                                 ))}
                             </SelectInput>
                             <InputError message={errors.mntr_department} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="mntr_model" value="Enter Monitor Model" />
+                            </div>
+                            <TextInput
+                                id="mntr_model"
+                                type='text'
+                                name='mntr_model'
+                                value={data.mntr_model}
+                                // placeholder=""
+                                // isFocused={true}
+                                onChange={(e) => setData("mntr_model", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.mntr_model} className='mt-2' />
                         </div>
                         
                         <div>

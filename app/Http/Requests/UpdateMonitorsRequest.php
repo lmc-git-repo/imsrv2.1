@@ -26,14 +26,14 @@ class UpdateMonitorsRequest extends FormRequest
     public function rules(): array
     {
         $departments = Departments::pluck('dept_list')->toArray();
-        $mntr_users = AccountUsers::pluck('name')->toArray();
+        $mntr_user = AccountUsers::pluck('name')->toArray();
         $compName = Computers::pluck('comp_name')->toArray();
 
         return [
             //
             "compName" => ['required', Rule::in($compName)],
             "img_path" => ['nullable', 'image'],
-            "mntr_users" => ['required', Rule::in($mntr_users)],
+            "mntr_user" => ['required', Rule::in($mntr_user)],
             "mntr_department" => ['required', Rule::in($departments)],
             "mntr_model" => ['required', 'max:255'],
             "mntr_serial" => ['required', 'max:255'],

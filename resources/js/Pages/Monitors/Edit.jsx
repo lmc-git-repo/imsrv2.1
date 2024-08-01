@@ -7,27 +7,26 @@ import { useEffect, useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, selectedEditComp }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, listCompName, selectedEditMntr }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        comp_name: selectedEditComp.comp_name || '',
-        // img_path: '',
+        compName: selectedEditMntr.compName || '',
         img_path: null,
-        comp_model: selectedEditComp.comp_model || '',
-        comp_type: selectedEditComp.comp_type || '',
-        comp_user: selectedEditComp.comp_user || '',
-        department_comp: selectedEditComp.department_comp || '',
-        comp_os: selectedEditComp.comp_os || '',
-        comp_storage: selectedEditComp.comp_storage || '',
-        comp_serial: selectedEditComp.comp_serial || '',
-        comp_asset: selectedEditComp.comp_asset || '',
-        comp_cpu: selectedEditComp.comp_cpu || '',
-        comp_gen: selectedEditComp.comp_gen || '',
-        comp_address: selectedEditComp.comp_address || '',
-        comp_prdctkey: selectedEditComp.comp_prdctkey || '',
-        comp_status: selectedEditComp.comp_status || '',
-        remarks: selectedEditComp.remarks || '',
+        // comp_type: selectedEditMntr.comp_type || '',
+        mntr_user: selectedEditMntr.mntr_user || '',
+        mntr_department: selectedEditMntr.mntr_department || '',
+        mntr_model: selectedEditMntr.mntr_model || '',
+        // comp_os: selectedEditMntr.comp_os || '',
+        // comp_storage: selectedEditMntr.comp_storage || '',
+        mntr_serial: selectedEditMntr.mntr_serial || '',
+        // comp_asset: selectedEditMntr.comp_asset || '',
+        // comp_cpu: selectedEditMntr.comp_cpu || '',
+        // comp_gen: selectedEditMntr.comp_gen || '',
+        // comp_address: selectedEditMntr.comp_address || '',
+        // comp_prdctkey: selectedEditMntr.comp_prdctkey || '',
+        // comp_status: selectedEditMntr.comp_status || '',
+        remarks: selectedEditMntr.remarks || '',
         _method: 'PUT',
     });
 
@@ -35,17 +34,17 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
     const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
-        if (selectedEditComp?.img_path) {
-            setImagePreview(selectedEditComp.img_path);
+        if (selectedEditMntr?.img_path) {
+            setImagePreview(selectedEditMntr.img_path);
         } else {
             setImagePreview(null);
         }
-    }, [selectedEditComp]);
+    }, [selectedEditMntr]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
         // console.log("Form Data:", data); // Add this line to log form data
-        post(route("computers.update", selectedEditComp && selectedEditComp.CID), {
+        post(route("monitors.update", selectedEditMntr && selectedEditMntr.monitor_id), {
             onSuccess: () => {
                 // console.log("Update Successful"); 
                 onClose();
@@ -65,14 +64,14 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
             setImagePreview(imageUrl);
         } else {
             setData("img_path", null);
-            setImagePreview(selectedEditComp.img_path || null);
+            setImagePreview(selectedEditMntr.img_path || null);
         }
     };
 
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit Computer - {selectedEditComp && selectedEditComp.comp_name}
+                Edit Monitor - {selectedEditMntr && selectedEditMntr.compName}
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
@@ -80,84 +79,55 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_name" value="Enter Computer Name" />
-                            </div>
-                            <TextInput
-                                id="comp_name"
-                                type='text'
-                                name='comp_name'
-                                value={data.comp_name}
-                                // placeholder=""
-                                // isFocused={true}
-                                onChange={(e) => setData("comp_name", e.target.value)}
-                                required
-                            />
-                            <InputError message={errors.comp_name} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_model" value="Enter Computer Model" />
-                            </div>
-                            <TextInput 
-                                id="comp_model" 
-                                type="text"
-                                name='comp_model' 
-                                value={data.comp_model}
-                                onChange={(e) => setData("comp_model", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.comp_model} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_type" value="Computer Type" />
+                                <Label htmlFor="compName" value="Choose Computer Name" />
                             </div>
                             <SelectInput 
-                                name='comp_type' 
-                                id="comp_type"
-                                value={data.comp_type}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_type", e.target.value)}
+                                name='compName'
+                                id="compName" 
+                                value={data.compName}
+                                onChange={(e) => setData("compName", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Computer Type: </option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Laptop">Laptop</option>
-                            </SelectInput>
-                            <InputError message={errors.comp_type} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_user" value="Select User" />
-                            </div>
-                            <SelectInput 
-                                name='comp_user'
-                                id="comp_user" 
-                                value={data.comp_user}
-                                onChange={(e) => setData("comp_user", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select User</option>
-                                {listCompUsers.map(comp => (
-                                    <option key={comp.CID} value={comp.initial}>
-                                        {comp.initial}
+                                <option value="">Select Computer</option>
+                                {listCompName.map(comp_mntr => (
+                                    <option key={comp_mntr.monitor_id} value={comp_mntr.comp_name}>
+                                        {comp_mntr.comp_name}
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.comp_user} className='mt-2' />
+                            <InputError message={errors.compName} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="department_comp" value="Choose Department" />
+                                <Label htmlFor="mntr_user" value="Select User" />
                             </div>
                             <SelectInput 
-                                name='department_comp'
-                                id="department_comp" 
-                                value={data.department_comp}
-                                onChange={(e) => setData("department_comp", e.target.value)}
+                                name='mntr_user'
+                                id="mntr_user" 
+                                value={data.mntr_user}
+                                onChange={(e) => setData("mntr_user", e.target.value)}
+                                required 
+                            >
+                                <option value="">Select User</option>
+                                {listMntrUsers.map(mntr => (
+                                    <option key={mntr.monitor_id} value={mntr.name}>
+                                        {mntr.name}
+                                    </option>
+                                ))}
+                            </SelectInput>
+                            <InputError message={errors.mntr_user} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="mntr_department" value="Choose Department" />
+                            </div>
+                            <SelectInput 
+                                name='mntr_department'
+                                id="mntr_department" 
+                                value={data.mntr_department}
+                                onChange={(e) => setData("mntr_department", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Department</option>
@@ -167,187 +137,57 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.department_comp} className='mt-2' />
+                            <InputError message={errors.mntr_department} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_os" value="Enter Computer OS" />
-                            </div>
-                            <SelectInput 
-                                name='comp_os' 
-                                id="comp_os" 
-                                value={data.comp_os}
-                                onChange={(e) => setData("comp_os", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Operating System: </option>
-                                <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
-                                <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 10 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 11 Pro">Windows 11 Pro</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.comp_os} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_storage" value="Enter Ram Capacity" />
-                            </div>
-                            <SelectInput 
-                                name='comp_storage' 
-                                id="comp_storage" 
-                                value={data.comp_storage}
-                                onChange={(e) => setData("comp_storage", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Operating System: </option>
-                                <option value="1.5GB">1.5GB</option>
-                                <option value="2GB">2GB</option>
-                                <option value="4GB">4GB</option>
-                                <option value="6GB">6GB</option>
-                                <option value="8GB">8GB</option>
-                                <option value="12GB">12GB</option>
-                                <option value="16GB">16GB</option>
-                                <option value="32GB">32GB</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.comp_storage} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_serial" value="Enter Computer Serial" />
+                                <Label htmlFor="mntr_model" value="Enter Monitor Model" />
                             </div>
                             <TextInput 
-                                id="comp_serial" 
+                                id="mntr_model" 
                                 type="text"
-                                name='comp_serial' 
-                                value={data.comp_serial}
-                                onChange={(e) => setData("comp_serial", e.target.value)}
+                                name='mntr_model' 
+                                value={data.mntr_model}
+                                onChange={(e) => setData("mntr_model", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_serial} className='mt-2' />
+                            <InputError message={errors.mntr_model} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_asset" value="Enter Computer Asset" />
+                                <Label htmlFor="mntr_serial" value="Enter Monitor Serial" />
                             </div>
                             <TextInput 
-                                id="comp_asset" 
+                                id="mntr_serial" 
                                 type="text"
-                                name='comp_asset' 
-                                value={data.comp_asset}
-                                onChange={(e) => setData("comp_asset", e.target.value)}
+                                name='mntr_serial' 
+                                value={data.mntr_serial}
+                                onChange={(e) => setData("mntr_serial", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_asset} className='mt-2' />
+                            <InputError message={errors.mntr_serial} className='mt-2' />
                         </div>
 
-                        <div>
+                        {/* <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_cpu" value="Enter Processor" />
+                                <Label htmlFor="mntr_asset" value="Enter Monitor Asset" />
                             </div>
                             <TextInput 
-                                id="comp_cpu" 
+                                id="mntr_asset" 
                                 type="text"
-                                name='comp_cpu' 
-                                value={data.comp_cpu}
-                                onChange={(e) => setData("comp_cpu", e.target.value)}
+                                name='mntr_asset' 
+                                value={data.mntr_asset}
+                                onChange={(e) => setData("mntr_asset", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_cpu} className='mt-2' />
-                        </div>
+                            <InputError message={errors.mntr_asset} className='mt-2' />
+                        </div> */}
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_gen" value="Computer Gen" />
-                            </div>
-                            <SelectInput 
-                                name='comp_gen' 
-                                id="comp_gen"
-                                value={data.comp_gen}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_gen", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Generation: </option>
-                                <option value="3rd">3rd</option>
-                                <option value="4th">4th</option>
-                                <option value="5th">5th</option>
-                                <option value="6th">6th</option>
-                                <option value="7th">7th</option>
-                                <option value="8th">8th</option>
-                                <option value="9th">9th</option>
-                                <option value="10th">10th</option>
-                                <option value="11th">11th</option>
-                                <option value="12th">12th</option>
-                                <option value="13th">13th</option>
-                                <option value="14th">14th</option>
-                                <option value="15th">15th</option>
-                                <option value="16th">16th</option>
-                                <option value="17th">17th</option>
-                                <option value="Pentium">Pentium</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.comp_gen} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_address" value="Enter Mac Address" />
-                            </div>
-                            <TextInput 
-                                id="comp_address" 
-                                type="text"
-                                name='comp_address' 
-                                value={data.comp_address}
-                                onChange={(e) => setData("comp_address", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.comp_address} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_prdctkey" value="Enter Product Key" />
-                            </div>
-                            <TextInput 
-                                id="comp_prdctkey" 
-                                type="text"
-                                name='comp_prdctkey' 
-                                value={data.comp_prdctkey}
-                                onChange={(e) => setData("comp_prdctkey", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.comp_prdctkey} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="comp_status" value="Status" />
-                            </div>
-                            <SelectInput 
-                                name='comp_status' 
-                                id="comp_status"
-                                value={data.comp_status}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_status", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Status: </option>
-                                <option value="Deployed">Deployed</option>
-                                <option value="Spare">Spare</option>
-                                <option value="For Disposal">For Disposal</option>
-                                <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
-                            </SelectInput>
-                            <InputError message={errors.comp_status} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="remarks" value="Enter Product Key" />
+                                <Label htmlFor="remarks" value="Enter Remarks" />
                             </div>
                             <TextInput 
                                 id="remarks" 
@@ -407,7 +247,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('computers.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('monitors.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

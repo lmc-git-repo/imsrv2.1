@@ -227,9 +227,9 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                                         <td className="px-3 py-2">
                                                             <img src={monitor.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{monitor.mntr_model}</td>
                                                         <td className="px-3 py-2">{monitor.mntr_user}</td>
                                                         <td className="px-3 py-2">{monitor.mntr_department}</td>
+                                                        <td className="px-3 py-2">{monitor.mntr_model}</td>
                                                         <td className="px-3 py-2">{monitor.mntr_serial}</td>
                                                         {/* <td className="px-3 py-2">{monitor.mntr_asset}</td> */}
                                                         <td className="px-3 py-2">{monitor.remarks}</td>
@@ -295,7 +295,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                listCompUsers={mntrUsersList.data}
+                listMntrUsers={mntrUsersList.data}
                 listCompName={compNameList.data}
                 // accountUsersEdit={monitors}
                 selectedEditMntr={selectedEditMntr}

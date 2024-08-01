@@ -83,7 +83,7 @@ class MonitorsController extends Controller
         }
 
         //?Checking if there's a data is posted after submission 
-        dd($data);
+        // dd($data);
 
         //*This is for passing the data to create a new monitor
         Monitors::create($data);
