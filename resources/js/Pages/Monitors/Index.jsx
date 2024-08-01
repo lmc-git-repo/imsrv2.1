@@ -1,12 +1,12 @@
 import Pagination from '@/Components/Pagination'
-import SelectInput from '@/Components/SelectInput'
+// import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+// import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
-import { useState } from 'react'
+// import { useState } from 'react'
 
 import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'

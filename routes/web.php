@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountUsersController;
 use App\Http\Controllers\ComputersController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\MonitorsController;
+use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServerUPSController;
 use App\Http\Controllers\UserController;
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('computers', ComputersController::class);
     Route::resource('serverUps', ServerUPSController::class);
     Route::resource('monitors', MonitorsController::class);
+    Route::resource('printers', PrintersController::class);
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);

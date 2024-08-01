@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'Jhobert Cariño','Jonas ','Rolly Iponla','Eduardo Altarez','Aries Marcaida','John Ernest Evangelista','Myrna Almarinez',
             'Training Laptop HR','Training Laptop 1','Training Laptop 2','Training Desktop','Jenell Calicoy','Jerry Pujeda',
             'Melvin Rullan','Training Laptop 3','Bernadette Bernardo','Dan Mark Caravana','Junisio Lumbres','Ruth Odiamar','Arvin Jade Villanueva',
-            'Rey Hondrade','Ericka Verdeflor','Eulalia Paral'
+            'Rey Hondrade','Ericka Verdeflor','Eulalia Paral','ITD'
         ];
 
         $initials = [
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             'R.Greganda','m.botin','qc.mu','rj.orate','mc.ebba','kd.devera','k.yokozuka','ranes','c.panghulan','jp.cruz','d.deguzman',
             'J.Carino','Tubaying','R.Iponla','E.Altarez','A.Marcaida','je.evangelista','m.almarinez','training.hr','training Laptop 1',
             'training Laptop 2','Desktop','J.Calicoy','j.pujeda','m.rullan','hrtraining.laptop3','b.bernardo','dm.caravana','j.lumbres',
-            'r.odiamar','aj.villanueva','r.hondrade','e.verdeflor','e.paral'
+            'r.odiamar','aj.villanueva','r.hondrade','e.verdeflor','e.paral','.'
 
         ];
 
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
             "Employed","Employed","Employed","Employed","Employed","Employed","Employed","Employed","Employed","Employed","Employed","Employed",
             "Employed","Employed","Employed","Employed","Employed","Employed","Employed","Resigned","Employed","Employed","Employed","Employed",
             "Employed","Employed","Employed","Employed","Resigned","Employed","Employed","Employed","Employed","Employed","Employed","Employed",
-            "Employed","Employed","Employed","Employed"
+            "Employed","Employed","Employed","Employed","Employed"
         ];
         
 
@@ -128,7 +128,7 @@ class DatabaseSeeder extends Seeder
             'Facilities', 'HR', 'Die Casting', 'PPC', 'QC', 'QC', 'HR', 'HR', 'QC', 'Admin', 
             'HR', 'Safety', 'Facilities', 'Die Casting', 'Facilities', 'IT', 'PPC', 'QC', 
             'MRO Warehouse', 'Facilities', 'HR', 'HR', 'HR', 'HR', 'HR', 'IT', 'HR', 'HR', 'HR', 'Accounting',
-            'IT','Die Casting', 'Die Mold', 'New Project', 'Die Mold', 'QC', 'QC'
+            'IT','Die Casting', 'Die Mold', 'New Project', 'Die Mold', 'QC', 'QC','IT'
         ];
 
         
