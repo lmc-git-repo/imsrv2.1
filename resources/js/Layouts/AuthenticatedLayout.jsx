@@ -51,6 +51,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     Monitors
                                                 </div>
                                             </Dropdown.Link>
+                                            <Dropdown.Link href={route('printers.index')}>
+                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('printers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                    Printers
+                                                </div>
+                                            </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 </div>

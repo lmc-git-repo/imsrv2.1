@@ -15,12 +15,12 @@ import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
-export default function Index({auth, monitors, departmentsList, mntrUsersList, compNameList, queryParams = null, success}) {
+export default function Index({auth, printers, departmentsList, prntrUsersList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
-    const { showModal, selectedMntr, openModal, closeModal } = useModal();
+    const { showModal, selectedPrinter, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditMntr, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditPrinter, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -28,7 +28,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
         else{
             delete queryParams[name];
         }
-        router.get(route('monitors.index'), queryParams)
+        router.get(route('printers.index'), queryParams)
     };
 
     const onKeyPress = (name, e) => {
@@ -50,14 +50,14 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('monitors.index'), queryParams)
+        router.get(route('printers.index'), queryParams)
     };
 
-    const deleteComputers = (monitor) => {
+    const deletePrinters = (printer) => {
         if (!window.confirm('Are you sure you want to delete this employee?')) {
             return;
         }
-        router.delete(route('monitors.destroy', monitor.monitor_id))
+        router.delete(route('printers.destroy', printer.printer_id))
     };    
     
   return (
@@ -65,7 +65,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
         user={auth.user}
         header={
             <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Monitors</h2>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Printers</h2>
                 <Button 
                     onClick={() => openCreateModal()} 
                     className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -80,7 +80,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
             </div>
         }
     >
-        <Head title="Monitors" />
+        <Head title="Printers" />
         <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
@@ -91,7 +91,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                             <div className="ms-3 text-sm font-medium">
                                 {success}
                             </div>
-                            <button onClick={() => router.get(route('monitors.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
+                            <button onClick={() => router.get(route('printers.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
                                 <span className="sr-only">Dismiss</span>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -101,16 +101,16 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                     )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {/* <pre>{JSON.stringify(monitors, undefined, 2)}</pre> */}
+                            {/* <pre>{JSON.stringify(printers, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
                                 <div className="flex justify-end py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.compName} 
-                                            placeholder="Computer Name"
-                                            onBlur={e => searchFieldChanged('compName', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('compName', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Printer" // should be printer name
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                 </div>
@@ -118,33 +118,25 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <TableHeading
-                                                name="monitor_id"
+                                                name="printer_id"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                MonitorID
+                                                PrinterID
                                             </TableHeading>
                                             <TableHeading
-                                                name="compName"
+                                                name="printer_user"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Computer Name
+                                                Printer User
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
                                             
                                             <TableHeading
-                                                name="mntr_user"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                User
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="mntr_department"
+                                                name="printer_department"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
@@ -153,29 +145,29 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                             </TableHeading>
 
                                             <TableHeading
-                                                name="mntr_model"
+                                                name="printer_model"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Monitor Model
+                                                Printer Model
                                             </TableHeading>
 
                                             <TableHeading
-                                                name="mntr_serial"
+                                                name="printer_serial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Monitor Serial
+                                                Printer Serial
                                             </TableHeading>
                                             {/* <TableHeading
-                                                name="mntr_asset"
+                                                name="printer_asset"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Monitor Asset
+                                                Printer Asset
                                             </TableHeading> */}
 
                                             <TableHeading
@@ -210,38 +202,36 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {monitors.data ? (
-                                                monitors.data.map(monitor => (
-                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={monitor.monitor_id}>
-                                                        <td className="px-3 py-2">{monitor.monitor_id}</td>
+                                        {printers.data ? (
+                                                printers.data.map(printer => (
+                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={printer.printer_id}>
+                                                        <td className="px-3 py-2">{printer.printer_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("monitors.show", { monitor_id: monitor.monitor_id })}>
-                                                                {monitor.compName}
+                                                            {/* <Link href={route("printers.show", { printer_id: printer.printer_id })}>
+                                                                {printer.printer_user}
                                                             </Link> */}
-                                                            <Link href="#" onClick={(e) => openModal(monitor, e)}>
-                                                                {monitor.compName}
+                                                            <Link href="#" onClick={(e) => openModal(printer, e)}>
+                                                                {printer.printer_user}
                                                             </Link>
                                                         </th>
                                                         <td className="px-3 py-2">
-                                                            <img src={monitor.img_path} alt="" style={{width: 60}} />
+                                                            <img src={printer.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{monitor.mntr_user}</td>
-                                                        <td className="px-3 py-2">{monitor.mntr_department}</td>
-                                                        <td className="px-3 py-2">{monitor.mntr_model}</td>
-                                                        <td className="px-3 py-2">{monitor.mntr_serial}</td>
-                                                        {/* <td className="px-3 py-2">{monitor.mntr_asset}</td> */}
-                                                        <td className="px-3 py-2">{monitor.remarks}</td>
-                                                        <td className="px-3 py-2">{monitor.createdBy.name}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{monitor.created_at}</td>
+                                                        <td className="px-3 py-2">{printer.printer_department}</td>
+                                                        <td className="px-3 py-2">{printer.printer_model}</td>
+                                                        <td className="px-3 py-2">{printer.printer_serial}</td>
+                                                        {/* <td className="px-3 py-2">{printer.printer_asset}</td> */}
+                                                        <td className="px-3 py-2">{printer.remarks}</td>
+                                                        <td className="px-3 py-2">{printer.createdBy.name}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{printer.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('monitors.edit', monitor.monitor_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
+                                                            {/* <Link href={route('printers.edit', printer.printer_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(monitor, e)}
+                                                                onClick={(e) => openModal(printer, e)}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -250,7 +240,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                                             </button>
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
-                                                                onClick={() => openEditModal(monitor)}
+                                                                onClick={() => openEditModal(printer)}
                                                             >
                                                                 <span className='flex items-center justify-center'>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -259,7 +249,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                                                 </span>
                                                             </button>
                                                             <button 
-                                                                onClick={(e) => deleteComputers(monitor)}
+                                                                onClick={(e) => deletePrinters(printer)}
                                                                 className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                             >
                                                                 <span className='flex items-center justify-center'>
@@ -280,27 +270,27 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={monitors.meta.links} />
+                            <Pagination links={printers.meta.links} />
                         </div>
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedMntr} />
+            <Show show={showModal} onClose={closeModal} user={selectedPrinter} />
             <CreateModalComponent 
                 show={showCreateModal} 
                 onClose={closeCreateModal} 
                 departmentsList={departmentsList.data} 
-                mntrUsersList={mntrUsersList.data}  
-                compNameList={compNameList.data}
+                prntrUsersList={prntrUsersList.data}  
+                // compNameList={compNameList.data}
             />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                listMntrUsers={mntrUsersList.data}
-                listCompName={compNameList.data}
-                // accountUsersEdit={monitors}
-                selectedEditMntr={selectedEditMntr}
+                listPrinterUsers={prntrUsersList.data}
+                // listCompName={compNameList.data}
+                // accountUsersEdit={printers}
+                selectedEditPrinter={selectedEditPrinter}
             />
     </AuthenticatedLayout>
   )

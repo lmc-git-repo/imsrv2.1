@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('printer_department')->references('dept_list')->on('departments');
             $table->string('printer_model');
             $table->string('printer_serial');
-            $table->string('printer_asset');
+            $table->string('printer_asset')->nullable();
             $table->string('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

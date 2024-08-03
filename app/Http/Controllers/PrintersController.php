@@ -27,9 +27,15 @@ class PrintersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("printer_user")){
-            $query->where("printer_user","like","%". request("printer_user") .'%');
-        }
+        // if(request("printer_user")){
+        //     $query->where("printer_user","like","%". request("printer_user") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('printer_user', 'like', '%' . $search . '%')
+                  ->orWhere('printer_model', 'like', '%' . $search . '%');
+            });
+        }              
 
         // if(request('printer_status')){
         //     $query->where('printer_status', request('printer_status'));
@@ -49,7 +55,7 @@ class PrintersController extends Controller
             'printers' => PrintersResource::collection($printers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
             // 'compNameList' => ComputersResource::collection($compNameList),
-            'printerUsersList' => AccountUsersResource::collection($printerUsersList),
+            'prntrUsersList' => AccountUsersResource::collection($printerUsersList),
             'printersAllData' => PrintersResource::collection($printersAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -129,7 +135,7 @@ class PrintersController extends Controller
         $data['updated_by'] = Auth::id();
         $printer->update($data);
         // \Log::info('Updated printer: ', $printers->toArray());
-        return to_route('printers.index')->with('success', "Printer \" $printer->printer_user\" was updated");
+        return to_route('printers.index')->with('success', "Printer \" $printer->printer_model\" was updated");
     }
 
     /**

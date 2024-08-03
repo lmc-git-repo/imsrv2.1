@@ -34,7 +34,7 @@ class UpdatePrintersRequest extends FormRequest
             "printer_department" => ['required', Rule::in($departments)],
             "printer_model" => ['required', 'max:255'],
             "printer_serial" => ['required', 'max:255'],
-            "printer_asset" => ['required', 'max:255'],
+            "printer_asset" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }
