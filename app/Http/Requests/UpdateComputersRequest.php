@@ -26,6 +26,7 @@ class UpdateComputersRequest extends FormRequest
     {
         $departments = Departments::pluck('dept_list')->toArray();
         $comp_users = AccountUsers::pluck('initial')->toArray();
+        $fullName = AccountUsers::pluck('name')->toArray();
         return [
             //
             "comp_name" => ['required', 'max:255'],
@@ -33,6 +34,7 @@ class UpdateComputersRequest extends FormRequest
             "comp_model" => ['required', 'max:255'],
             "comp_type" => ['required', Rule::in(['Desktop','Laptop'])],
             "comp_user" => ['required', Rule::in($comp_users)],
+            "fullName" => ['required', Rule::in($fullName)],
             "department_comp" => ['required', Rule::in($departments)],
             "comp_os" => ['required', 'max:255'],
             "comp_storage" => ['required', 'max:255'],

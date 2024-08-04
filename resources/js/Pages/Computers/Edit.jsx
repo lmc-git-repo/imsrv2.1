@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, selectedEditComp }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, listCompUsersFname, selectedEditComp }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
@@ -17,6 +17,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
         comp_model: selectedEditComp.comp_model || '',
         comp_type: selectedEditComp.comp_type || '',
         comp_user: selectedEditComp.comp_user || '',
+        fullName: selectedEditComp.fullName || '',
         department_comp: selectedEditComp.department_comp || '',
         comp_os: selectedEditComp.comp_os || '',
         comp_storage: selectedEditComp.comp_storage || '',
@@ -44,7 +45,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
 
     const onSubmit =(e) =>{
         e.preventDefault();
-        // console.log("Form Data:", data); // Add this line to log form data
+        console.log("Form Data:", data); // Add this line to log form data
         post(route("computers.update", selectedEditComp && selectedEditComp.CID), {
             onSuccess: () => {
                 // console.log("Update Successful"); 
@@ -147,6 +148,27 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, sel
                                 ))}
                             </SelectInput>
                             <InputError message={errors.comp_user} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="fullName" value="Full Name" />
+                            </div>
+                            <SelectInput 
+                                name='fullName'
+                                id="fullName" 
+                                value={data.fullName}
+                                onChange={(e) => setData("fullName", e.target.value)}
+                                required 
+                            >
+                                <option value="">Select User</option>
+                                {listCompUsersFname.map(fname => (
+                                    <option key={fname.CID} value={fname.name}>
+                                        {fname.name}
+                                    </option>
+                                ))}
+                            </SelectInput>
+                            <InputError message={errors.fullName} className='mt-2' />
                         </div>
 
                         <div>

@@ -24,6 +24,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Model:</strong> {user.comp_model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Type:</strong> {user.comp_type}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer User:</strong> {user.comp_user}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Full Name:</strong> {user.fullName}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_comp}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Operating System:</strong> {user.comp_os}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Ram Capacity:</strong> {user.comp_storage}</p>

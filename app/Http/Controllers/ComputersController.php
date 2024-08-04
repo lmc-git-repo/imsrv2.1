@@ -44,6 +44,7 @@ class ComputersController extends Controller
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $compUsersList = AccountUsers::orderBy('initial')->get();
+        $compUsersFnameList = AccountUsers::orderBy('name')->get();
         $computersAllData = Computers::orderBy('CID')->get();
 
         // echo $computersAllData;
@@ -52,6 +53,7 @@ class ComputersController extends Controller
             'computers' => ComputersResource::collection($computers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
             'compUsersList' => AccountUsersResource::collection($compUsersList),
+            'compUsersFnameList' => AccountUsersResource::collection($compUsersFnameList),
             'computersAllData' => ComputersResource::collection($computersAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
@@ -128,6 +130,7 @@ class ComputersController extends Controller
             unset($data['img_path']);
         }
 
+        // dd($data);
         $data['updated_by'] = Auth::id();
         $computer->update($data);
         // \Log::info('Updated computer: ', $computers->toArray());

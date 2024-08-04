@@ -23,6 +23,7 @@ class ComputersFactory extends Factory
             'comp_model' => fake()->word(),
             'comp_type' => fake()->word(),
             'comp_user' => fake()->unique()->lexify('?.????'),
+            'fullName' => fake()->name(),
             'department_comp' => fake()->word(),
             'comp_os' => fake()->word(),
             'comp_storage' => fake()->word(),

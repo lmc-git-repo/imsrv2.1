@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 
 
-const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList }) => {
+const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, compUsersFnameList }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
@@ -127,6 +127,29 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList })
                             </SelectInput>
                             <InputError message={errors.comp_user} className='mt-2' />
                         </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="fullName" value="Full Name" />
+                            </div>
+                            <SelectInput 
+                                name='fullName'
+                                id="fullName" 
+                                value={data.fullName}
+                                onChange={(e) => setData("fullName", e.target.value)}
+                                required 
+                            >
+                                <option value="">Select User</option>
+                                {compUsersFnameList.map(fname => (
+                                    <option key={fname.CID} value={fname.name}>
+                                        {fname.name}
+                                    </option>
+                                ))}
+                            </SelectInput>
+                            <InputError message={errors.fullName} className='mt-2' />
+                        </div>
+
+
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="department_comp" value="Choose Department" />

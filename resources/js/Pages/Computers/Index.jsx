@@ -15,7 +15,7 @@ import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
-export default function Index({auth, computers, departmentsList, compUsersList, queryParams = null, success}) {
+export default function Index({auth, computers, departmentsList, compUsersList, compUsersFnameList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
     const { showModal, selectedComp, openModal, closeModal } = useModal();
@@ -172,6 +172,16 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 User
                                             </TableHeading>
+                                            
+                                            <TableHeading
+                                                name="fullName"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Full Name
+                                            </TableHeading>
+
                                             <TableHeading
                                                 name="department_comp"
                                                 sort_field={queryParams.sort_field} 
@@ -290,6 +300,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3">
                                                 <SelectInput 
                                                     className="w-full text-sm h-8 py-1"
@@ -330,6 +341,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                         <td className="px-3 py-2">{computer.comp_model}</td>
                                                         <td className="px-3 py-2">{computer.comp_type}</td>
                                                         <td className="px-3 py-2">{computer.comp_user}</td>
+                                                        <td className="px-3 py-2">{computer.fullName}</td>
                                                         <td className="px-3 py-2">{computer.department_comp}</td>
                                                         <td className="px-3 py-2">{computer.comp_os}</td>
                                                         <td className="px-3 py-2">{computer.comp_storage}</td>
@@ -394,12 +406,13 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                 </div>
             </div>
             <Show show={showModal} onClose={closeModal} user={selectedComp} />
-            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} compUsersList={compUsersList.data}  />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} compUsersList={compUsersList.data} compUsersFnameList={compUsersFnameList.data}  />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
                 listCompUsers={compUsersList.data}
+                listCompUsersFname={compUsersFnameList.data}
                 // accountUsersEdit={computers}
                 selectedEditComp={selectedEditComp}
             />

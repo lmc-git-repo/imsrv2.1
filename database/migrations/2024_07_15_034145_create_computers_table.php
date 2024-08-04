@@ -19,6 +19,8 @@ return new class extends Migration
             $table->enum('comp_type',['Desktop','Laptop']);   
             $table->string('comp_user');
             $table->foreign('comp_user')->references('initial')->on('account_users');
+            $table->string('fullName')->nullable();
+            $table->foreign('fullName')->references('name')->on('account_users');
             $table->string('department_comp');
             $table->foreign('department_comp')->references('dept_list')->on('departments');
             $table->string('comp_os');
