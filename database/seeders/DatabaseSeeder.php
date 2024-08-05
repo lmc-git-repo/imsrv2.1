@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             'R.Greganda','m.botin','qc.mu','rj.orate','mc.ebba','kd.devera','k.yokozuka','ranes','c.panghulan','jp.cruz','d.deguzman',
             'J.Carino','Tubaying','R.Iponla','E.Altarez','A.Marcaida','je.evangelista','m.almarinez','training.hr','training Laptop 1',
             'training Laptop 2','Desktop','J.Calicoy','j.pujeda','m.rullan','hrtraining.laptop3','b.bernardo','dm.caravana','j.lumbres',
-            'r.odiamar','aj.villanueva','r.hondrade','e.verdeflor','e.paral','.'
+            'r.odiamar','aj.villanueva','r.hondrade','e.verdeflor','e.paral','it.department'
 
         ];
 

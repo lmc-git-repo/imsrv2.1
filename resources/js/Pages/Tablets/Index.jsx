@@ -1,12 +1,12 @@
 import Pagination from '@/Components/Pagination'
-// import SelectInput from '@/Components/SelectInput'
+import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-// import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+import { TABLETS_STATUS_CLASS_MAP, TABLETS_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
-// import { useState } from 'react'
+import { useState } from 'react'
 
 import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
@@ -15,12 +15,12 @@ import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
-export default function Index({auth, printers, departmentsList, prntrUsersList, queryParams = null, success}) {
+export default function Index({auth, tablets, departmentsList, tabletUsersList, tabletUsersFnameList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
-    const { showModal, selectedPrinter, openModal, closeModal } = useModal();
+    const { showModal, selectedTablet, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditPrinter, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditTablet, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -28,7 +28,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
         else{
             delete queryParams[name];
         }
-        router.get(route('printers.index'), queryParams)
+        router.get(route('tablets.index'), queryParams)
     };
 
     const onKeyPress = (name, e) => {
@@ -50,14 +50,14 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('printers.index'), queryParams)
+        router.get(route('tablets.index'), queryParams)
     };
 
-    const deletePrinters = (printer) => {
-        if (!window.confirm('Are you sure you want to delete this employee?')) {
+    const deleteTablets = (tablet) => {
+        if (!window.confirm('Are you sure you want to delete this Tablet?')) {
             return;
         }
-        router.delete(route('printers.destroy', printer.printer_id))
+        router.delete(route('tablets.destroy', tablet.tablet_id))
     };    
     
   return (
@@ -65,7 +65,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
         user={auth.user}
         header={
             <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Printers</h2>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Tablets</h2>
                 <Button 
                     onClick={() => openCreateModal()} 
                     className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -80,7 +80,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
             </div>
         }
     >
-        <Head title="Printers" />
+        <Head title="Tablets" />
         <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
@@ -91,7 +91,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                             <div className="ms-3 text-sm font-medium">
                                 {success}
                             </div>
-                            <button onClick={() => router.get(route('printers.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
+                            <button onClick={() => router.get(route('tablets.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
                                 <span className="sr-only">Dismiss</span>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -101,75 +101,168 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                     )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {/* <pre>{JSON.stringify(printers, undefined, 2)}</pre> */}
+                            {/* <pre>{JSON.stringify(tablets, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
                                 <div className="flex justify-end py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.search} 
-                                            placeholder="Printer" // should be printer name
-                                            onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('search', e)} 
+                                            defaultValue={queryParams.tablet_name} 
+                                            placeholder="Tablet Name"
+                                            onBlur={e => searchFieldChanged('tablet_name', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('tablet_name', e)} 
                                         />
+                                    </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={queryParams.tablet_status} 
+                                            onChange={ e => searchFieldChanged('tablet_status', e.target.value)}
+                                        >
+                                            <option value="">Select Status</option>
+                                            <option value="Deployed">Deployed</option>
+                                            <option value="Spare">Spare</option>
+                                            <option value="For Disposal">For Disposal</option>
+                                            <option value="Already Disposed">Already Disposed</option>
+                                            <option value="Barrow">Barrow</option>
+                                        </SelectInput>
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <TableHeading
-                                                name="printer_id"
+                                                name="tablet_id"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                PrinterID
+                                                TabID
                                             </TableHeading>
                                             <TableHeading
-                                                name="printer_user"
+                                                name="tablet_name"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Printer User
+                                                Tablet Name
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
+                                            <TableHeading
+                                                name="tablet_model"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Tablet Model
+                                            </TableHeading>
+                                            {/* <TableHeading
+                                                name="tablet_type"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Tablet Type
+                                            </TableHeading> */}
+                                            <TableHeading
+                                                name="tablet_user"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                User
+                                            </TableHeading>
                                             
                                             <TableHeading
-                                                name="printer_department"
+                                                name="fullName"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Full Name
+                                            </TableHeading>
+
+                                            <TableHeading
+                                                name="department_tablet"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Department
                                             </TableHeading>
-
                                             <TableHeading
-                                                name="printer_model"
+                                                name="tablet_os"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Printer Model
+                                                Operating System
                                             </TableHeading>
-
                                             <TableHeading
-                                                name="printer_serial"
+                                                name="tablet_storage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Printer Serial
+                                                Tablet Storage
                                             </TableHeading>
                                             <TableHeading
-                                                name="printer_asset"
+                                                name="tablet_serial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Printer Asset
+                                                Tablet Serial
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="tablet_asset"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Tablet Asset
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="tablet_cpu"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Processor
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="tablet_gen"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Tablet Gen
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="tablet_address"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Mac Address
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="tablet_prdctkey"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Product Key
                                             </TableHeading>
 
+                                            <TableHeading
+                                                name="tablet_status"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Status
+                                            </TableHeading>
                                             <TableHeading
                                                 name="remarks"
                                                 sort_field={queryParams.sort_field} 
@@ -203,36 +296,70 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3">
+                                                <SelectInput 
+                                                    className="w-full text-sm h-8 py-1"
+                                                    defaultValue={queryParams.tablet_status} 
+                                                    onChange={ e => searchFieldChanged('tablet_status', e.target.value)}
+                                                >
+                                                    <option value="">Select Status</option>
+                                                    <option value="Deployed">Deployed</option>
+                                                    <option value="Spare">Spare</option>
+                                                    <option value="For Disposal">For Disposal</option>
+                                                    <option value="Already Disposed">Already Disposed</option>
+                                                    <option value="Barrow">Barrow</option>
+                                                </SelectInput>
+                                            </th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {printers.data ? (
-                                                printers.data.map(printer => (
-                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={printer.printer_id}>
-                                                        <td className="px-3 py-2">{printer.printer_id}</td>
+                                        {tablets.data ? (
+                                                tablets.data.map(tablet => (
+                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={tablet.tablet_id}>
+                                                        <td className="px-3 py-2">{tablet.tablet_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("printers.show", { printer_id: printer.printer_id })}>
-                                                                {printer.printer_user}
+                                                            {/* <Link href={route("tablets.show", { tablet_id: tablet.tablet_id })}>
+                                                                {tablet.tablet_name}
                                                             </Link> */}
-                                                            <Link href="#" onClick={(e) => openModal(printer, e)}>
-                                                                {printer.printer_user}
+                                                            <Link href="#" onClick={(e) => openModal(tablet, e)}>
+                                                                {tablet.tablet_name}
                                                             </Link>
                                                         </th>
                                                         <td className="px-3 py-2">
-                                                            <img src={printer.img_path} alt="" style={{width: 60}} />
+                                                            <img src={tablet.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{printer.printer_department}</td>
-                                                        <td className="px-3 py-2">{printer.printer_model}</td>
-                                                        <td className="px-3 py-2">{printer.printer_serial}</td>
-                                                        <td className="px-3 py-2">{printer.printer_asset}</td>
-                                                        <td className="px-3 py-2">{printer.remarks}</td>
-                                                        <td className="px-3 py-2">{printer.createdBy.name}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{printer.created_at}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_model}</td>
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_type}</td> */}
+                                                        <td className="px-3 py-2">{tablet.tablet_user}</td>
+                                                        <td className="px-3 py-2">{tablet.fullName}</td>
+                                                        <td className="px-3 py-2">{tablet.department_tablet}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_os}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_storage}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_serial}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_asset}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_cpu}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_gen}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_address}</td>
+                                                        <td className="px-3 py-2">{tablet.tablet_prdctkey}</td>
+                                                        <td className="px-3 py-2 text-nowrap">
+                                                            <span className={'px-2 rounded-e-full text-white ' + TABLETS_STATUS_CLASS_MAP[tablet.tablet_status]}>{TABLETS_STATUS_TEXT_MAP[tablet.tablet_status]}</span>
+                                                        </td>
+                                                        <td className="px-3 py-2">{tablet.remarks}</td>
+                                                        <td className="px-3 py-2">{tablet.createdBy.name}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{tablet.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('printers.edit', printer.printer_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
+                                                            {/* <Link href={route('tablets.edit', tablet.tablet_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(printer, e)}
+                                                                onClick={(e) => openModal(tablet, e)}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -241,7 +368,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                                             </button>
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
-                                                                onClick={() => openEditModal(printer)}
+                                                                onClick={() => openEditModal(tablet)}
                                                             >
                                                                 <span className='flex items-center justify-center'>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -250,7 +377,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                                                 </span>
                                                             </button>
                                                             <button 
-                                                                onClick={(e) => deletePrinters(printer)}
+                                                                onClick={(e) => deleteTablets(tablet)}
                                                                 className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                             >
                                                                 <span className='flex items-center justify-center'>
@@ -271,27 +398,21 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={printers.meta.links} />
+                            <Pagination links={tablets.meta.links} />
                         </div>
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedPrinter} />
-            <CreateModalComponent 
-                show={showCreateModal} 
-                onClose={closeCreateModal} 
-                departmentsList={departmentsList.data} 
-                prntrUsersList={prntrUsersList.data}  
-                // compNameList={compNameList.data}
-            />
+            <Show show={showModal} onClose={closeModal} user={selectedTablet} />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} tabletUsersList={tabletUsersList.data} tabletUsersFnameList={tabletUsersFnameList.data}  />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                listPrinterUsers={prntrUsersList.data}
-                // listCompName={compNameList.data}
-                // accountUsersEdit={printers}
-                selectedEditPrinter={selectedEditPrinter}
+                listTabletUsers={tabletUsersList.data}
+                listTabletUsersFname={tabletUsersFnameList.data}
+                // accountUsersEdit={tablets}
+                selectedEditTablet={selectedEditTablet}
             />
     </AuthenticatedLayout>
   )

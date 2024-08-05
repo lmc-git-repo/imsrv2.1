@@ -2,152 +2,130 @@ import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, listCompUsersFname, selectedEditComp }) => {
+const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList, tabletUsersFnameList }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        comp_name: selectedEditComp.comp_name || '',
-        // img_path: '',
-        img_path: null,
-        comp_model: selectedEditComp.comp_model || '',
-        comp_type: selectedEditComp.comp_type || '',
-        comp_user: selectedEditComp.comp_user || '',
-        fullName: selectedEditComp.fullName || '',
-        department_comp: selectedEditComp.department_comp || '',
-        comp_os: selectedEditComp.comp_os || '',
-        comp_storage: selectedEditComp.comp_storage || '',
-        comp_serial: selectedEditComp.comp_serial || '',
-        comp_asset: selectedEditComp.comp_asset || '',
-        comp_cpu: selectedEditComp.comp_cpu || '',
-        comp_gen: selectedEditComp.comp_gen || '',
-        comp_address: selectedEditComp.comp_address || '',
-        comp_prdctkey: selectedEditComp.comp_prdctkey || '',
-        comp_status: selectedEditComp.comp_status || '',
-        remarks: selectedEditComp.remarks || '',
-        _method: 'PUT',
-    });
-
-
+        tablet_name: '',
+        img_path: '',
+        tablet_model: '',
+        tablet_type: '',
+        tablet_user: '',
+        department_tablet: '',
+        tablet_os: '',
+        tablet_storage: '',
+        tablet_serial: '',
+        tablet_asset: '',
+        tablet_cpu: '',
+        tablet_gen: '',
+        tablet_address: '',
+        tablet_prdctkey: '',
+        tablet_status: '',
+        remarks: '',
+    })
     const [imagePreview, setImagePreview] = useState(null);
-
-    useEffect(() => {
-        if (selectedEditComp?.img_path) {
-            setImagePreview(selectedEditComp.img_path);
-        } else {
-            setImagePreview(null);
-        }
-    }, [selectedEditComp]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
-        // console.log("Form Data:", data); // Add this line to log form data
-        post(route("computers.update", selectedEditComp && selectedEditComp.CID), {
+
+        post(route("tablets.store"), {
             onSuccess: () => {
-                // console.log("Update Successful"); 
                 onClose();
                 reset();
-            },
-            onError: (errors) => {
-                // Handle errors if needed
-                console.error(errors);
             }
         });
     }
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        setData("img_path", file);
         if (file) {
-            setData("img_path", file);
             const imageUrl = URL.createObjectURL(file);
             setImagePreview(imageUrl);
         } else {
-            setData("img_path", null);
-            setImagePreview(selectedEditComp.img_path || null);
+            setImagePreview(null);
         }
     };
 
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit Computer - {selectedEditComp && selectedEditComp.comp_name}
+                Add New Tablet
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
-                    {/* <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre> */}
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_name" value="Enter Computer Name" />
+                                <Label htmlFor="tablet_name" value="Enter Tablet Name" />
                             </div>
                             <TextInput
-                                id="comp_name"
+                                id="tablet_name"
                                 type='text'
-                                name='comp_name'
-                                value={data.comp_name}
+                                name='tablet_name'
+                                value={data.tablet_name}
                                 // placeholder=""
                                 // isFocused={true}
-                                onChange={(e) => setData("comp_name", e.target.value)}
+                                onChange={(e) => setData("tablet_name", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.comp_name} className='mt-2' />
+                            <InputError message={errors.tablet_name} className='mt-2' />
                         </div>
-
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_model" value="Enter Computer Model" />
+                                <Label htmlFor="tablet_model" value="Enter Tablet Model" />
                             </div>
-                            <TextInput 
-                                id="comp_model" 
-                                type="text"
-                                name='comp_model' 
-                                value={data.comp_model}
-                                onChange={(e) => setData("comp_model", e.target.value)}
-                                required 
+                            <TextInput
+                                id="tablet_model"
+                                type='text'
+                                name='tablet_model'
+                                value={data.tablet_model}
+                                // placeholder=""
+                                // isFocused={true}
+                                onChange={(e) => setData("tablet_model", e.target.value)}
+                                required
                             />
-                            <InputError message={errors.comp_model} className='mt-2' />
+                            <InputError message={errors.tablet_model} className='mt-2' />
                         </div>
-
-                        <div>
+                        {/* <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_type" value="Computer Type" />
+                                <Label htmlFor="tablet_type" value="Tablet Type:" />
                             </div>
                             <SelectInput 
-                                name='comp_type' 
-                                id="comp_type"
-                                value={data.comp_type}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_type", e.target.value)}
+                                name='tablet_type' 
+                                id="tablet_type" 
+                                onChange={(e) => setData("tablet_type", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Computer Type: </option>
+                                <option value="">Select Type: </option>
                                 <option value="Desktop">Desktop</option>
                                 <option value="Laptop">Laptop</option>
                             </SelectInput>
-                            <InputError message={errors.comp_type} className='mt-2' />
-                        </div>
-
+                            <InputError message={errors.tablet_type} className='mt-2' />
+                        </div> */}
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_user" value="Select User" />
+                                <Label htmlFor="tablet_user" value="Choose User" />
                             </div>
                             <SelectInput 
-                                name='comp_user'
-                                id="comp_user" 
-                                value={data.comp_user}
-                                onChange={(e) => setData("comp_user", e.target.value)}
+                                name='tablet_user'
+                                id="tablet_user" 
+                                value={data.tablet_user}
+                                onChange={(e) => setData("tablet_user", e.target.value)}
                                 required 
                             >
                                 <option value="">Select User</option>
-                                {listCompUsers.map(comp => (
-                                    <option key={comp.CID} value={comp.initial}>
-                                        {comp.initial}
+                                {tabletUsersList.map(tab => (
+                                    <option key={tab.tablet_id} value={tab.initial}>
+                                        {tab.initial}
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.comp_user} className='mt-2' />
+                            <InputError message={errors.tablet_user} className='mt-2' />
                         </div>
 
                         <div>
@@ -162,8 +140,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                                 required 
                             >
                                 <option value="">Select User</option>
-                                {listCompUsersFname.map(fname => (
-                                    <option key={fname.CID} value={fname.name}>
+                                {tabletUsersFnameList.map(fname => (
+                                    <option key={fname.tablet_id} value={fname.name}>
                                         {fname.name}
                                     </option>
                                 ))}
@@ -171,60 +149,57 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                             <InputError message={errors.fullName} className='mt-2' />
                         </div>
 
+
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="department_comp" value="Choose Department" />
+                                <Label htmlFor="department_tablet" value="Choose Department" />
                             </div>
                             <SelectInput 
-                                name='department_comp'
-                                id="department_comp" 
-                                value={data.department_comp}
-                                onChange={(e) => setData("department_comp", e.target.value)}
+                                name='department_tablet'
+                                id="department_tablet" 
+                                value={data.department_tablet}
+                                onChange={(e) => setData("department_tablet", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Department</option>
-                                {listDepartments.map(dept => (
+                                {departmentsList.map(dept => (
                                     <option key={dept.dept_id} value={dept.dept_list}>
                                         {dept.dept_list}
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.department_comp} className='mt-2' />
+                            <InputError message={errors.department_tablet} className='mt-2' />
                         </div>
-
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_os" value="Enter Computer OS" />
+                                <Label htmlFor="tablet_os" value="Enter Tablet OS" />
                             </div>
                             <SelectInput 
-                                name='comp_os' 
-                                id="comp_os" 
-                                value={data.comp_os}
-                                onChange={(e) => setData("comp_os", e.target.value)}
+                                name='tablet_os' 
+                                id="tablet_os" 
+                                onChange={(e) => setData("tablet_os", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Operating System: </option>
                                 <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
                                 <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 10 Pro 64bit">Windows 8.1 Pro 64bit</option>
+                                <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
                                 <option value="Windows 11 Pro">Windows 11 Pro</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
-                            <InputError message={errors.comp_os} className='mt-2' />
+                            <InputError message={errors.tablet_os} className='mt-2' />
                         </div>
-
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_storage" value="Enter Ram Capacity" />
+                                <Label htmlFor="tablet_storage" value="Enter Ram Capacity" />
                             </div>
                             <SelectInput 
-                                name='comp_storage' 
-                                id="comp_storage" 
-                                value={data.comp_storage}
-                                onChange={(e) => setData("comp_storage", e.target.value)}
+                                name='tablet_storage' 
+                                id="tablet_storage" 
+                                onChange={(e) => setData("tablet_storage", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Operating System: </option>
+                                <option value="">Select Ram Capacity: </option>
                                 <option value="1.5GB">1.5GB</option>
                                 <option value="2GB">2GB</option>
                                 <option value="4GB">4GB</option>
@@ -235,63 +210,62 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                                 <option value="32GB">32GB</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
-                            <InputError message={errors.comp_storage} className='mt-2' />
+                            <InputError message={errors.tablet_storage} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_serial" value="Enter Computer Serial" />
+                                <Label htmlFor="tablet_serial" value="Enter Tablet Serial" />
                             </div>
                             <TextInput 
-                                id="comp_serial" 
+                                id="tablet_serial" 
                                 type="text"
-                                name='comp_serial' 
-                                value={data.comp_serial}
-                                onChange={(e) => setData("comp_serial", e.target.value)}
+                                name='tablet_serial' 
+                                value={data.tablet_serial}
+                                onChange={(e) => setData("tablet_serial", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_serial} className='mt-2' />
+                            <InputError message={errors.tablet_serial} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_asset" value="Enter Computer Asset" />
+                                <Label htmlFor="tablet_asset" value="Enter Tablet Asset" />
                             </div>
                             <TextInput 
-                                id="comp_asset" 
+                                id="tablet_asset" 
                                 type="text"
-                                name='comp_asset' 
-                                value={data.comp_asset}
-                                onChange={(e) => setData("comp_asset", e.target.value)}
+                                name='tablet_asset' 
+                                value={data.tablet_asset}
+                                onChange={(e) => setData("tablet_asset", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_asset} className='mt-2' />
+                            <InputError message={errors.tablet_asset} className='mt-2' />
                         </div>
-
+                        
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_cpu" value="Enter Processor" />
+                                <Label htmlFor="tablet_cpu" value="Enter Tablet Processor" />
                             </div>
                             <TextInput 
-                                id="comp_cpu" 
+                                id="tablet_cpu" 
                                 type="text"
-                                name='comp_cpu' 
-                                value={data.comp_cpu}
-                                onChange={(e) => setData("comp_cpu", e.target.value)}
+                                name='tablet_cpu' 
+                                value={data.tablet_cpu}
+                                onChange={(e) => setData("tablet_cpu", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_cpu} className='mt-2' />
+                            <InputError message={errors.tablet_cpu} className='mt-2' />
                         </div>
-
+                        
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_gen" value="Computer Gen" />
+                                <Label htmlFor="tablet_gen" value="Tablet Gen:" />
                             </div>
                             <SelectInput 
-                                name='comp_gen' 
-                                id="comp_gen"
-                                value={data.comp_gen}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_gen", e.target.value)}
+                                name='tablet_gen' 
+                                id="tablet_gen" 
+                                onChange={(e) => setData("tablet_gen", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Generation: </option>
@@ -313,63 +287,62 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                                 <option value="Pentium">Pentium</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
-                            <InputError message={errors.comp_gen} className='mt-2' />
+                            <InputError message={errors.tablet_gen} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_address" value="Enter Mac Address" />
+                                <Label htmlFor="tablet_address" value="Enter Tablet Address" />
                             </div>
                             <TextInput 
-                                id="comp_address" 
+                                id="tablet_address" 
                                 type="text"
-                                name='comp_address' 
-                                value={data.comp_address}
-                                onChange={(e) => setData("comp_address", e.target.value)}
+                                name='tablet_address' 
+                                value={data.tablet_address}
+                                onChange={(e) => setData("tablet_address", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_address} className='mt-2' />
+                            <InputError message={errors.tablet_address} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_prdctkey" value="Enter Product Key" />
+                                <Label htmlFor="tablet_prdctkey" value="Enter Product Key" />
                             </div>
                             <TextInput 
-                                id="comp_prdctkey" 
+                                id="tablet_prdctkey" 
                                 type="text"
-                                name='comp_prdctkey' 
-                                value={data.comp_prdctkey}
-                                onChange={(e) => setData("comp_prdctkey", e.target.value)}
+                                name='tablet_prdctkey' 
+                                value={data.tablet_prdctkey}
+                                onChange={(e) => setData("tablet_prdctkey", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.comp_prdctkey} className='mt-2' />
+                            <InputError message={errors.tablet_prdctkey} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="comp_status" value="Status" />
+                                <Label htmlFor="tablet_status" value="Tablet Status" />
                             </div>
                             <SelectInput 
-                                name='comp_status' 
-                                id="comp_status"
-                                value={data.comp_status}  // Add this line to set the value 
-                                onChange={(e) => setData("comp_status", e.target.value)}
+                                name='tablet_status' 
+                                id="tablet_status" 
+                                onChange={(e) => setData("tablet_status", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Status: </option>
+                                <option value="">Select Computer Status: </option>
                                 <option value="Deployed">Deployed</option>
                                 <option value="Spare">Spare</option>
                                 <option value="For Disposal">For Disposal</option>
                                 <option value="Already Disposed">Already Disposed</option>
                                 <option value="Barrow">Barrow</option>
                             </SelectInput>
-                            <InputError message={errors.comp_status} className='mt-2' />
+                            <InputError message={errors.tablet_status} className='mt-2' />
                         </div>
-
+                        
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="remarks" value="Enter Product Key" />
+                                <Label htmlFor="remarks" value="Remarks" />
                             </div>
                             <TextInput 
                                 id="remarks" 
@@ -385,14 +358,14 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
 
                         <div className="flex-row w-full items-center justify-center">
                             <Label
-                                htmlFor="computers_img_path"
+                                htmlFor="tablet_img_path"
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                    {   
+                                    {
                                         imagePreview ? (
                                             <div className="mt-4">
-                                                <img src={imagePreview} alt="Img Preview" className="h-52 w-52 object-cover rounded-full" />
+                                                <img src={imagePreview} alt="Image Preview" className="h-52 w-52 object-cover rounded-full" />
                                             </div>
                                         ) : (
                                         <div className='flex flex-col items-center justify-center'>
@@ -416,12 +389,18 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                                             </p>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                         </div>
-                                        )                                        
+                                        )
                                     }
+                                    {/* {imagePreview && (
+                                        <div className="mt-4">
+                                            <img src={imagePreview} alt="Profile Preview" className="h-32 w-32 object-cover rounded-full" />
+                                        </div>
+                                    )} */}
                                 </div>
                                 <FileInput 
-                                    id="computers_img_path" 
-                                    name='img_path'
+                                    id="tablet_img_path" 
+                                    name='img_path' 
+                                    // onChange={(e) => setData("img_path", e.target.files[0])} 
                                     onChange={handleFileChange}
                                     className="hidden" 
                                 />
@@ -429,7 +408,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('computers.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('tablets.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
@@ -448,4 +427,4 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
     );
 };
 
-export default EditModalComponent;
+export default CreateModalComponent;

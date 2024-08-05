@@ -17,6 +17,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
         printer_department: selectedEditPrinter.printer_department || '',
         printer_model: selectedEditPrinter.printer_model || '',
         printer_serial: selectedEditPrinter.printer_serial || '',
+        printer_asset: selectedEditPrinter.printer_asset || '',
         remarks: selectedEditPrinter.remarks || '',
         _method: 'PUT',
     });
@@ -161,7 +162,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
                             <InputError message={errors.printer_serial} className='mt-2' />
                         </div>
 
-                        {/* <div>
+                        <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="printer_asset" value="Enter Printer Asset" />
                             </div>
@@ -174,7 +175,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
                                 required 
                             />
                             <InputError message={errors.printer_asset} className='mt-2' />
-                        </div> */}
+                        </div>
 
                         <div>
                             <div className="mb-2 block">

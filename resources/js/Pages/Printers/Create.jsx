@@ -17,7 +17,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
         printer_department: '',
         printer_model: '',
         printer_serial: '',
-        // printer_asset: '',
+        printer_asset: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -151,7 +151,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
                             <InputError message={errors.printer_serial} className='mt-2' />
                         </div>
 
-                        {/* <div>
+                        <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="printer_asset" value="Enter Printer Asset" />
                             </div>
@@ -164,7 +164,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
                                 required 
                             />
                             <InputError message={errors.printer_asset} className='mt-2' />
-                        </div> */}
+                        </div>
                         
                         <div>
                             <div className="mb-2 block">

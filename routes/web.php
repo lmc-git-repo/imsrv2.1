@@ -7,6 +7,7 @@ use App\Http\Controllers\MonitorsController;
 use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServerUPSController;
+use App\Http\Controllers\TabletsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('serverUps', ServerUPSController::class);
     Route::resource('monitors', MonitorsController::class);
     Route::resource('printers', PrintersController::class);
+    Route::resource('tablets', TabletsController::class);
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);

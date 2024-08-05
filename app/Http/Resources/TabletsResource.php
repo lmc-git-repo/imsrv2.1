@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class ComputersResource extends JsonResource
+class TabletsResource extends JsonResource
 {
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -19,23 +20,22 @@ class ComputersResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'CID' => $this->CID,
-            'comp_name' => $this->comp_name,
+            'tablet_id' => $this->tablet_id,
+            'tablet_name' => $this->tablet_name,
             'img_path' => $this->img_path ? Storage::url($this->img_path) : '',
-            'comp_model' => $this->comp_model,
-            'comp_type' => $this->comp_type,
-            'comp_user' => $this->comp_user,
+            'tablet_model' => $this->tablet_model,
+            'tablet_user' => $this->tablet_user,
             'fullName' => $this->fullName,
-            'department_comp' => $this->department_comp,
-            'comp_os' => $this->comp_os,
-            'comp_storage' => $this->comp_storage,
-            'comp_serial' => $this->comp_serial,
-            'comp_asset' => $this->comp_asset,
-            'comp_cpu' => $this->comp_cpu,
-            'comp_gen' => $this->comp_gen,
-            'comp_address' => $this->comp_address,
-            'comp_prdctkey' => $this->comp_prdctkey,
-            'comp_status' => $this->comp_status,
+            'department_tablet' => $this->department_tablet,
+            'tablet_os' => $this->tablet_os,
+            'tablet_storage' => $this->tablet_storage,
+            'tablet_serial' => $this->tablet_serial,
+            'tablet_asset' => $this->tablet_asset,
+            'tablet_cpu' => $this->tablet_cpu,
+            'tablet_gen' => $this->tablet_gen,
+            'tablet_address' => $this->tablet_address,
+            'tablet_prdctkey' => $this->tablet_prdctkey,
+            'tablet_status' => $this->tablet_status,
             'remarks' => $this->remarks,
             'createdBy'=> new UserResource($this->createdBy),
             'updatedBy'=> new UserResource($this->updatedBy),
