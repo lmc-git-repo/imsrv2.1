@@ -7,26 +7,24 @@ import { useState } from 'react';
 
 
 
-const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList, tabletUsersFnameList }) => {
+const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameList }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        tablet_name: '',
+        phone_name: '',
+        phone_num: '',
         img_path: '',
-        tablet_model: '',
-        tablet_type: '',
-        tablet_user: '',
+        phone_model: '',
         fullName: '',
-        department_tablet: '',
-        tablet_os: '',
-        tablet_storage: '',
-        tablet_serial: '',
-        tablet_asset: '',
-        tablet_cpu: '',
-        tablet_gen: '',
-        tablet_address: '',
-        tablet_prdctkey: '',
-        tablet_status: '',
+        department_phone: '',
+        phone_storage: '',
+        phone_ram: '',
+        phone_serial: '',
+        phone_asset: '',
+        phone_cpu: '',
+        phone_address: '',
+        phone_imei: '',
+        phone_status: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -34,7 +32,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
     const onSubmit =(e) =>{
         e.preventDefault();
 
-        post(route("tablets.store"), {
+        post(route("phones.store"), {
             onSuccess: () => {
                 onClose();
                 reset();
@@ -55,79 +53,61 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Add New Tablet
+                Add New Phone
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_name" value="Enter Tablet Name" />
+                                <Label htmlFor="phone_name" value="Enter Phone Name" />
                             </div>
                             <TextInput
-                                id="tablet_name"
+                                id="phone_name"
                                 type='text'
-                                name='tablet_name'
-                                value={data.tablet_name}
+                                name='phone_name'
+                                value={data.phone_name}
                                 // placeholder=""
                                 // isFocused={true}
-                                onChange={(e) => setData("tablet_name", e.target.value)}
+                                onChange={(e) => setData("phone_name", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.tablet_name} className='mt-2' />
+                            <InputError message={errors.phone_name} className='mt-2' />
                         </div>
+                        
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_model" value="Enter Tablet Model" />
+                                <Label htmlFor="phone_num" value="Enter Phone No: " />
                             </div>
                             <TextInput
-                                id="tablet_model"
-                                type='text'
-                                name='tablet_model'
-                                value={data.tablet_model}
-                                // placeholder=""
-                                // isFocused={true}
-                                onChange={(e) => setData("tablet_model", e.target.value)}
+                                id="phone_num"
+                                type='number'
+                                name='phone_num'
+                                value={data.phone_num}
+                                onChange={(e) => setData("phone_num", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.tablet_model} className='mt-2' />
+                            <InputError message={errors.phone_num} className='mt-2' />
                         </div>
-                        {/* <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="tablet_type" value="Tablet Type:" />
-                            </div>
-                            <SelectInput 
-                                name='tablet_type' 
-                                id="tablet_type" 
-                                onChange={(e) => setData("tablet_type", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Type: </option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Laptop">Laptop</option>
-                            </SelectInput>
-                            <InputError message={errors.tablet_type} className='mt-2' />
-                        </div> */}
+
+
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_user" value="Choose User" />
+                                <Label htmlFor="phone_model" value="Enter Phone Model" />
                             </div>
-                            <SelectInput 
-                                name='tablet_user'
-                                id="tablet_user" 
-                                value={data.tablet_user}
-                                onChange={(e) => setData("tablet_user", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select User</option>
-                                {tabletUsersList.map(tab => (
-                                    <option key={tab.tablet_id} value={tab.initial}>
-                                        {tab.initial}
-                                    </option>
-                                ))}
-                            </SelectInput>
-                            <InputError message={errors.tablet_user} className='mt-2' />
+                            <TextInput
+                                id="phone_model"
+                                type='text'
+                                name='phone_model'
+                                value={data.phone_model}
+                                // placeholder=""
+                                // isFocused={true}
+                                onChange={(e) => setData("phone_model", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.phone_model} className='mt-2' />
                         </div>
+                        
 
                         <div>
                             <div className="mb-2 block">
@@ -141,8 +121,8 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                                 required 
                             >
                                 <option value="">Select User</option>
-                                {tabletUsersFnameList.map(fname => (
-                                    <option key={fname.tablet_id} value={fname.name}>
+                                {phoneUsersFnameList.map(fname => (
+                                    <option key={fname.phone_id} value={fname.name}>
                                         {fname.name}
                                     </option>
                                 ))}
@@ -153,13 +133,13 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="department_tablet" value="Choose Department" />
+                                <Label htmlFor="department_phone" value="Choose Department" />
                             </div>
                             <SelectInput 
-                                name='department_tablet'
-                                id="department_tablet" 
-                                value={data.department_tablet}
-                                onChange={(e) => setData("department_tablet", e.target.value)}
+                                name='department_phone'
+                                id="department_phone" 
+                                value={data.department_phone}
+                                onChange={(e) => setData("department_phone", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Department</option>
@@ -169,35 +149,41 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.department_tablet} className='mt-2' />
+                            <InputError message={errors.department_phone} className='mt-2' />
                         </div>
+                        
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_os" value="Enter Tablet OS" />
+                                <Label htmlFor="phone_storage" value="Enter Phone Storage" />
                             </div>
                             <SelectInput 
-                                name='tablet_os' 
-                                id="tablet_os" 
-                                onChange={(e) => setData("tablet_os", e.target.value)}
+                                name='phone_storage' 
+                                id="phone_storage" 
+                                onChange={(e) => setData("phone_storage", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Operating System: </option>
-                                <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
-                                <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
-                                <option value="Windows 11 Pro">Windows 11 Pro</option>
+                                <option value="">Select ROM Capacity: </option>
+                                <option value="8GB">8GB</option>
+                                <option value="16GB">16GB</option>
+                                <option value="32GB">32GB</option>
+                                <option value="64GB">64GB</option>
+                                <option value="128GB">128GB</option>
+                                <option value="256GB">256GB</option>
+                                <option value="512GB">512GB</option>
+                                <option value="1TB">1TB</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
-                            <InputError message={errors.tablet_os} className='mt-2' />
+                            <InputError message={errors.phone_storage} className='mt-2' />
                         </div>
+
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_storage" value="Enter Ram Capacity" />
+                                <Label htmlFor="phone_ram" value="Enter Ram Capacity" />
                             </div>
                             <SelectInput 
-                                name='tablet_storage' 
-                                id="tablet_storage" 
-                                onChange={(e) => setData("tablet_storage", e.target.value)}
+                                name='phone_ram' 
+                                id="phone_ram" 
+                                onChange={(e) => setData("phone_ram", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Ram Capacity: </option>
@@ -211,124 +197,94 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                                 <option value="32GB">32GB</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
-                            <InputError message={errors.tablet_storage} className='mt-2' />
+                            <InputError message={errors.phone_ram} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_serial" value="Enter Tablet Serial" />
+                                <Label htmlFor="phone_serial" value="Enter Phone Serial" />
                             </div>
                             <TextInput 
-                                id="tablet_serial" 
+                                id="phone_serial" 
                                 type="text"
-                                name='tablet_serial' 
-                                value={data.tablet_serial}
-                                onChange={(e) => setData("tablet_serial", e.target.value)}
+                                name='phone_serial' 
+                                value={data.phone_serial}
+                                onChange={(e) => setData("phone_serial", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.tablet_serial} className='mt-2' />
+                            <InputError message={errors.phone_serial} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_asset" value="Enter Tablet Asset" />
+                                <Label htmlFor="phone_asset" value="Enter Phone Asset" />
                             </div>
                             <TextInput 
-                                id="tablet_asset" 
+                                id="phone_asset" 
                                 type="text"
-                                name='tablet_asset' 
-                                value={data.tablet_asset}
-                                onChange={(e) => setData("tablet_asset", e.target.value)}
+                                name='phone_asset' 
+                                value={data.phone_asset}
+                                onChange={(e) => setData("phone_asset", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.tablet_asset} className='mt-2' />
+                            <InputError message={errors.phone_asset} className='mt-2' />
                         </div>
                         
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_cpu" value="Enter Tablet Processor" />
+                                <Label htmlFor="phone_cpu" value="Enter Phone Processor" />
                             </div>
                             <TextInput 
-                                id="tablet_cpu" 
+                                id="phone_cpu" 
                                 type="text"
-                                name='tablet_cpu' 
-                                value={data.tablet_cpu}
-                                onChange={(e) => setData("tablet_cpu", e.target.value)}
+                                name='phone_cpu' 
+                                value={data.phone_cpu}
+                                onChange={(e) => setData("phone_cpu", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.tablet_cpu} className='mt-2' />
+                            <InputError message={errors.phone_cpu} className='mt-2' />
                         </div>
                         
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="tablet_gen" value="Tablet Gen:" />
-                            </div>
-                            <SelectInput 
-                                name='tablet_gen' 
-                                id="tablet_gen" 
-                                onChange={(e) => setData("tablet_gen", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Generation: </option>
-                                <option value="3rd">3rd</option>
-                                <option value="4th">4th</option>
-                                <option value="5th">5th</option>
-                                <option value="6th">6th</option>
-                                <option value="7th">7th</option>
-                                <option value="8th">8th</option>
-                                <option value="9th">9th</option>
-                                <option value="10th">10th</option>
-                                <option value="11th">11th</option>
-                                <option value="12th">12th</option>
-                                <option value="13th">13th</option>
-                                <option value="14th">14th</option>
-                                <option value="15th">15th</option>
-                                <option value="16th">16th</option>
-                                <option value="17th">17th</option>
-                                <option value="Pentium">Pentium</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.tablet_gen} className='mt-2' />
-                        </div>
+            
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_address" value="Enter Tablet Address" />
+                                <Label htmlFor="phone_address" value="Enter Phone Address" />
                             </div>
                             <TextInput 
-                                id="tablet_address" 
+                                id="phone_address" 
                                 type="text"
-                                name='tablet_address' 
-                                value={data.tablet_address}
-                                onChange={(e) => setData("tablet_address", e.target.value)}
+                                name='phone_address' 
+                                value={data.phone_address}
+                                onChange={(e) => setData("phone_address", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.tablet_address} className='mt-2' />
+                            <InputError message={errors.phone_address} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_prdctkey" value="Enter Product Key" />
+                                <Label htmlFor="phone_imei" value="Enter IMEI" />
                             </div>
                             <TextInput 
-                                id="tablet_prdctkey" 
+                                id="phone_imei" 
                                 type="text"
-                                name='tablet_prdctkey' 
-                                value={data.tablet_prdctkey}
-                                onChange={(e) => setData("tablet_prdctkey", e.target.value)}
+                                name='phone_imei' 
+                                value={data.phone_imei}
+                                onChange={(e) => setData("phone_imei", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.tablet_prdctkey} className='mt-2' />
+                            <InputError message={errors.phone_imei} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="tablet_status" value="Tablet Status" />
+                                <Label htmlFor="phone_status" value="Phone Status" />
                             </div>
                             <SelectInput 
-                                name='tablet_status' 
-                                id="tablet_status" 
-                                onChange={(e) => setData("tablet_status", e.target.value)}
+                                name='phone_status' 
+                                id="phone_status" 
+                                onChange={(e) => setData("phone_status", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Computer Status: </option>
@@ -338,7 +294,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                                 <option value="Already Disposed">Already Disposed</option>
                                 <option value="Barrow">Barrow</option>
                             </SelectInput>
-                            <InputError message={errors.tablet_status} className='mt-2' />
+                            <InputError message={errors.phone_status} className='mt-2' />
                         </div>
                         
                         <div>
@@ -359,7 +315,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
 
                         <div className="flex-row w-full items-center justify-center">
                             <Label
-                                htmlFor="tablet_img_path"
+                                htmlFor="phone_img_path"
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
@@ -399,7 +355,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                                     )} */}
                                 </div>
                                 <FileInput 
-                                    id="tablet_img_path" 
+                                    id="phone_img_path" 
                                     name='img_path' 
                                     // onChange={(e) => setData("img_path", e.target.files[0])} 
                                     onChange={handleFileChange}
@@ -409,7 +365,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, tabletUsersList,
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('tablets.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('phones.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

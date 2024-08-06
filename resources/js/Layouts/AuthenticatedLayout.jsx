@@ -56,6 +56,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     Printers
                                                 </div>
                                             </Dropdown.Link>
+                                            <Dropdown.Link href={route('tablets.index')}>
+                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tablets.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                    Tablets
+                                                </div>
+                                            </Dropdown.Link>
+                                            <Dropdown.Link href={route('phones.index')}>
+                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                    Phones
+                                                </div>
+                                            </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 </div>
