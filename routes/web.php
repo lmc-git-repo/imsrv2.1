@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountUsersController;
 use App\Http\Controllers\ComputersController;
+use App\Http\Controllers\ConsumablesController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\MonitorsController;
 use App\Http\Controllers\PhonesController;
@@ -26,6 +27,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('printers', PrintersController::class);
     Route::resource('tablets', TabletsController::class);
     Route::resource('phones', PhonesController::class);
+    Route::resource('consumables', ConsumablesController::class);
     Route::resource('departments', DepartmentsController::class);
     Route::resource('accountUsers', AccountUsersController::class);
     Route::resource('user', UserController::class);
