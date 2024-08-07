@@ -7,43 +7,61 @@ import { useEffect, useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFname, selectedEditPhone }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUsersFname, selectedEditConsumables }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        phone_name: selectedEditPhone.phone_name || '',
-        phone_num: selectedEditPhone.phone_num || '',
+        po_num: selectedEditConsumables.po_num || '',
+        serial_no: selectedEditConsumables.serial_no || '',
         img_path: null,
-        phone_model: selectedEditPhone.phone_model || '',
-        fullName: selectedEditPhone.fullName || '',
-        department_phone: selectedEditPhone.department_phone || '',
-        phone_storage: selectedEditPhone.phone_storage || '',
-        phone_ram: selectedEditPhone.phone_ram || '',
-        phone_serial: selectedEditPhone.phone_serial || '',
-        phone_asset: selectedEditPhone.phone_asset || '',
-        phone_cpu: selectedEditPhone.phone_cpu || '',
-        phone_address: selectedEditPhone.phone_address || '',
-        phone_imei: selectedEditPhone.phone_imei || '',
-        phone_status: selectedEditPhone.phone_status || '',
-        remarks: selectedEditPhone.remarks || '',
+        si_code: selectedEditConsumables.si_code || '',
+        brand: selectedEditConsumables.brand || '',
+        model: selectedEditConsumables.model || '',
+        storage_capacity: selectedEditConsumables.storage_capacity || '',
+        qty: selectedEditConsumables.qty || '',
+        price: selectedEditConsumables.price || '',
+        total: selectedEditConsumables.total || '',
+        dateIssued: selectedEditConsumables.dateIssued || '',
+        installedTo: selectedEditConsumables.installedTo || '',
+        department_consumables: selectedEditConsumables.department_consumables || '',
+        remarks: selectedEditConsumables.remarks || '',
         _method: 'PUT',
     });
+
+    const handleDecimalChange = (name, value) => {
+        const decimalValue = parseFloat(value).toFixed(2);
+        setData((prevData) => ({
+            ...prevData,
+            [name]: decimalValue,
+        }));
+    };
+
+    useEffect(() => {
+        const qty = parseFloat(data.qty) || 0;
+        const price = parseFloat(data.price) || 0;
+        const total = (qty * price).toFixed(2); // Format total to two decimal places
+        // setData('total', qty * price);
+        setData((prevData) => ({
+            ...prevData,
+            total: total,
+        }));
+    }, [data.qty, data.price]);
 
 
     const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
-        if (selectedEditPhone?.img_path) {
-            setImagePreview(selectedEditPhone.img_path);
+        if (selectedEditConsumables?.img_path) {
+            setImagePreview(selectedEditConsumables.img_path);
         } else {
             setImagePreview(null);
         }
-    }, [selectedEditPhone]);
+    }, [selectedEditConsumables]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
         // console.log("Form Data:", data); // Add this line to log form data
-        post(route("phones.update", selectedEditPhone && selectedEditPhone.phone_id), {
+        post(route("consumables.update", selectedEditConsumables && selectedEditConsumables.consumables_id), {
             onSuccess: () => {
                 // console.log("Update Successful"); 
                 onClose();
@@ -63,14 +81,14 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
             setImagePreview(imageUrl);
         } else {
             setData("img_path", null);
-            setImagePreview(selectedEditPhone.img_path || null);
+            setImagePreview(selectedEditConsumables.img_path || null);
         }
     };
 
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit Phone - {selectedEditPhone && selectedEditPhone.phone_name}
+                Edit Consumable - {selectedEditConsumables && selectedEditConsumables.po_num}
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
@@ -78,86 +96,191 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                     <div className="space-y-6">
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="phone_name" value="Enter Phone Name" />
+                                <Label htmlFor="po_num" value="Enter PO NO:" />
                             </div>
                             <TextInput
-                                id="phone_name"
+                                id="po_num"
                                 type='text'
-                                name='phone_name'
-                                value={data.phone_name}
+                                name='po_num'
+                                value={data.po_num}
                                 // placeholder=""
                                 // isFocused={true}
-                                onChange={(e) => setData("phone_name", e.target.value)}
+                                onChange={(e) => setData("po_num", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.phone_name} className='mt-2' />
+                            <InputError message={errors.po_num} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="phone_num" value="Enter Phone NO:" />
+                                <Label htmlFor="serial_no" value="Enter Serial NO:" />
                             </div>
                             <TextInput
-                                id="phone_num"
-                                type='number'
-                                name='phone_num'
-                                value={data.phone_num}
-                                // placeholder=""
-                                // isFocused={true}
-                                onChange={(e) => setData("phone_num", e.target.value)}
+                                id="serial_no"
+                                type='text'
+                                name='serial_no'
+                                value={data.serial_no}
+                                onChange={(e) => setData("serial_no", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.phone_num} className='mt-2' />
+                            <InputError message={errors.serial_no} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="phone_model" value="Enter Phone Model" />
+                                <Label htmlFor="si_code" value="SI Code:" />
+                            </div>
+                            <TextInput
+                                id="si_code"
+                                type='number'
+                                name='si_code'
+                                value={data.si_code}
+                                // placeholder=""
+                                // isFocused={true}
+                                onChange={(e) => setData("si_code", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.si_code} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="brand" value="Enter Brand:" />
+                            </div>
+                            <TextInput
+                                id="brand"
+                                type='text'
+                                name='brand'
+                                value={data.brand}
+                                onChange={(e) => setData("brand", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.brand} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="model" value="Enter Model" />
                             </div>
                             <TextInput 
-                                id="phone_model" 
+                                id="model" 
                                 type="text"
-                                name='phone_model' 
-                                value={data.phone_model}
-                                onChange={(e) => setData("phone_model", e.target.value)}
+                                name='model' 
+                                value={data.model}
+                                onChange={(e) => setData("model", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.phone_model} className='mt-2' />
+                            <InputError message={errors.model} className='mt-2' />
                         </div>
 
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="storage_capacity" value="Enter Storage Capacity" />
+                            </div>
+                            <TextInput 
+                                id="storage_capacity" 
+                                type="text"
+                                name='storage_capacity' 
+                                value={data.storage_capacity}
+                                onChange={(e) => setData("storage_capacity", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.storage_capacity} className='mt-2' />
+                        </div>
 
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="qty" value="Enter QTY" />
+                            </div>
+                            <TextInput 
+                                id="qty" 
+                                type="number"
+                                name='qty' 
+                                value={data.qty}
+                                onChange={(e) => setData("qty", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.qty} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="price" value="Enter Price" />
+                            </div>
+                            <TextInput 
+                                id="price" 
+                                type="number"
+                                name='price' 
+                                value={data.price}
+                                // onChange={(e) => setData("price", e.target.value)}
+                                onChange={(e) => handleDecimalChange("price", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.price} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="total" value="TOTAL" />
+                            </div>
+                            <TextInput 
+                                id="total" 
+                                type="number"
+                                name='total'
+                                disabled 
+                                value={data.total}
+                                onChange={(e) => setData("total", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.total} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="dateIssued" value="Date Issued: " />
+                            </div>
+                            <TextInput 
+                                id="dateIssued" 
+                                type="text"
+                                name='dateIssued'
+                                value={data.dateIssued}
+                                onChange={(e) => setData("dateIssued", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.dateIssued} className='mt-2' />
+                        </div>
 
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="fullName" value="Full Name" />
+                                <Label htmlFor="installedTo" value="Full Name" />
                             </div>
                             <SelectInput 
-                                name='fullName'
-                                id="fullName" 
-                                value={data.fullName}
-                                onChange={(e) => setData("fullName", e.target.value)}
+                                name='installedTo'
+                                id="installedTo" 
+                                value={data.installedTo}
+                                onChange={(e) => setData("installedTo", e.target.value)}
                                 required 
                             >
                                 <option value="">Select User</option>
-                                {listPhoneUsersFname.map(fname => (
-                                    <option key={fname.phone_id} value={fname.name}>
+                                {listConsumablesUsersFname.map(fname => (
+                                    <option key={fname.consumables_id} value={fname.name}>
                                         {fname.name}
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.fullName} className='mt-2' />
+                            <InputError message={errors.installedTo} className='mt-2' />
                         </div>
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="department_phone" value="Choose Department" />
+                                <Label htmlFor="department_consumables" value="Choose Department" />
                             </div>
                             <SelectInput 
-                                name='department_phone'
-                                id="department_phone" 
-                                value={data.department_phone}
-                                onChange={(e) => setData("department_phone", e.target.value)}
+                                name='department_consumables'
+                                id="department_consumables" 
+                                value={data.department_consumables}
+                                onChange={(e) => setData("department_consumables", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Department</option>
@@ -167,160 +290,9 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.department_phone} className='mt-2' />
+                            <InputError message={errors.department_consumables} className='mt-2' />
                         </div>
-
                     
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_storage" value="Enter Phone Storage" />
-                            </div>
-                            <SelectInput 
-                                name='phone_storage' 
-                                id="phone_storage" 
-                                value={data.phone_storage}
-                                onChange={(e) => setData("phone_storage", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select ROM Capacity: </option>
-                                <option value="8GB">8GB</option>
-                                <option value="16GB">16GB</option>
-                                <option value="32GB">32GB</option>
-                                <option value="64GB">64GB</option>
-                                <option value="128GB">128GB</option>
-                                <option value="256GB">256GB</option>
-                                <option value="512GB">512GB</option>
-                                <option value="1TB">1TB</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.phone_storage} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_ram" value="Enter Ram Capacity" />
-                            </div>
-                            <SelectInput 
-                                name='phone_ram' 
-                                id="phone_ram"
-                                value={data.phone_ram} 
-                                onChange={(e) => setData("phone_ram", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Ram Capacity: </option>
-                                <option value="1.5GB">1.5GB</option>
-                                <option value="2GB">2GB</option>
-                                <option value="4GB">4GB</option>
-                                <option value="6GB">6GB</option>
-                                <option value="8GB">8GB</option>
-                                <option value="12GB">12GB</option>
-                                <option value="16GB">16GB</option>
-                                <option value="32GB">32GB</option>
-                                <option value="N/A">N/A</option>
-                            </SelectInput>
-                            <InputError message={errors.phone_ram} className='mt-2' />
-                        </div>
-
-
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_serial" value="Enter Phone Serial" />
-                            </div>
-                            <TextInput 
-                                id="phone_serial" 
-                                type="text"
-                                name='phone_serial' 
-                                value={data.phone_serial}
-                                onChange={(e) => setData("phone_serial", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.phone_serial} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_asset" value="Enter Phone Asset" />
-                            </div>
-                            <TextInput 
-                                id="phone_asset" 
-                                type="text"
-                                name='phone_asset' 
-                                value={data.phone_asset}
-                                onChange={(e) => setData("phone_asset", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.phone_asset} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_cpu" value="Enter Processor" />
-                            </div>
-                            <TextInput 
-                                id="phone_cpu" 
-                                type="text"
-                                name='phone_cpu' 
-                                value={data.phone_cpu}
-                                onChange={(e) => setData("phone_cpu", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.phone_cpu} className='mt-2' />
-                        </div>
-
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_address" value="Enter Mac Address" />
-                            </div>
-                            <TextInput 
-                                id="phone_address" 
-                                type="text"
-                                name='phone_address' 
-                                value={data.phone_address}
-                                onChange={(e) => setData("phone_address", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.phone_address} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_imei" value="Enter IMEI" />
-                            </div>
-                            <TextInput 
-                                id="phone_imei" 
-                                type="text"
-                                name='phone_imei' 
-                                value={data.phone_imei}
-                                onChange={(e) => setData("phone_imei", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.phone_imei} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="phone_status" value="Status" />
-                            </div>
-                            <SelectInput 
-                                name='phone_status' 
-                                id="phone_status"
-                                value={data.phone_status}  // Add this line to set the value 
-                                onChange={(e) => setData("phone_status", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select Status: </option>
-                                <option value="Deployed">Deployed</option>
-                                <option value="Spare">Spare</option>
-                                <option value="For Disposal">For Disposal</option>
-                                <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
-                            </SelectInput>
-                            <InputError message={errors.phone_status} className='mt-2' />
-                        </div>
-
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="remarks" value="Enter Remarks" />
@@ -339,7 +311,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
 
                         <div className="flex-row w-full items-center justify-center">
                             <Label
-                                htmlFor="phones_img_path"
+                                htmlFor="consumables_img_path"
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
@@ -374,7 +346,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                                     }
                                 </div>
                                 <FileInput 
-                                    id="phones_img_path" 
+                                    id="consumables_img_path" 
                                     name='img_path'
                                     onChange={handleFileChange}
                                     className="hidden" 
@@ -383,7 +355,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('phones.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('consumables.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

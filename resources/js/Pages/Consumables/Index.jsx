@@ -295,8 +295,8 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                         <td className="px-3 py-2">{consumable.model}</td>
                                                         <td className="px-3 py-2">{consumable.storage_capacity}</td>
                                                         <td className="px-3 py-2">{consumable.qty}</td>
-                                                        <td className="px-3 py-2">{consumable.price}</td>
-                                                        <td className="px-3 py-2">{consumable.total}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.price}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.total}</td>
                                                         <td className="px-3 py-2">{consumable.dateIssued}</td>
                                                         <td className="px-3 py-2">{consumable.installedTo}</td>
                                                         <td className="px-3 py-2">{consumable.department_consumables}</td>

@@ -8,37 +8,32 @@ const ModalComponent = ({ show, onClose, user }) => {
   return (
     <Modal show={show} onClose={onClose}>
       <Modal.Header className="p-4">
-        {user.phone_name}
+        {user.po_num}
       </Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
             <div className="flex justify-center">
-                <img src={user.img_path} alt={`${user.phone_name}'s profile`} className="mt-3 size-2/4" />
+                <img src={user.img_path} alt={`${user.po_num}'s profile`} className="mt-3 size-2/4" />
             </div>
             <div className='text-center'>
-                <p className="text-base leading-relaxed text-white"><strong>{user.phone_name.toUpperCase()}</strong></p>
+                <p className="text-base leading-relaxed text-white"><strong>{user.po_num.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
                 <div className="border rounded p-3 w-full">
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.phone_id}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Phone NO:</strong> {user.phone_num}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Phone Model:</strong> {user.phone_model}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Full Name:</strong> {user.fullName}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_phone}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>ROM Capacity:</strong> {user.phone_storage}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>RAM Capacity:</strong> {user.phone_ram}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Phone Serial:</strong> {user.phone_serial}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.consumables_id}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial NO:</strong> {user.serial_no}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>SI CODE:</strong> {user.si_code}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Brand:</strong> {user.brand}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Model:</strong> {user.model}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Storage Capacity:</strong> {user.storage_capacity}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>QTY:</strong> {user.qty}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Price:</strong> {'₱ ' + user.price}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Total:</strong> {'₱ ' + user.total}</p>
                 </div>
                 <div className="border rounded p-3 w-full">
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Tag:</strong> {user.phone_asset}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Processor:</strong> {user.phone_cpu}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Mac Address:</strong> {user.phone_address}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>IMEI:</strong> {user.phone_imei}</p>  
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                        <strong className='pe-4'>Status:</strong> 
-                        {/* {user.status} */}
-                        <span className={'px-2 rounded-e-full text-white ' + PHONES_STATUS_CLASS_MAP[user.phone_status]}>{PHONES_STATUS_TEXT_MAP[user.phone_status]}</span>
-                    </p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Issued:</strong> {user.dateIssued}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Full Name:</strong> {user.installedTo}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_consumables}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
