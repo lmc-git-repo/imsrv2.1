@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('po_num');
             $table->string('serial_no');
             $table ->string('img_path')->nullable();
-            $table->string('si_code');
+            $table->string('si_code')->nullable();
             $table->string('brand');
             $table->string('model');
             $table->string('storage_capacity');
@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('total', 8, 2); // 8 total digits, 2 of which are after the decimal point
             $table->date('dateIssued');
             $table->string('installedTo');
+            $table->string('deliveryRecieptDate')->nullable();
             $table->foreign('installedTo')->references('name')->on('account_users');
             $table->string('department_consumables');
             $table->foreign('department_consumables')->references('dept_list')->on('departments');

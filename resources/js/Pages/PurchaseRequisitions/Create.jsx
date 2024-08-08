@@ -7,24 +7,21 @@ import { useState, useEffect } from 'react';
 
 
 
-const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsersFnameList }) => {
+const CreateModalComponent = ({ show, onClose, departmentsList }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
+        control_num: '',
         po_num: '',
-        serial_no: '',
         img_path: '',
-        si_code: '',
-        brand: '',
-        model: '',
-        storage_capacity: '',
+        description: '',
         qty: '',
-        price: '',
+        unit_price: '',
         total: '',
-        dateIssued: '',
-        installedTo: '',
-        deliveryRecieptDate: '',
-        department_consumables: '',
+        date_required: '',
+        department_pr: '',
+        purpose: '',
+        item_category: '',
         remarks: '',
     })
 
@@ -38,21 +35,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
 
     useEffect(() => {
         const qty = parseFloat(data.qty) || 0;
-        const price = parseFloat(data.price) || 0;
-        const total = (qty * price).toFixed(2); // Format total to two decimal places
-        // setData('total', qty * price);
+        const unit_price = parseFloat(data.unit_price) || 0;
+        const total = (qty * unit_price).toFixed(2); // Format total to two decimal places
+        // setData('total', qty * unit_price);
         setData((prevData) => ({
             ...prevData,
             total: total,
         }));
-    }, [data.qty, data.price]);
+    }, [data.qty, data.unit_price]);
 
     const [imagePreview, setImagePreview] = useState(null);
 
     const onSubmit =(e) =>{
         e.preventDefault();
         
-        post(route("consumables.store"), {
+        post(route("purchase_requisitions.store"), {
             onSuccess: () => {
                 onClose();
                 reset();
@@ -73,13 +70,30 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
     return (
         <Modal show={show} onClose={onClose}>
             <Modal.Header className="p-4">
-                Add New Phone
+                Add New Purchase Requisitions
             </Modal.Header>
             <Modal.Body>
                 <form action="" onSubmit={onSubmit}>
                     <div className="space-y-6">
                         {/* <div className='border flex justify-around'> */}
                             <div className='borderSeparation'>
+                                <div>
+                                    <div className="mb-2 block">
+                                        <Label htmlFor="control_num" value="Enter Control Number" />
+                                    </div>
+                                    <TextInput
+                                        id="control_num"
+                                        type='text'
+                                        name='control_num'
+                                        value={data.control_num}
+                                        // placeholder=""
+                                        // isFocused={true}
+                                        onChange={(e) => setData("control_num", e.target.value)}
+                                        required
+                                    />
+                                    <InputError message={errors.control_num} className='mt-2' />
+                                </div>
+
                                 <div>
                                     <div className="mb-2 block">
                                         <Label htmlFor="po_num" value="Enter PO Number" />
@@ -89,86 +103,24 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
                                         type='text'
                                         name='po_num'
                                         value={data.po_num}
-                                        // placeholder=""
-                                        // isFocused={true}
                                         onChange={(e) => setData("po_num", e.target.value)}
-                                        required
                                     />
                                     <InputError message={errors.po_num} className='mt-2' />
                                 </div>
                                 
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="serial_no" value="Enter Serial No: " />
-                                    </div>
-                                    <TextInput
-                                        id="serial_no"
-                                        type='text'
-                                        name='serial_no'
-                                        value={data.serial_no}
-                                        onChange={(e) => setData("serial_no", e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.serial_no} className='mt-2' />
-                                </div>
 
                                 <div>
                                     <div className="mb-2 block">
-                                        <Label htmlFor="si_code" value="SI Code: " />
+                                        <Label htmlFor="description" value="Description: " />
                                     </div>
                                     <TextInput
-                                        id="si_code"
+                                        id="description"
                                         type='text'
-                                        name='si_code'
-                                        value={data.si_code}
-                                        onChange={(e) => setData("si_code", e.target.value)}
+                                        name='description'
+                                        value={data.description}
+                                        onChange={(e) => setData("description", e.target.value)}
                                     />
-                                    <InputError message={errors.si_code} className='mt-2' />
-                                </div>
-
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="brand" value="Enter Brand: " />
-                                    </div>
-                                    <TextInput
-                                        id="brand"
-                                        type='text'
-                                        name='brand'
-                                        value={data.brand}
-                                        onChange={(e) => setData("brand", e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.brand} className='mt-2' />
-                                </div>
-
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="model" value="Enter Model: " />
-                                    </div>
-                                    <TextInput
-                                        id="model"
-                                        type='text'
-                                        name='model'
-                                        value={data.model}
-                                        onChange={(e) => setData("model", e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.model} className='mt-2' />
-                                </div>
-
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="storage_capacity" value="Enter Storage Capacity: " />
-                                    </div>
-                                    <TextInput
-                                        id="storage_capacity"
-                                        type='text'
-                                        name='storage_capacity'
-                                        value={data.storage_capacity}
-                                        onChange={(e) => setData("storage_capacity", e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.storage_capacity} className='mt-2' />
+                                    <InputError message={errors.description} className='mt-2' />
                                 </div>
                             </div>
 
@@ -190,18 +142,18 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
 
                                 <div>
                                     <div className="mb-2 block">
-                                        <Label htmlFor="price" value="Enter Price: " />
+                                        <Label htmlFor="unit_price" value="Enter Unit Price: " />
                                     </div>
                                     <TextInput
-                                        id="price"
+                                        id="unit_price"
                                         type='number'
-                                        name='price'
-                                        value={data.price}
-                                        // onChange={(e) => setData("price", e.target.value)}
-                                        onChange={(e) => handleDecimalChange("price", e.target.value)}
+                                        name='unit_price'
+                                        value={data.unit_price}
+                                        // onChange={(e) => setData("unit_price", e.target.value)}
+                                        onChange={(e) => handleDecimalChange("unit_price", e.target.value)}
                                         required
                                     />
-                                    <InputError message={errors.price} className='mt-2' />
+                                    <InputError message={errors.unit_price} className='mt-2' />
                                 </div>
 
                                 <div>
@@ -222,65 +174,29 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
 
                                 <div>
                                     <div className="mb-2 block">
-                                        <Label htmlFor="dateIssued" value="Date Issued: " />
+                                        <Label htmlFor="date_required" value="Date Required: " />
                                     </div>
                                     <TextInput
-                                        id="dateIssued"
+                                        id="date_required"
                                         type='date'
-                                        name='dateIssued'
-                                        value={data.dateIssued}
-                                        onChange={(e) => setData("dateIssued", e.target.value)}
+                                        name='date_required'
+                                        value={data.date_required}
+                                        onChange={(e) => setData("date_required", e.target.value)}
                                         required
                                     />
-                                    <InputError message={errors.dateIssued} className='mt-2' />
+                                    <InputError message={errors.date_required} className='mt-2' />
                                 </div>
 
 
                                 <div>
                                     <div className="mb-2 block">
-                                        <Label htmlFor="installedTo" value="Full Name" />
+                                        <Label htmlFor="department_pr" value="Choose Department" />
                                     </div>
                                     <SelectInput 
-                                        name='installedTo'
-                                        id="installedTo" 
-                                        value={data.installedTo}
-                                        onChange={(e) => setData("installedTo", e.target.value)}
-                                        required 
-                                    >
-                                        <option value="">Select User</option>
-                                        {consumablesUsersFnameList.map(fname => (
-                                            <option key={fname.phone_id} value={fname.name}>
-                                                {fname.name}
-                                            </option>
-                                        ))}
-                                    </SelectInput>
-                                    <InputError message={errors.installedTo} className='mt-2' />
-                                </div>
-
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="deliveryRecieptDate" value="Delivery Date: " />
-                                    </div>
-                                    <TextInput
-                                        id="deliveryRecieptDate"
-                                        type='date'
-                                        name='deliveryRecieptDate'
-                                        value={data.deliveryRecieptDate}
-                                        onChange={(e) => setData("deliveryRecieptDate", e.target.value)}
-                                    />
-                                    <InputError message={errors.deliveryRecieptDate} className='mt-2' />
-                                </div>
-
-
-                                <div>
-                                    <div className="mb-2 block">
-                                        <Label htmlFor="department_consumables" value="Choose Department" />
-                                    </div>
-                                    <SelectInput 
-                                        name='department_consumables'
-                                        id="department_consumables" 
-                                        value={data.department_consumables}
-                                        onChange={(e) => setData("department_consumables", e.target.value)}
+                                        name='department_pr'
+                                        id="department_pr" 
+                                        value={data.department_pr}
+                                        onChange={(e) => setData("department_pr", e.target.value)}
                                         required 
                                     >
                                         <option value="">Select Department</option>
@@ -290,8 +206,40 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
                                             </option>
                                         ))}
                                     </SelectInput>
-                                    <InputError message={errors.department_consumables} className='mt-2' />
+                                    <InputError message={errors.department_pr} className='mt-2' />
                                 </div>
+
+                                <div>
+                                    <div className="mb-2 block">
+                                        <Label htmlFor="purpose" value="Purpose: " />
+                                    </div>
+                                    <TextInput
+                                        id="purpose"
+                                        type='text'
+                                        name='purpose'
+                                        value={data.purpose}
+                                        onChange={(e) => setData("purpose", e.target.value)}
+                                    />
+                                    <InputError message={errors.purpose} className='mt-2' />
+                                </div>
+
+                                <div>
+                                    <div className="mb-2 block">
+                                        <Label htmlFor="item_category" value="Item Category:" />
+                                    </div>
+                                    <SelectInput 
+                                        name='item_category' 
+                                        id="item_category" 
+                                        onChange={(e) => setData("item_category", e.target.value)}
+                                        required 
+                                    >
+                                        <option value="">Category: </option>
+                                        <option value="Consumables">Consumables</option>
+                                        <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                    </SelectInput>
+                                    <InputError message={errors.item_category} className='mt-2' />
+                                </div>
+                                
                             </div>
                         {/* </div> */}
                         
@@ -363,7 +311,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('consumables.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('purchase_requisitions.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

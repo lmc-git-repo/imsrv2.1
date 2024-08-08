@@ -41,6 +41,7 @@ class UpdateConsumablesRequest extends FormRequest
             "total" => ['required'],
             "dateIssued" => ['required', 'max:255'],
             "installedTo" => ['required', Rule::in($installedTo)],
+            "deliveryRecieptDate" => ['nullable', 'max:255'],
             "department_consumables" => ['required', Rule::in($departments)],
             "remarks" => ['required', 'max:255'],
         ];

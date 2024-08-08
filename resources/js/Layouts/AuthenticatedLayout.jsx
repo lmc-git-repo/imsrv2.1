@@ -71,6 +71,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     Consumables
                                                 </div>
                                             </Dropdown.Link>
+                                            <Dropdown.Link href={route('purchase_requisitions.index')}>
+                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('purchase_requisitions.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                    Purchase Requisitions
+                                                </div>
+                                            </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
                                 </div>

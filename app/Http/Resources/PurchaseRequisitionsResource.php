@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class ConsumablesResource extends JsonResource
+class PurchaseRequisitionsResource extends JsonResource
 {
     public static $wrap = false;
 
@@ -20,21 +20,18 @@ class ConsumablesResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'consumables_id' => $this->consumables_id,
+            'pr_id' => $this->pr_id,
+            'control_num' => $this->control_num,
             'po_num' => $this->po_num,
-            'serial_no' => $this->serial_no,
             'img_path' => $this->img_path ? Storage::url($this->img_path) : '',
-            'si_code' => $this->si_code,
-            'brand' => $this->brand,
-            'model' => $this->model,
-            'storage_capacity' => $this->storage_capacity,
+            'description' => $this->description,
             'qty' => $this->qty,
-            'price' => $this->price,
+            'unit_price' => $this->unit_price,
             'total' => $this->total,
-            'dateIssued' => $this->dateIssued,
-            'installedTo' => $this->installedTo,
-            'deliveryRecieptDate' => $this->deliveryRecieptDate,
-            'department_consumables' => $this->department_consumables,
+            'date_required' => $this->date_required,
+            'department_pr' => $this->department_pr,
+            'purpose' => $this->purpose,
+            'item_category' => $this->item_category,
             'remarks' => $this->remarks,
             'createdBy'=> new UserResource($this->createdBy),
             'updatedBy'=> new UserResource($this->updatedBy),

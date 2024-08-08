@@ -7,25 +7,22 @@ import { useEffect, useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUsersFname, selectedEditConsumables }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, selectedEditPR }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
-        po_num: selectedEditConsumables.po_num || '',
-        serial_no: selectedEditConsumables.serial_no || '',
+        control_num: selectedEditPR.control_num || '',
+        po_num: selectedEditPR.po_num || '',
         img_path: null,
-        si_code: selectedEditConsumables.si_code || '',
-        brand: selectedEditConsumables.brand || '',
-        model: selectedEditConsumables.model || '',
-        storage_capacity: selectedEditConsumables.storage_capacity || '',
-        qty: selectedEditConsumables.qty || '',
-        price: selectedEditConsumables.price || '',
-        total: selectedEditConsumables.total || '',
-        dateIssued: selectedEditConsumables.dateIssued || '',
-        installedTo: selectedEditConsumables.installedTo || '',
-        deliveryRecieptDate: selectedEditConsumables.deliveryRecieptDate || '',
-        department_consumables: selectedEditConsumables.department_consumables || '',
-        remarks: selectedEditConsumables.remarks || '',
+        description: selectedEditPR.description || '',
+        qty: selectedEditPR.qty || '',
+        unit_price: selectedEditPR.unit_price || '',
+        total: selectedEditPR.total || '',
+        date_required: selectedEditPR.date_required || '',
+        department_pr: selectedEditPR.department_pr || '',
+        purpose: selectedEditPR.purpose || '',
+        item_category: selectedEditPR.item_category || '',
+        remarks: selectedEditPR.remarks || '',
         _method: 'PUT',
     });
 
@@ -39,30 +36,30 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
 
     useEffect(() => {
         const qty = parseFloat(data.qty) || 0;
-        const price = parseFloat(data.price) || 0;
-        const total = (qty * price).toFixed(2); // Format total to two decimal places
-        // setData('total', qty * price);
+        const unit_price = parseFloat(data.unit_price) || 0;
+        const total = (qty * unit_price).toFixed(2); // Format total to two decimal places
+        // setData('total', qty * unit_price);
         setData((prevData) => ({
             ...prevData,
             total: total,
         }));
-    }, [data.qty, data.price]);
+    }, [data.qty, data.unit_price]);
 
 
     const [imagePreview, setImagePreview] = useState(null);
 
     useEffect(() => {
-        if (selectedEditConsumables?.img_path) {
-            setImagePreview(selectedEditConsumables.img_path);
+        if (selectedEditPR?.img_path) {
+            setImagePreview(selectedEditPR.img_path);
         } else {
             setImagePreview(null);
         }
-    }, [selectedEditConsumables]);
+    }, [selectedEditPR]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
         // console.log("Form Data:", data); // Add this line to log form data
-        post(route("consumables.update", selectedEditConsumables && selectedEditConsumables.consumables_id), {
+        post(route("purchase_requisitions.update", selectedEditPR && selectedEditPR.pr_id), {
             onSuccess: () => {
                 // console.log("Update Successful"); 
                 onClose();
@@ -82,19 +79,33 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
             setImagePreview(imageUrl);
         } else {
             setData("img_path", null);
-            setImagePreview(selectedEditConsumables.img_path || null);
+            setImagePreview(selectedEditPR.img_path || null);
         }
     };
 
     return (
         <Modal show={show} onClose={onClose }>
             <Modal.Header className="p-4">
-                Edit Consumable - {selectedEditConsumables && selectedEditConsumables.po_num}
+                Edit Purchase Requisition - {selectedEditPR && selectedEditPR.control_num}
             </Modal.Header>
             <Modal.Body className=''>
                 <form action="" onSubmit={onSubmit}>
                     {/* <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre> */}
                     <div className="space-y-6">
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="control_num" value="Enter Control NO:" />
+                            </div>
+                            <TextInput
+                                id="control_num"
+                                type='text'
+                                name='control_num'
+                                value={data.control_num}
+                                onChange={(e) => setData("control_num", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.control_num} className='mt-2' />
+                        </div>
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="po_num" value="Enter PO NO:" />
@@ -114,80 +125,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="serial_no" value="Enter Serial NO:" />
+                                <Label htmlFor="description" value="Description:" />
                             </div>
                             <TextInput
-                                id="serial_no"
+                                id="description"
                                 type='text'
-                                name='serial_no'
-                                value={data.serial_no}
-                                onChange={(e) => setData("serial_no", e.target.value)}
-                                required
-                            />
-                            <InputError message={errors.serial_no} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="si_code" value="SI Code:" />
-                            </div>
-                            <TextInput
-                                id="si_code"
-                                type='number'
-                                name='si_code'
-                                value={data.si_code}
+                                name='description'
+                                value={data.description}
                                 // placeholder=""
                                 // isFocused={true}
-                                onChange={(e) => setData("si_code", e.target.value)}
+                                onChange={(e) => setData("description", e.target.value)}
                                 required
                             />
-                            <InputError message={errors.si_code} className='mt-2' />
+                            <InputError message={errors.description} className='mt-2' />
                         </div>
 
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="brand" value="Enter Brand:" />
-                            </div>
-                            <TextInput
-                                id="brand"
-                                type='text'
-                                name='brand'
-                                value={data.brand}
-                                onChange={(e) => setData("brand", e.target.value)}
-                                required
-                            />
-                            <InputError message={errors.brand} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="model" value="Enter Model" />
-                            </div>
-                            <TextInput 
-                                id="model" 
-                                type="text"
-                                name='model' 
-                                value={data.model}
-                                onChange={(e) => setData("model", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.model} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="storage_capacity" value="Enter Storage Capacity" />
-                            </div>
-                            <TextInput 
-                                id="storage_capacity" 
-                                type="text"
-                                name='storage_capacity' 
-                                value={data.storage_capacity}
-                                onChange={(e) => setData("storage_capacity", e.target.value)}
-                                required 
-                            />
-                            <InputError message={errors.storage_capacity} className='mt-2' />
-                        </div>
 
                         <div>
                             <div className="mb-2 block">
@@ -206,18 +158,18 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="price" value="Enter Price" />
+                                <Label htmlFor="unit_price" value="Enter Price" />
                             </div>
                             <TextInput 
-                                id="price" 
+                                id="unit_price" 
                                 type="number"
-                                name='price' 
-                                value={data.price}
-                                // onChange={(e) => setData("price", e.target.value)}
-                                onChange={(e) => handleDecimalChange("price", e.target.value)}
+                                name='unit_price' 
+                                value={data.unit_price}
+                                // onChange={(e) => setData("unit_price", e.target.value)}
+                                onChange={(e) => handleDecimalChange("unit_price", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.price} className='mt-2' />
+                            <InputError message={errors.unit_price} className='mt-2' />
                         </div>
 
                         <div>
@@ -238,64 +190,28 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="dateIssued" value="Date Issued: " />
+                                <Label htmlFor="date_required" value="Date Required: " />
                             </div>
                             <TextInput 
-                                id="dateIssued" 
+                                id="date_required" 
                                 type="date"
-                                name='dateIssued'
-                                value={data.dateIssued}
-                                onChange={(e) => setData("dateIssued", e.target.value)}
+                                name='date_required'
+                                value={data.date_required}
+                                onChange={(e) => setData("date_required", e.target.value)}
                                 required 
                             />
-                            <InputError message={errors.dateIssued} className='mt-2' />
+                            <InputError message={errors.date_required} className='mt-2' />
                         </div>
-
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="installedTo" value="Full Name" />
+                                <Label htmlFor="department_pr" value="Choose Department" />
                             </div>
                             <SelectInput 
-                                name='installedTo'
-                                id="installedTo" 
-                                value={data.installedTo}
-                                onChange={(e) => setData("installedTo", e.target.value)}
-                                required 
-                            >
-                                <option value="">Select User</option>
-                                {listConsumablesUsersFname.map(fname => (
-                                    <option key={fname.consumables_id} value={fname.name}>
-                                        {fname.name}
-                                    </option>
-                                ))}
-                            </SelectInput>
-                            <InputError message={errors.installedTo} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="deliveryRecieptDate" value="Delivery Date: " />
-                            </div>
-                            <TextInput 
-                                id="deliveryRecieptDate" 
-                                type="date"
-                                name='deliveryRecieptDate'
-                                value={data.deliveryRecieptDate}
-                                onChange={(e) => setData("deliveryRecieptDate", e.target.value)}
-                            />
-                            <InputError message={errors.deliveryRecieptDate} className='mt-2' />
-                        </div>
-
-                        <div>
-                            <div className="mb-2 block">
-                                <Label htmlFor="department_consumables" value="Choose Department" />
-                            </div>
-                            <SelectInput 
-                                name='department_consumables'
-                                id="department_consumables" 
-                                value={data.department_consumables}
-                                onChange={(e) => setData("department_consumables", e.target.value)}
+                                name='department_pr'
+                                id="department_pr" 
+                                value={data.department_pr}
+                                onChange={(e) => setData("department_pr", e.target.value)}
                                 required 
                             >
                                 <option value="">Select Department</option>
@@ -305,7 +221,39 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                                     </option>
                                 ))}
                             </SelectInput>
-                            <InputError message={errors.department_consumables} className='mt-2' />
+                            <InputError message={errors.department_pr} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="purpose" value="Purpose: " />
+                            </div>
+                            <TextInput 
+                                id="purpose" 
+                                type="text"
+                                name='purpose'
+                                value={data.purpose}
+                                onChange={(e) => setData("purpose", e.target.value)}
+                            />
+                            <InputError message={errors.purpose} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="item_category" value="Item Category:" />
+                            </div>
+                            <SelectInput 
+                                name='item_category' 
+                                id="item_category" 
+                                value={data.item_category}
+                                onChange={(e) => setData("item_category", e.target.value)}
+                                required 
+                            >
+                                <option value="">Category: </option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                            </SelectInput>
+                            <InputError message={errors.item_category} className='mt-2' />
                         </div>
                     
                         <div>
@@ -326,7 +274,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
 
                         <div className="flex-row w-full items-center justify-center">
                             <Label
-                                htmlFor="consumables_img_path"
+                                htmlFor="pr_img_path"
                                 className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
                                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
@@ -361,7 +309,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                                     }
                                 </div>
                                 <FileInput 
-                                    id="consumables_img_path" 
+                                    id="pr_img_path" 
                                     name='img_path'
                                     onChange={handleFileChange}
                                     className="hidden" 
@@ -370,7 +318,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                             <InputError message={errors.img_path} className='mt-2' />
                         </div>
                         <div className='flex justify-end'>
-                            <Link href={route('consumables.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
+                            <Link href={route('purchase_requisitions.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
                             <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>

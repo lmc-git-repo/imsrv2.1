@@ -33,6 +33,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <div className="border rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Issued:</strong> {user.dateIssued}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Full Name:</strong> {user.installedTo}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Delivery Date:</strong> {user.deliveryRecieptDate}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_consumables}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>

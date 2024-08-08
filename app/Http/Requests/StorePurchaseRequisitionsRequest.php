@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Models\AccountUsers;
 use App\Models\Departments;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreConsumablesRequest extends FormRequest
+class StorePurchaseRequisitionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,24 +24,19 @@ class StoreConsumablesRequest extends FormRequest
     public function rules(): array
     {
         $departments = Departments::pluck('dept_list')->toArray();
-        $installedTo = AccountUsers::pluck('name')->toArray();
-
         return [
             //
-            "po_num" => ['required', 'max:255'],
-            "serial_no" => ['required', 'max:255'],
+            "control_num" => ['required', 'max:255'],
+            "po_num" => ['nullable', 'max:255'],
             "img_path" => ['nullable', 'image'],
-            "si_code" => ['nullable', 'max:255'],
-            "brand" => ['required', 'max:255'],
-            "model" => ['required', 'max:255'],
-            "storage_capacity" => ['required', 'max:255'],
+            "description" => ['required', 'max:255'],
             "qty" => ['required'],
-            "price" => ['required'],
+            "unit_price" => ['required'],
             "total" => ['required'],
-            "dateIssued" => ['required', 'max:255'],
-            "installedTo" => ['required', Rule::in($installedTo)],
-            "deliveryRecieptDate" => ['nullable', 'max:255'],
-            "department_consumables" => ['required', Rule::in($departments)],
+            "date_required" => ['required', 'max:255'],
+            "department_pr" => ['required', Rule::in($departments)],
+            "purpose" => ['required', 'max:255'],
+            "item_category" => ['required', Rule::in(['Consumables','Repair and Maintenance'])],
             "remarks" => ['required', 'max:255'],
         ];
     }

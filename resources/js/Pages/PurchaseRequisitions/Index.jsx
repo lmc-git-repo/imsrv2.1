@@ -15,12 +15,12 @@ import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 
-export default function Index({auth, consumables, departmentsList, consumablesUsersFnameList, queryParams = null, success}) {
+export default function Index({auth, purchase_requisitions, departmentsList, queryParams = null, success}) {
     
     queryParams = queryParams || {}
-    const { showModal, selectedConsumables, openModal, closeModal } = useModal();
+    const { showModal, selectedPR, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditConsumables, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEditPR, openEditModal, closeEditModal } = useEditModal();
     const searchFieldChanged = (name, value) =>{
         if(value){
             queryParams[name] = value;
@@ -28,7 +28,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
         else{
             delete queryParams[name];
         }
-        router.get(route('consumables.index'), queryParams)
+        router.get(route('purchase_requisitions.index'), queryParams)
     };
 
     const onKeyPress = (name, e) => {
@@ -50,14 +50,14 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('consumables.index'), queryParams)
+        router.get(route('purchase_requisitions.index'), queryParams)
     };
 
-    const deleteConsumables = (consumable) => {
-        if (!window.confirm('Are you sure you want to delete this Consumable?')) {
+    const deletePR = (pr) => {
+        if (!window.confirm('Are you sure you want to delete this Purchase Requisition?')) {
             return;
         }
-        router.delete(route('consumables.destroy', consumable.consumables_id))
+        router.delete(route('purchase_requisitions.destroy', pr.pr_id))
     };    
     
   return (
@@ -65,7 +65,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
         user={auth.user}
         header={
             <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Consumables</h2>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Purchase Requisitions</h2>
                 <Button 
                     onClick={() => openCreateModal()} 
                     className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -80,7 +80,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
             </div>
         }
     >
-        <Head title="Consumables" />
+        <Head title="Purchase Requisition" />
         <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
@@ -91,7 +91,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                             <div className="ms-3 text-sm font-medium">
                                 {success}
                             </div>
-                            <button onClick={() => router.get(route('consumables.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
+                            <button onClick={() => router.get(route('purchase_requisitions.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
                                 <span className="sr-only">Dismiss</span>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -101,29 +101,48 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                     )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {/* <pre>{JSON.stringify(consumables, undefined, 2)}</pre> */}
+                            {/* <pre>{JSON.stringify(purchase_requisitions, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
                                 <div className="flex justify-end py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.po_num} 
-                                            placeholder="PO Number"
-                                            onBlur={e => searchFieldChanged('po_num', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('po_num', e)} 
+                                            defaultValue={queryParams.control_num} 
+                                            placeholder="Control Number"
+                                            onBlur={e => searchFieldChanged('control_num', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('control_num', e)} 
                                         />
+                                    </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={queryParams.item_category} 
+                                            onChange={ e => searchFieldChanged('item_category', e.target.value)}
+                                        >
+                                            <option value="">Select Category</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                        </SelectInput>
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <TableHeading
-                                                name="consumables_id"
+                                                name="pr_id"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                ConID
+                                                PRID
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="control_num"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Control NO
                                             </TableHeading>
                                             <TableHeading
                                                 name="po_num"
@@ -134,49 +153,17 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                 PO NO
                                             </TableHeading>
 
-                                            <TableHeading
-                                                name="serial_no"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Serial No
-                                            </TableHeading>
-
+                                            
                                             <th className="px-3 py-3">IMG</th>
                                             <TableHeading
-                                                name="si_code"
+                                                name="description"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                SI Code
+                                                Description
                                             </TableHeading>
-                                            <TableHeading
-                                                name="brand"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Brand
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="model"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Model
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="storage_capacity"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Storage Capacity
-                                            </TableHeading>
-
+                                            
                                             <TableHeading
                                                 name="qty"
                                                 sort_field={queryParams.sort_field} 
@@ -187,12 +174,12 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                             </TableHeading>
 
                                             <TableHeading
-                                                name="price"
+                                                name="unit_price"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Price
+                                                Unit Price
                                             </TableHeading>
 
                                             <TableHeading
@@ -205,39 +192,39 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                             </TableHeading>
 
                                             <TableHeading
-                                                name="dateIssued"
+                                                name="date_required"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Date Issued
+                                                Date Required
                                             </TableHeading>
                                             
                                             <TableHeading
-                                                name="installedTo"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Full Name
-                                            </TableHeading>
-
-                                            <TableHeading
-                                                name="deliveryRecieptDate"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Delivery Date
-                                            </TableHeading>
-
-                                            <TableHeading
-                                                name="department_consumables"
+                                                name="department_pr"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Department
+                                            </TableHeading>
+
+                                            <TableHeading
+                                                name="purpose"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Purpose
+                                            </TableHeading>
+
+                                            <TableHeading
+                                                name="item_category"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Item Category
                                             </TableHeading>
                                             
                                             <TableHeading
@@ -278,47 +265,41 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {consumables.data ? (
-                                                consumables.data.map(consumable => (
-                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={consumable.consumables_id}>
-                                                        <td className="px-3 py-2">{consumable.consumables_id}</td>
+                                        {purchase_requisitions.data ? (
+                                                purchase_requisitions.data.map(pr => (
+                                                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={pr.pr_id}>
+                                                        <td className="px-3 py-2">{pr.pr_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("consumables.show", { consumables_id: consumable.consumables_id })}>
-                                                                {consumable.po_num}
+                                                            {/* <Link href={route("purchase_requisitions.show", { pr_id: pr.pr_id })}>
+                                                                {pr.control_num}
                                                             </Link> */}
-                                                            <Link href="#" onClick={(e) => openModal(consumable, e)}>
-                                                                {consumable.po_num}
+                                                            <Link href="#" onClick={(e) => openModal(pr, e)}>
+                                                                {pr.control_num}
                                                             </Link>
                                                         </th>
-                                                        <td className="px-3 py-2">{consumable.serial_no}</td>
+                                                        <td className="px-3 py-2">{pr.po_num}</td>
                                                         <td className="px-3 py-2">
-                                                            <img src={consumable.img_path} alt="" style={{width: 60}} />
+                                                            <img src={pr.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{consumable.si_code}</td>
-                                                        <td className="px-3 py-2">{consumable.brand}</td>
-                                                        <td className="px-3 py-2">{consumable.model}</td>
-                                                        <td className="px-3 py-2">{consumable.storage_capacity}</td>
-                                                        <td className="px-3 py-2">{consumable.qty}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.price}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.total}</td>
-                                                        <td className="px-3 py-2">{consumable.dateIssued}</td>
-                                                        <td className="px-3 py-2">{consumable.installedTo}</td>
-                                                        <td className="px-3 py-2">{consumable.deliveryRecieptDate}</td>
-                                                        <td className="px-3 py-2">{consumable.department_consumables}</td>
-                                                        <td className="px-3 py-2">{consumable.remarks}</td>
-                                                        <td className="px-3 py-2">{consumable.createdBy.name}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{consumable.created_at}</td>
+                                                        <td className="px-3 py-2">{pr.description}</td>
+                                                        <td className="px-3 py-2">{pr.qty}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + pr.unit_price}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{'₱ ' + pr.total}</td>
+                                                        <td className="px-3 py-2">{pr.date_required}</td>
+                                                        <td className="px-3 py-2">{pr.department_pr}</td>
+                                                        <td className="px-3 py-2">{pr.purpose}</td>
+                                                        <td className="px-3 py-2">{pr.item_category}</td>
+                                                        <td className="px-3 py-2">{pr.remarks}</td>
+                                                        <td className="px-3 py-2">{pr.createdBy.name}</td>
+                                                        <td className="px-3 py-2 text-nowrap">{pr.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('consumables.edit', consumable.consumables_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
+                                                            {/* <Link href={route('purchase_requisitions.edit', pr.pr_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(consumable, e)}
+                                                                onClick={(e) => openModal(pr, e)}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -327,7 +308,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                             </button>
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
-                                                                onClick={() => openEditModal(consumable)}
+                                                                onClick={() => openEditModal(pr)}
                                                             >
                                                                 <span className='flex items-center justify-center'>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -336,7 +317,7 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                                 </span>
                                                             </button>
                                                             <button 
-                                                                onClick={(e) => deleteConsumables(consumable)}
+                                                                onClick={(e) => deletePR(pr)}
                                                                 className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                             >
                                                                 <span className='flex items-center justify-center'>
@@ -357,19 +338,18 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={consumables.meta.links} />
+                            <Pagination links={purchase_requisitions.meta.links} />
                         </div>
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedConsumables} />
-            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} consumablesUsersFnameList={consumablesUsersFnameList.data}  />
+            <Show show={showModal} onClose={closeModal} user={selectedPR} />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                listConsumablesUsersFname={consumablesUsersFnameList.data}
-                selectedEditConsumables={selectedEditConsumables}
+                selectedEditPR={selectedEditPR}
             />
     </AuthenticatedLayout>
   )

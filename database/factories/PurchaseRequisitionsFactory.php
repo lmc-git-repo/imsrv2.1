@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Consumables>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PurchaseRequisitions>
  */
-class ConsumablesFactory extends Factory
+class PurchaseRequisitionsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,20 +18,17 @@ class ConsumablesFactory extends Factory
     {
         return [
             //
+            'control_num' => fake()->word(),
             'po_num' => fake()->word(),
-            'serial_no' => fake()->word(),
             'img_path' => fake()->imageUrl(),
-            'si_code' => fake()->word(),
-            'brand' => fake()->word(),
-            'model' => fake()->word(),
-            'storage_capacity' => fake()->word(),
+            'description' => fake()->word(),
             'qty' => fake()->word(),
-            'price' => fake()->word(),
+            'unit_price' => fake()->word(),
             'total' => fake()->word(),
-            'dateIssued' => fake()->word(),
-            'installedTo' => fake()->name(),
-            'deliveryRecieptDate' => fake()->word(),
-            'department_consumables' => fake()->word(),
+            'date_required' => fake()->word(),
+            'department_pr' => fake()->word(),
+            'purpose' => fake()->word(),
+            'item_category' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,
