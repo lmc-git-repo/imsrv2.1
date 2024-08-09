@@ -161,6 +161,15 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('departments.index')} active={route().current('departments.index')}>
+                            Deparments
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
+                            Employees
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('user.index')} active={route().current('user.index')}>
+                            Users
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

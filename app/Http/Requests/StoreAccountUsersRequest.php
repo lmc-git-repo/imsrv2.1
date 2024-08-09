@@ -29,6 +29,7 @@ class StoreAccountUsersRequest extends FormRequest
             "name" => ['required', 'max:255'],
             "department_users" => ['required', Rule::in($departments)],
             "initial" => ['required', 'max:255'],
+            "outlookEmail" => ['nullable', 'email', 'unique:account_users,outlookEmail', 'max:255'],
             "status" => ['required', Rule::in(['Employed','Resigned','Terminated'])],
             "profile_path" => ['nullable', 'image'],
         ];

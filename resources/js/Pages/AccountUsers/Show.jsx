@@ -66,6 +66,7 @@ const ModalComponent = ({ show, onClose, user }) => {
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Initials:</strong> {user.initial}</p>
             </div>
             <div className="border rounded p-3 w-full">
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Email:</strong> {user.outlookEmail}</p>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                 <strong className='pe-4'>Status:</strong> 
                 {/* {user.status} */}

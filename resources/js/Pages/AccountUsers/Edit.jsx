@@ -13,6 +13,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
         name: selectedEditUser.name || "",
         department_users: selectedEditUser.department_users || "",
         initial: selectedEditUser.initial || "",
+        outlookEmail: selectedEditUser.outlookEmail || "",
         status: selectedEditUser.status || "",
         // profile_path: selectedEditUser.profile_path || "",
         profile_path: null,
@@ -118,6 +119,22 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                             />
                             <InputError message={errors.initial} className='mt-2' />
                         </div>
+                        
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="outlookEmail" value="Enter Email" />
+                            </div>
+                            <TextInput 
+                                id="outlookEmail" 
+                                type="text"
+                                name='outlookEmail' 
+                                value={data.outlookEmail}
+                                onChange={(e) => setData("outlookEmail", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.outlookEmail} className='mt-2' />
+                        </div>
+
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="status" value="Status" />

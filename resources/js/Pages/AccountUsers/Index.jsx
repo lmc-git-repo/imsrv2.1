@@ -108,10 +108,10 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.name} 
+                                            defaultValue={queryParams.search} 
                                             placeholder="Employee Name"
-                                            onBlur={e => searchFieldChanged('name', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('name', e)} 
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                 </div>
@@ -151,6 +151,16 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                             >
                                                 Initials
                                             </TableHeading>
+
+                                            <TableHeading
+                                                name="outlookEmail"
+                                                sort_field={queryParams.sort_field} 
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Email
+                                            </TableHeading>
+
                                             <TableHeading
                                                 name="status"
                                                 sort_field={queryParams.sort_field} 
@@ -177,9 +187,8 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                
-                                            </th>
+                                            <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3">
                                                 <SelectInput 
                                                     className="w-full text-sm h-8 py-1"
@@ -214,6 +223,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                 </td>
                                                 <td className="px-3 py-2">{accountusers.department_users}</td>
                                                 <td className="px-3 py-2">{accountusers.initial}</td>
+                                                <td className="px-3 py-2">{accountusers.outlookEmail}</td>
                                                 <td className="px-3 py-2">
                                                     <span className={'px-2 rounded-e-full text-white ' + ACCOUNTUSERS_STATUS_CLASS_MAP[accountusers.status]}>{ACCOUNTUSERS_STATUS_TEXT_MAP[accountusers.status]}</span>
                                                 </td>

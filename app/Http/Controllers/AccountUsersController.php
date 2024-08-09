@@ -24,9 +24,16 @@ class AccountUsersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("name")){
-            $query->where("name","like","%". request("name") .'%');
-        }
+        // if(request("name")){
+        //     $query->where("name","like","%". request("name") .'%');
+        // }
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('outlookEmail', 'like', '%' . $search . '%');
+            });
+        } 
 
         if(request('status')){
             $query->where('status', request('status'));
