@@ -6,6 +6,9 @@ use App\Http\Resources\DepartmentsResource;
 use App\Models\Departments;
 use App\Http\Requests\StoreDepartmentsRequest;
 use App\Http\Requests\UpdateDepartmentsRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DepartmentsController extends Controller
 {
@@ -38,9 +41,14 @@ class DepartmentsController extends Controller
         $departments = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)->onEachSide(1);
 
+        $departmentsAllData = Departments::orderBy('dept_id')->get();
+
+
         return inertia("Departments/Index", [
             'departments' => DepartmentsResource::collection($departments),
+            'departmentsAllData' => DepartmentsResource::collection($departmentsAllData),
             'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
         ]);
     }
 
@@ -58,6 +66,19 @@ class DepartmentsController extends Controller
     public function store(StoreDepartmentsRequest $request)
     {
         //
+        $data = $request->validated();
+        
+        $data['created_by'] = Auth::id(); 
+        $data['updated_by'] = Auth::id();
+        
+
+        //?Checking if there's a data is posted after submission 
+        // dd($data);
+
+        //*This is for passing the data to create a new Department
+        Departments::create($data);
+
+        return to_route('departments.index')->with('success', 'New Department was created');
     }
 
     /**
@@ -79,17 +100,29 @@ class DepartmentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDepartmentsRequest $request, Departments $departments)
+    public function update(UpdateDepartmentsRequest $request, Departments $department)
     {
         //
+        $data = $request->validated();
+
+        // dd($data);
+        $data['updated_by'] = Auth::id();
+        $department->update($data);
+        // \Log::info('Updated department: ', $departments->toArray());
+        return to_route('departments.index')->with('success', "Department \" $department->dept_list\" was updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Departments $departments)
+    public function destroy(Departments $department)
     {
         //
+        $department->delete();
+        // if($department->img_path){
+        //     Storage::disk('public')->deleteDirectory(dirname($department->img_path));
+        // }
+        return to_route('departments.index')->with('success', "Department - \" $department->dept_list\" successfully deleted!");
     }
 
     //

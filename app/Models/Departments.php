@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Departments extends Model
 {
+    protected $primaryKey = 'dept_id';
+    protected $fillable = [
+        'dept_list', 'created_by', 'updated_by'
+    ];
     use HasFactory;
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');

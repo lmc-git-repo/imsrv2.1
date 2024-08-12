@@ -11,7 +11,7 @@ class StoreDepartmentsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,7 @@ class StoreDepartmentsRequest extends FormRequest
     {
         return [
             //
+            "dept_list" => ['required', 'max:255'],
         ];
     }
 }
