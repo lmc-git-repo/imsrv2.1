@@ -12,6 +12,7 @@ use App\Http\Controllers\PurchaseRequisitionsController;
 use App\Http\Controllers\ServerUPSController;
 use App\Http\Controllers\TabletsController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,25 +23,31 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
         ->name('dashboard');
 
-    Route::resource('computers', ComputersController::class);
-    Route::resource('serverUps', ServerUPSController::class);
-    Route::resource('monitors', MonitorsController::class);
-    Route::resource('printers', PrintersController::class);
-    Route::resource('tablets', TabletsController::class);
-    Route::resource('phones', PhonesController::class);
-    Route::resource('consumables', ConsumablesController::class);
-    Route::resource('purchase_requisitions', PurchaseRequisitionsController::class);
-    Route::resource('departments', DepartmentsController::class);
-    Route::resource('accountUsers', AccountUsersController::class);
-    Route::resource('user', UserController::class);
+    Route::resource('computers', ComputersController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('serverUps', ServerUPSController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('monitors', MonitorsController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('printers', PrintersController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('tablets', TabletsController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('phones', PhonesController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('consumables', ConsumablesController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('purchase_requisitions', PurchaseRequisitionsController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('departments', DepartmentsController::class)->middleware(CheckRole::class.':super admin,admin,user,member');
+    Route::resource('accountUsers', AccountUsersController::class)->middleware(CheckRole::class.':super admin,admin,user,member');
+    // Route::resource('user', UserController::class);
+
+    // Restrict 'user' resource to admins only
+    Route::resource('user', UserController::class)->middleware(CheckRole::class.':admin,super admin');
 });
+
+// Route::get('/test-role', function () {
+//     return 'Role Middleware Test';
+// })->middleware(CheckRole::class.':user');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/accountUsers/{account_id}', [AccountUsersController::class, 'show'])->name('accountUsers.show');
-Route::put('/accountUsers/{account_id}', [AccountUsersController::class, 'update'])->name('accountUsers.update');
 
 require __DIR__.'/auth.php';

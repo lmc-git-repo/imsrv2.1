@@ -24,61 +24,62 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                
-                                <div className='flex justify-center items-center'>
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
-                                            <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
-                                                Inventory
-                                                <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                                </svg>
-                                            </NavLink>
-                                        </Dropdown.Trigger>
-                                        <Dropdown.Content>
-                                            <Dropdown.Link href={route('computers.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('computers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Computers
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('serverUps.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('serverUps.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Server / UPS
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('monitors.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('monitors.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Monitors
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('printers.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('printers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Printers
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('tablets.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tablets.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Tablets
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('phones.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Phones
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('consumables.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Consumables
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link href={route('purchase_requisitions.index')}>
-                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('purchase_requisitions.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                    Purchase Requisitions
-                                                </div>
-                                            </Dropdown.Link>
-                                        </Dropdown.Content>
-                                    </Dropdown>
-                                </div>
+                                {(user.role === 'super admin' || user.role === 'admin') && (
+                                    <div className='flex justify-center items-center'>
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
+                                                    Inventory
+                                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                </NavLink>
+                                            </Dropdown.Trigger>
+                                            <Dropdown.Content>
+                                                <Dropdown.Link href={route('computers.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('computers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Computers
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('serverUps.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('serverUps.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Server / UPS
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('monitors.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('monitors.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Monitors
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('printers.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('printers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Printers
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('tablets.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tablets.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Tablets
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('phones.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Phones
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('consumables.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Consumables
+                                                    </div>
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('purchase_requisitions.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('purchase_requisitions.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Purchase Requisitions
+                                                    </div>
+                                                </Dropdown.Link>
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                )}
 
 
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
