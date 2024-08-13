@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -14,6 +15,28 @@ class UserController extends Controller
     public function index()
     {
         //
+        $query = User::query();
+
+        $sortField = request("sort_field", 'created_at');
+        $sortDirection = request("sort_direction", "desc");
+
+        if(request("name")){
+            $query->where("name","like","%". request("name") .'%');
+        }
+
+        $users = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)->onEachSide(1);
+
+        $usersAllData = User::orderBy('id')->get();
+
+        // echo $usersAllData;
+
+        return inertia("Users/Index", [
+            'users' => UserResource::collection($users),
+            'usersAllData' => UserResource::collection($usersAllData),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
+        ]);
     }
 
     /**
@@ -30,6 +53,16 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         //
+        $data = $request->validated();
+        $data['email_verified_at'] = time();
+        $data['password'] = bcrypt($data['password']);
+        
+        //?Checking if there's a data is posted after submission 
+        // dd($data);
+
+        User::create($data);
+
+        return to_route('user.index')->with('success', 'New user was created');
     }
 
     /**
@@ -54,6 +87,19 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         //
+        $data = $request->validated();
+        // \Log::info('Update data: ', $data);
+
+        $password = $data['password'] ?? null;
+        if($password){
+            $data['password'] = bcrypt($password);
+        } else {
+            unset($data['password']);
+        }
+        // dd($data);
+        $user->update($data);
+        // \Log::info('Updated user: ', $user->toArray());
+        return to_route('user.index')->with('success', "User \" $user->name\" was updated");
     }
 
     /**
@@ -62,5 +108,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+        $user->delete();
+        // if($user->img_path){
+        //     Storage::disk('public')->deleteDirectory(dirname($user->img_path));
+        // }
+        return to_route('user.index')->with('success', "User - \" $user->name\" successfully deleted!");
     }
 }

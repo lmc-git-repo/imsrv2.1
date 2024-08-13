@@ -87,9 +87,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
                                     Employees{/* List of Employees/Users */}
                                 </NavLink>
-                                <NavLink href={route('user.index')} active={route().current('user.index')}>
-                                    Users {/* All Accounts */}
-                                </NavLink>
+                                {(user.role === 'super admin' || user.role === 'admin') && (
+                                    <NavLink href={route('user.index')} active={route().current('user.index')}>
+                                        Users {/* All Accounts */}
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 

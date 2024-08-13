@@ -25,14 +25,6 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => time()
         ]);
 
-        User::factory()->create([
-            'name' => 'User',
-            'email' => 'itdlagunamettscorp@gmail.com',
-            'password' => bcrypt('#@User123'),
-            'role' => 'user',
-            'email_verified_at' => time()
-        ]);
-
         // List of departments
         $departments = [
             'Admin', 'HR', 'IT', 'Accounting', 'Purchasing', 'COOP', 'GA', 'GA/Nurse', 
