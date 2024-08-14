@@ -66,14 +66,16 @@ export default function Index({auth, departments, queryParams = null, success}) 
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Departments</h2>
-                <Button 
-                    onClick={() => openCreateModal()} 
-                    className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
-                >
-                    <span className='flex items-center'>
-                        Add
-                    </span>
-                </Button>
+                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                    <Button 
+                        onClick={() => openCreateModal()} 
+                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    >
+                        <span className='flex items-center'>
+                            Add
+                        </span>
+                    </Button>
+                )}
             </div>
         }
     >

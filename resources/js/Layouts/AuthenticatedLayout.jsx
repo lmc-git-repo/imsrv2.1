@@ -24,7 +24,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                {(user.role === 'super admin' || user.role === 'admin') && (
+                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member') && (
                                     <div className='flex justify-center items-center'>
                                         <Dropdown>
                                             <Dropdown.Trigger>
