@@ -14,7 +14,7 @@
 //         <Head title={`Account User ${accountUsers.name}`} />
 //         <div className="py-12">
 //             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-//             <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+//             <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg">
 //                 <div className="p-6 text-gray-900 dark:text-gray-100">
 //                 <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
 //                     Account User Details
