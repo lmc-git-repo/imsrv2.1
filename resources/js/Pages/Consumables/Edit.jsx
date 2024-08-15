@@ -133,7 +133,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                             </div>
                             <TextInput
                                 id="si_code"
-                                type='number'
+                                type='text'
                                 name='si_code'
                                 value={data.si_code}
                                 // placeholder=""
