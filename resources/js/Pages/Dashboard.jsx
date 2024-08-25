@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, totalOperationals, totalUsers, totalSpareUnits, totalDesktops, totalLaptops, totalTablets, totalPhones }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -14,49 +14,49 @@ export default function Dashboard({ auth }) {
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-green-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-green-600 text-xl font-semibold'>Operationals</h3>
-                            {/* <p>{totalOperationals}</p> */}
+                            <p>{totalOperationals}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-amber-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-amber-600 text-xl font-semibold'>Users</h3>
-                            {/* <p>{totalUsers}</p> */}
+                            <p>{totalUsers}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-gray-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-gray-400 text-xl font-semibold'>Spare Computers</h3>
-                            {/* <p>{totalSpareComputers}</p> */}
+                            <p>{totalSpareUnits}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-sky-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-sky-600 text-xl font-semibold'>Desktop</h3>
-                            {/* <p>{totalDesktop}</p> */}
+                            <p>{totalDesktops}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-sky-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-sky-600 text-xl font-semibold'>Laptop</h3>
-                            {/* <p>{totalLaptop}</p> */}
+                            <p>{totalLaptops}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-sky-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-sky-600 text-xl font-semibold'>Tablets</h3>
-                            {/* <p>{totalTablets}</p> */}
+                            <p>{totalTablets}</p>
                         </div>
                     </div>
 
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 border-sky-400">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <h3 className='text-sky-600 text-xl font-semibold'>Phones</h3>
-                            {/* <p>{totalPhones}</p> */}
+                            <p>{totalPhones}</p>
                         </div>
                     </div>
 

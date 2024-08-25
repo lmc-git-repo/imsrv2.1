@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountUsersController;
 use App\Http\Controllers\ComputersController;
 use App\Http\Controllers\ConsumablesController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\MonitorsController;
 use App\Http\Controllers\PhonesController;
@@ -20,7 +21,7 @@ use Inertia\Inertia;
 Route::redirect('/', '/dashboard');
 
 Route::middleware(['auth', 'verified']) ->group(function(){
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
+    Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
     Route::resource('computers', ComputersController::class)->middleware(CheckRole::class.':super admin,admin,member');
