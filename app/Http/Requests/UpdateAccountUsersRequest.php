@@ -28,10 +28,23 @@ class UpdateAccountUsersRequest extends FormRequest
             //
             "name" => ['required', 'max:255'],
             "department_users" => ['required', Rule::in($departments)],
-            "initial" => ['required', 'max:255'],
+            "initial" => ['required', 'max:255', Rule::exists('account_users', 'initial')],
             "outlookEmail" => ['nullable', 'email', 'unique:account_users,outlookEmail', 'max:255'],
             "status" => ['required', Rule::in(['Employed','Resigned','Terminated'])],
             'profile_path' => 'nullable|image|mimes:jpeg,png,jpg,gif', // Adjust max size as needed
+        ];
+    }
+    /**
+     * Customize the validation error messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages()
+    {
+        return [
+            'initial.exists' => 'The specified initial value is currently in use and cannot be updated or deleted because it is referenced by other records in the database. Please choose a different value or update the related records first.',
+            // 'outlookEmail.unique' => 'The email address is already in use.',
+            // Add other custom messages if needed
         ];
     }
 }

@@ -105,14 +105,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(computers, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.comp_name} 
-                                            placeholder="Computer Name"
-                                            onBlur={e => searchFieldChanged('comp_name', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('comp_name', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Computer"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                     <div>
@@ -127,6 +127,21 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Barrow">Barrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={queryParams.department_comp} 
+                                            onChange={ e => searchFieldChanged('department_comp', e.target.value)}
+                                        >
+                                            <option value="">Select Department</option>
+                                            {departmentsList.data.map(dept => (
+                                                <option key={dept.dept_id} value={dept.dept_list}>
+                                                    {dept.dept_list}
+                                                </option>
+                                            ))}
                                         </SelectInput>
                                     </div>
                                 </div>
@@ -150,14 +165,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Name
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="comp_model"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Computer Model
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="comp_type"
                                                 sort_field={queryParams.sort_field} 
@@ -166,14 +181,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Computer Type
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="comp_user"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 User
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             
                                             <TableHeading
                                                 name="fullName"
@@ -192,30 +207,30 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Department
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="comp_os"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Operating System
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="comp_storage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Computer Storage
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="comp_serial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Computer Serial
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="comp_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -224,14 +239,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Computer Asset
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="comp_cpu"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Processor
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="comp_gen"
                                                 sort_field={queryParams.sort_field} 
@@ -248,14 +263,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Mac Address
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="comp_prdctkey"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Product Key
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="comp_status"
@@ -265,23 +280,23 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Status
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="remarks"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Remarks
-                                            </TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <th className="px-3 py-3">Created By</th> */}
+                                            {/* <TableHeading
                                                 name="created_at"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Created Date
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -298,30 +313,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput 
-                                                    className="w-full text-sm h-8 py-1"
-                                                    defaultValue={queryParams.comp_status} 
-                                                    onChange={ e => searchFieldChanged('comp_status', e.target.value)}
-                                                >
-                                                    <option value="">Select Status</option>
-                                                    <option value="Deployed">Deployed</option>
-                                                    <option value="Spare">Spare</option>
-                                                    <option value="For Disposal">For Disposal</option>
-                                                    <option value="Already Disposed">Already Disposed</option>
-                                                    <option value="Barrow">Barrow</option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -340,25 +331,25 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                         <td className="px-3 py-2">
                                                             <img src={computer.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{computer.comp_model}</td>
+                                                        {/* <td className="px-3 py-2">{computer.comp_model}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_type}</td>
-                                                        <td className="px-3 py-2">{computer.comp_user}</td>
-                                                        <td className="px-3 py-2">{computer.fullName}</td>
+                                                        {/* <td className="px-3 py-2">{computer.comp_user}</td> */}
+                                                        <td className="px-3 py-2 font-bold text-slate-300">{computer.fullName}</td>
                                                         <td className="px-3 py-2">{computer.department_comp}</td>
-                                                        <td className="px-3 py-2">{computer.comp_os}</td>
-                                                        <td className="px-3 py-2">{computer.comp_storage}</td>
-                                                        <td className="px-3 py-2">{computer.comp_serial}</td>
+                                                        {/* <td className="px-3 py-2">{computer.comp_os}</td> */}
+                                                        {/* <td className="px-3 py-2">{computer.comp_storage}</td> */}
+                                                        {/* <td className="px-3 py-2">{computer.comp_serial}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_asset}</td>
-                                                        <td className="px-3 py-2">{computer.comp_cpu}</td>
+                                                        {/* <td className="px-3 py-2">{computer.comp_cpu}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_gen}</td>
                                                         <td className="px-3 py-2">{computer.comp_address}</td>
-                                                        <td className="px-3 py-2">{computer.comp_prdctkey}</td>
+                                                        {/* <td className="px-3 py-2">{computer.comp_prdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[computer.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[computer.comp_status]}</span>
                                                         </td>
-                                                        <td className="px-3 py-2">{computer.remarks}</td>
-                                                        <td className="px-3 py-2">{computer.createdBy.name}</td>
-                                                        <td className="px-3 py-2 text-nowrap">{computer.created_at}</td>
+                                                        {/* <td className="px-3 py-2">{computer.remarks}</td> */}
+                                                        {/* <td className="px-3 py-2">{computer.createdBy.name}</td> */}
+                                                        {/* <td className="px-3 py-2 text-nowrap">{computer.created_at}</td> */}
                                                         <td className="px-3 py-2 text-right text-nowrap">
                                                             {/* <Link href={route('computers.edit', computer.CID)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button

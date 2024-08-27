@@ -31,12 +31,24 @@ class ComputersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("comp_name")){
-            $query->where("comp_name","like","%". request("comp_name") .'%');
+        // if(request("comp_name")){
+        //     $query->where("comp_name","like","%". request("comp_name") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('comp_name', 'like', '%' . $search . '%')
+                  ->orWhere('fullName', 'like', '%' . $search . '%')
+                  ->orWhere('comp_user', 'like', '%' . $search . '%');
+
+            });
         }
 
         if(request('comp_status')){
             $query->where('comp_status', request('comp_status'));
+        }
+
+        if(request('department_comp')){
+            $query->where('department_comp', request('department_comp'));
         }
 
         $computers = $query->orderBy($sortField, $sortDirection)
