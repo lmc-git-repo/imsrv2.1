@@ -22,18 +22,23 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
     })
     const [imagePreview, setImagePreview] = useState(null);
 
+    const [loading, setLoading] = useState(false);
+
     const onSubmit =(e) =>{
         e.preventDefault();
+        setLoading(true);
         // console.log("Form Data:", data);
         post(route("monitors.store"), {
             onSuccess: () => {
                 // console.log("Success:", response);
+                setLoading(false);
                 onClose();
                 reset();
             },
-            // onError: (errors) => {
-            //     console.log("Errors:", errors);
-            // }
+            onError: () => {
+                setLoading(false);
+                // console.log("Errors:", errors);
+            }
         });
     }
     const handleFileChange = (e) => {
@@ -237,8 +242,25 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                             <Link href={route('monitors.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
+                            {/* <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
                                 Submit
+                            </button> */}
+                            <button 
+                                type="submit" 
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <span className="flex items-center">
+                                        <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 8 8A8 8 0 0 1 4 12z"></path>
+                                        </svg>
+                                        Processing...
+                                    </span>
+                                ) : (
+                                    'Submit'
+                                )}
                             </button>
                         </div>
                     </div>

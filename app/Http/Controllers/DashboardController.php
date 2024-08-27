@@ -126,10 +126,10 @@ class DashboardController extends Controller
         $statuses = ['Deployed', 'Spare', 'Barrow'];
         $generations = ['N/A', 'Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
         
-        $totalOperationals = Computers::query()->where('comp_status', 'Deployed')->count()
-            + Tablets::query()->where('tablet_status', 'Deployed')->count()
-            + ServerUPS::query()->where('S_UStatus', 'Deployed')->count()
-            + Phones::query()->where('phone_status', 'Deployed')->count();
+        $totalOperationals = Computers::query()->whereIn('comp_status', ['Deployed','Barrow'])->count()
+            + Tablets::query()->whereIn('tablet_status', ['Deployed','Barrow'])->count()
+            + ServerUPS::query()->whereIn('S_UStatus', ['Deployed','Barrow'])->count()
+            + Phones::query()->whereIn('phone_status', ['Deployed','Barrow'])->count();
 
         $totalUsers = Computers::query()->whereIn('comp_type', ['Desktop','Laptop'])->count()
             + Tablets::query()->count()
@@ -137,18 +137,41 @@ class DashboardController extends Controller
             + Phones::query()->count();
 
         $totalSpareUnits = Computers::query()->where('comp_status', 'Spare')->count();
-        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->count();
-        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->count();
+        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Barrow'])->count();
+        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Barrow'])->count();
         $totalTablets = Tablets::query()->count();
         $totalPhones = Phones::query()->count();
         
+        // $totalsByGen = [];
+        // foreach ($generations as $gen) {
+        //     $totalsByGen[$gen] = Computers::query()
+        //         ->where('comp_gen', $gen)
+        //         ->whereIn('comp_status', $statuses)
+        //         ->count();
+        // }
+
         $totalsByGen = [];
-        foreach ($generations as $gen) {
+        foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
             $totalsByGen[$gen] = Computers::query()
                 ->where('comp_gen', $gen)
                 ->whereIn('comp_status', $statuses)
+                ->count()
+            + ServerUPS::query()
+                ->where('S_UGen', $gen)
+                ->whereIn('S_UStatus', $statuses)
                 ->count();
         }
+
+        // Special handling for 'N/A'
+        $totalNACeleron = Computers::query()
+        ->where(function ($query) {
+            $query->where('comp_gen', 'N/A')
+                ->whereIn('comp_status', ['Deployed', 'Spare', 'Barrow'])
+                ->orWhere('comp_cpu', 'like', '%celeron%');
+        })->count()
+        + Tablets::query()
+        ->whereIn('tablet_status', ['Deployed', 'Spare', 'Barrow', 'For Disposal', 'Already Disposed'])
+        ->where('tablet_cpu', 'like', '%celeron%')->count();
 
         $totalDesktopPentiumto7thGen = Computers::query()
             ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
@@ -164,8 +187,17 @@ class DashboardController extends Controller
 
         $totalDisposedOrDisposal = Computers::query()
             ->whereIn('comp_status', ['For Disposal', 'Already Disposed'])
-            ->count();
-
+            ->count()
+            + Tablets::query()
+                ->whereIn('tablet_status', ['For Disposal', 'Already Disposed'])
+                ->count()
+            + Phones::query()
+                ->whereIn('phone_status', ['For Disposal', 'Already Disposed'])
+                ->count();
+            + ServerUPS::query()
+                ->whereIn('S_UStatus', ['For Disposal', 'Already Disposed'])
+                ->count();
+            
         return inertia(
             'Dashboard', 
             array_merge(
@@ -174,7 +206,7 @@ class DashboardController extends Controller
                     'totalDesktopPentiumto7thGen', 'totalLaptopPentiumto7thGen', 'totalDisposedOrDisposal'
                 ),
                 [
-                    'totalNACeleron' => $totalsByGen['N/A'],
+                    'totalNACeleron' => $totalNACeleron,
                     'totalPentium' => $totalsByGen['Pentium'],
                     'total3rdGen' => $totalsByGen['3rd'],
                     'total4thGen' => $totalsByGen['4th'],
