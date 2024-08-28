@@ -27,8 +27,17 @@ class ConsumablesController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("po_num")){
-            $query->where("po_num","like","%". request("po_num") .'%');
+        // if(request("po_num")){
+        //     $query->where("po_num","like","%". request("po_num") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('po_num', 'like', '%' . $search . '%')
+                  ->orWhere('si_code', 'like', '%' . $search . '%')
+                  ->orWhere('brand', 'like', '%' . $search . '%')
+                  ->orWhere('model', 'like', '%' . $search . '%')
+                  ->orWhere('installedTo', 'like', '%' . $search . '%');
+            });
         }
 
         // if(request('consumables_status')){

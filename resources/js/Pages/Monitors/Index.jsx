@@ -105,14 +105,14 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(monitors, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-start py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.compName} 
-                                            placeholder="Computer Name"
-                                            onBlur={e => searchFieldChanged('compName', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('compName', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Computer Name / User"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                 </div>

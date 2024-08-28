@@ -103,14 +103,14 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(purchase_requisitions, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.control_num} 
-                                            placeholder="Control Number"
-                                            onBlur={e => searchFieldChanged('control_num', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('control_num', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Control Number / PO"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                     <div>
@@ -155,14 +155,14 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
 
                                             
                                             <th className="px-3 py-3">IMG</th>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="description"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Description
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             
                                             <TableHeading
                                                 name="qty"
@@ -209,14 +209,14 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                                 Department
                                             </TableHeading>
 
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="purpose"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Purpose
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="item_category"
@@ -227,14 +227,14 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                                 Item Category
                                             </TableHeading>
                                             
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="remarks"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Remarks
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <th className="px-3 py-3">Created By</th>
                                             <TableHeading
                                                 name="created_at"
@@ -249,9 +249,6 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                     </thead>
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
@@ -284,15 +281,15 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                                         <td className="px-3 py-2">
                                                             <img src={pr.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        <td className="px-3 py-2">{pr.description}</td>
+                                                        {/* <td className="px-3 py-2">{pr.description}</td> */}
                                                         <td className="px-3 py-2">{pr.qty}</td>
                                                         <td className="px-3 py-2 text-nowrap">{'₱ ' + pr.unit_price}</td>
                                                         <td className="px-3 py-2 text-nowrap">{'₱ ' + pr.total}</td>
                                                         <td className="px-3 py-2">{pr.date_required}</td>
                                                         <td className="px-3 py-2">{pr.department_pr}</td>
-                                                        <td className="px-3 py-2">{pr.purpose}</td>
+                                                        {/* <td className="px-3 py-2">{pr.purpose}</td> */}
                                                         <td className="px-3 py-2">{pr.item_category}</td>
-                                                        <td className="px-3 py-2">{pr.remarks}</td>
+                                                        {/* <td className="px-3 py-2">{pr.remarks}</td> */}
                                                         <td className="px-3 py-2">{pr.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{pr.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">

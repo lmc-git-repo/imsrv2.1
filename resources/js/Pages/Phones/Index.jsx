@@ -105,14 +105,14 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(phones, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.phone_name} 
-                                            placeholder="Phone Name"
-                                            onBlur={e => searchFieldChanged('phone_name', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('phone_name', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Phone Name / User"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                     <div>
@@ -188,7 +188,7 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                                 Department
                                             </TableHeading>
                                             
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="phone_storage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
@@ -204,16 +204,16 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                                 sortChanged={sortChanged}
                                             >
                                                 RAM
-                                            </TableHeading>
+                                            </TableHeading> */}
 
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="phone_serial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Phone Serial
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="phone_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -222,7 +222,7 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                             >
                                                 Phone Asset
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="phone_cpu"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
@@ -238,15 +238,15 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                                 sortChanged={sortChanged}
                                             >
                                                 Mac Address
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="phone_imei"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 IMEI
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="phone_status"
@@ -291,28 +291,6 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            {/* <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th> */}
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput 
-                                                    className="w-full text-sm h-8 py-1"
-                                                    defaultValue={queryParams.phone_status} 
-                                                    onChange={ e => searchFieldChanged('phone_status', e.target.value)}
-                                                >
-                                                    <option value="">Select Status</option>
-                                                    <option value="Deployed">Deployed</option>
-                                                    <option value="Spare">Spare</option>
-                                                    <option value="For Disposal">For Disposal</option>
-                                                    <option value="Already Disposed">Already Disposed</option>
-                                                    <option value="Barrow">Barrow</option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -333,15 +311,15 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                                             <img src={phone.img_path} alt="" style={{width: 60}} />
                                                         </td>
                                                         <td className="px-3 py-2">{phone.phone_model}</td>
-                                                        <td className="px-3 py-2">{phone.fullName}</td>
+                                                        <td className="px-3 py-2 font-bold text-slate-300">{phone.fullName}</td>
                                                         <td className="px-3 py-2">{phone.department_phone}</td>
-                                                        <td className="px-3 py-2">{phone.phone_storage}</td>
-                                                        <td className="px-3 py-2">{phone.phone_ram}</td>
-                                                        <td className="px-3 py-2">{phone.phone_serial}</td>
+                                                        {/* <td className="px-3 py-2">{phone.phone_storage}</td>
+                                                        <td className="px-3 py-2">{phone.phone_ram}</td> */}
+                                                        {/* <td className="px-3 py-2">{phone.phone_serial}</td> */}
                                                         <td className="px-3 py-2">{phone.phone_asset}</td>
-                                                        <td className="px-3 py-2">{phone.phone_cpu}</td>
-                                                        <td className="px-3 py-2">{phone.phone_address}</td>
-                                                        <td className="px-3 py-2">{phone.phone_imei}</td>
+                                                        {/* <td className="px-3 py-2">{phone.phone_cpu}</td> */}
+                                                        {/* <td className="px-3 py-2">{phone.phone_address}</td> */}
+                                                        {/* <td className="px-3 py-2">{phone.phone_imei}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + PHONES_STATUS_CLASS_MAP[phone.phone_status]}>{PHONES_STATUS_TEXT_MAP[phone.phone_status]}</span>
                                                         </td>

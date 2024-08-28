@@ -28,8 +28,17 @@ class TabletsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("tablet_name")){
-            $query->where("tablet_name","like","%". request("tablet_name") .'%');
+        // if(request("tablet_name")){
+        //     $query->where("tablet_name","like","%". request("tablet_name") .'%');
+        // }
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('tablet_name', 'like', '%' . $search . '%')
+                  ->orWhere('fullName', 'like', '%' . $search . '%')
+                  ->orWhere('tablet_user', 'like', '%' . $search . '%');
+
+            });
         }
 
         if(request('tablet_status')){

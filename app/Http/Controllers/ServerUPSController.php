@@ -28,8 +28,15 @@ class ServerUPSController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("S_UName")){
-            $query->where("S_UName","like","%". request("S_UName") .'%');
+        // if(request("S_UName")){
+        //     $query->where("S_UName","like","%". request("S_UName") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('S_UName', 'like', '%' . $search . '%')
+                  ->orWhere('S_UUser', 'like', '%' . $search . '%');
+
+            });
         }
 
         if(request('S_UStatus')){

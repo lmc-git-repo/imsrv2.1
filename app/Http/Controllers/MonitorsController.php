@@ -29,8 +29,15 @@ class MonitorsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("compName")){
-            $query->where("compName","like","%". request("compName") .'%');
+        // if(request("compName")){
+        //     $query->where("compName","like","%". request("compName") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('compName', 'like', '%' . $search . '%')
+                  ->orWhere('mntr_user', 'like', '%' . $search . '%');
+
+            });
         }
 
         // if(request('comp_status')){

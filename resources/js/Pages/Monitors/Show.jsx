@@ -19,19 +19,19 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <p className="text-base leading-relaxed text-white"><strong>{user.compName.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.monitor_id}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer User:</strong> {user.mntr_user}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.mntr_department}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Model:</strong> {user.mntr_model}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Serial:</strong> {user.mntr_serial}</p>
                 </div>
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
             </div>
-            <div className='border rounded'>
+            <div className='rounded'>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 p-1"><strong>Remarks :</strong> {user.remarks}</p>
             </div>
         </div>

@@ -117,7 +117,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="S_UType" value="Computer Type" />
+                                <Label htmlFor="S_UType" value="Device Type" />
                             </div>
                             <SelectInput 
                                 name='S_UType' 
@@ -126,7 +126,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 onChange={(e) => setData("S_UType", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Computer Type: </option>
+                                <option value="">Select Type: </option>
                                 <option value="SERVER">SERVER</option>
                                 <option value="UPS">UPS</option>
                             </SelectInput>
@@ -190,7 +190,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 <option value="Windows Server 2012 R2 Standard">Windows Server 2012 R2 Standard</option>
                                 <option value="Windows 7 Professional SP1">Windows 7 Professional SP1</option>
                                 <option value="Windows 8.1 Pro 64bit">Windows 8.1 Pro 64bit</option>
-                                <option value="Windows 10 Pro 64bit">Windows 8.1 Pro 64bit</option>
+                                <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
                                 <option value="Windows 11 Pro">Windows 11 Pro</option>
                                 <option value="N/A">N/A</option>
                             </SelectInput>
@@ -208,7 +208,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 onChange={(e) => setData("S_UStorage", e.target.value)}
                                 required 
                             >
-                                <option value="">Select Operating System: </option>
+                                <option value="">Select Ram Capacity: </option>
                                 <option value="1.5GB">1.5GB</option>
                                 <option value="2GB">2GB</option>
                                 <option value="4GB">4GB</option>
@@ -353,7 +353,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
 
                         <div>
                             <div className="mb-2 block">
-                                <Label htmlFor="S_URemarks" value="Enter Product Key" />
+                                <Label htmlFor="S_URemarks" value="Remarks" />
                             </div>
                             <TextInput 
                                 id="S_URemarks" 

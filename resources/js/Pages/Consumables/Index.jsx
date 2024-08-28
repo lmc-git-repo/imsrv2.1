@@ -105,14 +105,14 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(consumables, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-start py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.po_num} 
-                                            placeholder="PO Number"
-                                            onBlur={e => searchFieldChanged('po_num', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('po_num', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="PO / SI / Name"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                 </div>
@@ -136,14 +136,14 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                 PO NO
                                             </TableHeading>
 
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="serial_no"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Serial No
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <th className="px-3 py-3">IMG</th>
                                             <TableHeading
@@ -162,22 +162,22 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                             >
                                                 Brand
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="model"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Model
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="storage_capacity"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Storage Capacity
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="qty"
@@ -215,14 +215,14 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                 Date Issued
                                             </TableHeading>
                                             
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="installedTo"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Full Name
-                                            </TableHeading>
+                                                Installed To
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="deliveryRecieptDate"
@@ -242,14 +242,14 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                 Department
                                             </TableHeading>
                                             
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="remarks"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Remarks
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <th className="px-3 py-3">Created By</th>
                                             <TableHeading
                                                 name="created_at"
@@ -264,11 +264,6 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                     </thead>
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
@@ -298,22 +293,22 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                                                 {consumable.po_num}
                                                             </Link>
                                                         </th>
-                                                        <td className="px-3 py-2">{consumable.serial_no}</td>
+                                                        {/* <td className="px-3 py-2">{consumable.serial_no}</td> */}
                                                         <td className="px-3 py-2">
                                                             <img src={consumable.img_path} alt="" style={{width: 60}} />
                                                         </td>
                                                         <td className="px-3 py-2">{consumable.si_code}</td>
                                                         <td className="px-3 py-2">{consumable.brand}</td>
-                                                        <td className="px-3 py-2">{consumable.model}</td>
-                                                        <td className="px-3 py-2">{consumable.storage_capacity}</td>
+                                                        {/* <td className="px-3 py-2">{consumable.model}</td> */}
+                                                        {/* <td className="px-3 py-2">{consumable.storage_capacity}</td> */}
                                                         <td className="px-3 py-2">{consumable.qty}</td>
                                                         <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.price}</td>
                                                         <td className="px-3 py-2 text-nowrap">{'₱ ' + consumable.total}</td>
                                                         <td className="px-3 py-2">{consumable.dateIssued}</td>
-                                                        <td className="px-3 py-2">{consumable.installedTo}</td>
+                                                        {/* <td className="px-3 py-2">{consumable.installedTo}</td> */}
                                                         <td className="px-3 py-2">{consumable.deliveryRecieptDate}</td>
                                                         <td className="px-3 py-2">{consumable.department_consumables}</td>
-                                                        <td className="px-3 py-2">{consumable.remarks}</td>
+                                                        {/* <td className="px-3 py-2">{consumable.remarks}</td> */}
                                                         <td className="px-3 py-2">{consumable.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{consumable.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">

@@ -27,8 +27,14 @@ class PhonesController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("phone_name")){
-            $query->where("phone_name","like","%". request("phone_name") .'%');
+        // if(request("phone_name")){
+        //     $query->where("phone_name","like","%". request("phone_name") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('phone_name', 'like', '%' . $search . '%')
+                  ->orWhere('fullName', 'like', '%' . $search . '%');
+            });
         }
 
         if(request('phone_status')){

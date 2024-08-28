@@ -105,14 +105,14 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(serverUps, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.S_UName} 
-                                            placeholder="Server / UPS Name"
-                                            onBlur={e => searchFieldChanged('S_UName', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('S_UName', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="SERVER/UPS /User"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                     <div>
@@ -182,30 +182,30 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             >
                                                 Department
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="S_UOs"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Operating System
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="S_UStorage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 S & U Storage
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="S_USerial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 S & U Serial
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="S_UAsset"
                                                 sort_field={queryParams.sort_field} 
@@ -214,38 +214,38 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             >
                                                 S & U Asset
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="S_UCpu"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Processor
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="S_UGen"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 S & U Gen
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="S_UAddress"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Mac Address
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="S_UPrdctkey"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Product Key
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="S_UStatus"
@@ -290,27 +290,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput 
-                                                    className="w-full text-sm h-8 py-1"
-                                                    defaultValue={queryParams.S_UStatus} 
-                                                    onChange={ e => searchFieldChanged('S_UStatus', e.target.value)}
-                                                >
-                                                    <option value="">Select Status</option>
-                                                    <option value="Deployed">Deployed</option>
-                                                    <option value="Spare">Spare</option>
-                                                    <option value="For Disposal">For Disposal</option>
-                                                    <option value="Already Disposed">Already Disposed</option>
-                                                    <option value="Barrow">Barrow</option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -333,14 +312,14 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                         <td className="px-3 py-2">{serverups.S_UType}</td>
                                                         <td className="px-3 py-2">{serverups.S_UUser}</td>
                                                         <td className="px-3 py-2">{serverups.department_S_U}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UOs}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UStorage}</td>
-                                                        <td className="px-3 py-2">{serverups.S_USerial}</td>
+                                                        {/* <td className="px-3 py-2">{serverups.S_UOs}</td> */}
+                                                        {/* <td className="px-3 py-2">{serverups.S_UStorage}</td> */}
+                                                        {/* <td className="px-3 py-2">{serverups.S_USerial}</td> */}
                                                         <td className="px-3 py-2">{serverups.S_UAsset}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UCpu}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UGen}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UAddress}</td>
-                                                        <td className="px-3 py-2">{serverups.S_UPrdctkey}</td>
+                                                        {/* <td className="px-3 py-2">{serverups.S_UCpu}</td> */}
+                                                        {/* <td className="px-3 py-2">{serverups.S_UGen}</td> */}
+                                                        {/* <td className="px-3 py-2">{serverups.S_UAddress}</td> */}
+                                                        {/* <td className="px-3 py-2">{serverups.S_UPrdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + SERVERUPS_STATUS_CLASS_MAP[serverups.S_UStatus]}>{SERVERUPS_STATUS_TEXT_MAP[serverups.S_UStatus]}</span>
                                                         </td>

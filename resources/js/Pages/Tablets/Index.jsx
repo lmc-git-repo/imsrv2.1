@@ -105,14 +105,14 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(tablets, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.tablet_name} 
-                                            placeholder="Tablet Name"
-                                            onBlur={e => searchFieldChanged('tablet_name', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('tablet_name', e)} 
+                                            defaultValue={queryParams.search} 
+                                            placeholder="Tablet Name / User"
+                                            onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
                                     <div>
@@ -166,14 +166,14 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             >
                                                 Tablet Type
                                             </TableHeading> */}
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="tablet_user"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 User
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             
                                             <TableHeading
                                                 name="fullName"
@@ -192,30 +192,30 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             >
                                                 Department
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="tablet_os"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Operating System
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="tablet_storage"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Tablet Storage
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="tablet_serial"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Tablet Serial
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="tablet_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -224,23 +224,23 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             >
                                                 Tablet Asset
                                             </TableHeading>
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="tablet_cpu"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Processor
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="tablet_gen"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 Tablet Gen
-                                            </TableHeading>
-                                            <TableHeading
+                                            </TableHeading> */}
+                                            {/* <TableHeading
                                                 name="tablet_address"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
@@ -255,7 +255,7 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                                 sortChanged={sortChanged}
                                             >
                                                 Product Key
-                                            </TableHeading>
+                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="tablet_status"
@@ -299,27 +299,6 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3">
-                                                <SelectInput 
-                                                    className="w-full text-sm h-8 py-1"
-                                                    defaultValue={queryParams.tablet_status} 
-                                                    onChange={ e => searchFieldChanged('tablet_status', e.target.value)}
-                                                >
-                                                    <option value="">Select Status</option>
-                                                    <option value="Deployed">Deployed</option>
-                                                    <option value="Spare">Spare</option>
-                                                    <option value="For Disposal">For Disposal</option>
-                                                    <option value="Already Disposed">Already Disposed</option>
-                                                    <option value="Barrow">Barrow</option>
-                                                </SelectInput>
-                                            </th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -340,17 +319,17 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                                         </td>
                                                         <td className="px-3 py-2">{tablet.tablet_model}</td>
                                                         {/* <td className="px-3 py-2">{tablet.tablet_type}</td> */}
-                                                        <td className="px-3 py-2">{tablet.tablet_user}</td>
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_user}</td> */}
                                                         <td className="px-3 py-2">{tablet.fullName}</td>
                                                         <td className="px-3 py-2">{tablet.department_tablet}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_os}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_storage}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_serial}</td>
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_os}</td> */}
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_storage}</td> */}
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_serial}</td> */}
                                                         <td className="px-3 py-2">{tablet.tablet_asset}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_cpu}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_gen}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_address}</td>
-                                                        <td className="px-3 py-2">{tablet.tablet_prdctkey}</td>
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_cpu}</td> */}
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_gen}</td> */}
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_address}</td> */}
+                                                        {/* <td className="px-3 py-2">{tablet.tablet_prdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + TABLETS_STATUS_CLASS_MAP[tablet.tablet_status]}>{TABLETS_STATUS_TEXT_MAP[tablet.tablet_status]}</span>
                                                         </td>

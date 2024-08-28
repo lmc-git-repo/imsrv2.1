@@ -25,8 +25,14 @@ class PurchaseRequisitionsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("control_num")){
-            $query->where("control_num","like","%". request("control_num") .'%');
+        // if(request("control_num")){
+        //     $query->where("control_num","like","%". request("control_num") .'%');
+        // }
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('control_num', 'like', '%' . $search . '%')
+                  ->orWhere('po_num', 'like', '%' . $search . '%');
+            });
         }
 
         if(request('item_category')){

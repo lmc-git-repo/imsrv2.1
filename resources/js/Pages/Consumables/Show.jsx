@@ -16,10 +16,10 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <img src={user.img_path} alt={`${user.po_num}'s profile`} className="mt-3 size-2/4" />
             </div>
             <div className='text-center'>
-                <p className="text-base leading-relaxed text-white"><strong>{user.po_num.toUpperCase()}</strong></p>
+                <p className="text-base leading-relaxed text-white"><strong>PO: {user.po_num.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.consumables_id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial NO:</strong> {user.serial_no}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>SI CODE:</strong> {user.si_code}</p>
@@ -30,7 +30,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Price:</strong> {'₱ ' + user.price}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Total:</strong> {'₱ ' + user.total}</p>
                 </div>
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Issued:</strong> {user.dateIssued}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Full Name:</strong> {user.installedTo}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Delivery Date:</strong> {user.deliveryRecieptDate}</p>
@@ -39,7 +39,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
             </div>
-            <div className='border rounded'>
+            <div className='rounded'>
                 <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 p-1"><strong>Remarks :</strong> {user.remarks}</p>
             </div>
         </div>
