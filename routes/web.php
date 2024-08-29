@@ -20,6 +20,11 @@ use Inertia\Inertia;
 
 Route::redirect('/', '/dashboard');
 
+// Public view route
+Route::get('/public-view', function () {
+    return Inertia::render('PublicView/Index');
+})->name('public.view');
+
 Route::middleware(['auth', 'verified']) ->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
