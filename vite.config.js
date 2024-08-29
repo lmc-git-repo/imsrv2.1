@@ -12,7 +12,7 @@ export default defineConfig({
     ],
     server: {
         // host: '192.168.18.30', //home Ip
-        host: '10.208.10.41', // This allows access from any IP on your network
+        host: '10.208.10.201', // This allows access from any IP on your network
         port: 5173,      // Default Vite port, change if necessary
     },
 });

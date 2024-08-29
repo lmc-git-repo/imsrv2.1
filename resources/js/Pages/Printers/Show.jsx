@@ -19,20 +19,20 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <p className="text-base leading-relaxed text-white"><strong>{user.printer_model.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.printer_id}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Printer User:</strong> {user.printer_user}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.printer_department}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Printer Model:</strong> {user.printer_model}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Printer Serial:</strong> {user.printer_serial}</p>
                 </div>
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Printer Asset:</strong> {user.printer_asset}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
             </div>
-            <div className='border rounded'>
+            <div className='rounded'>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 p-1"><strong>Remarks :</strong> {user.remarks}</p>
             </div>
         </div>

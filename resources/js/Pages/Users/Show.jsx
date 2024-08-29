@@ -15,7 +15,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <p className="text-base leading-relaxed text-white"><strong>{user.name.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Email:</strong> {user.email}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {user.password}</p>

@@ -102,7 +102,7 @@ export default function Index({auth, users, queryParams = null, success}) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(users, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-end py-2">
+                                <div className="flex justify-start py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"

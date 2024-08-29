@@ -19,7 +19,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                 <p className="text-base leading-relaxed text-white"><strong>{user.comp_name.toUpperCase()}</strong></p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.CID}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Model:</strong> {user.comp_model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Type:</strong> {user.comp_type}</p>
@@ -30,7 +30,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Ram Capacity:</strong> {user.comp_storage}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Serial:</strong> {user.comp_serial}</p>
                 </div>
-                <div className="border rounded p-3 w-full">
+                <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Tag:</strong> {user.comp_asset}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Processor:</strong> {user.comp_cpu}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Gen:</strong> {user.comp_gen}</p>
@@ -45,7 +45,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
             </div>
-            <div className='border rounded'>
+            <div className='rounded'>
                 <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 p-1"><strong>Remarks :</strong> {user.remarks}</p>
             </div>
         </div>

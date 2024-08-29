@@ -60,12 +60,12 @@ const ModalComponent = ({ show, onClose, user }) => {
             <img src={user.profile_path} alt={`${user.name}'s profile`} className="mt-3 size-2/4" />
           </div>
           <div className="flex justify-around">
-            <div className="border rounded p-3 w-full">
+            <div className="rounded p-3 w-full">
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.account_id}</p>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_users}</p>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Initials:</strong> {user.initial}</p>
             </div>
-            <div className="border rounded p-3 w-full">
+            <div className="rounded p-3 w-full">
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Email:</strong> {user.outlookEmail}</p>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                 <strong className='pe-4'>Status:</strong> 
