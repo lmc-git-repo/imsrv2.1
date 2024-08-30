@@ -3,11 +3,11 @@ import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import { ACCOUNTUSERS_STATUS_CLASS_MAP, ACCOUNTUSERS_STATUS_TEXT_MAP } from '@/constants'
 
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import PublicLayout from '@/Layouts/PublicLayout'
 
-export default function Index({accountUsers, queryParams = null}) {
+export default function Index({employees, queryParams = null}) {
     queryParams = queryParams || {}
 
     const searchFieldChanged = (name, value) =>{
@@ -17,7 +17,7 @@ export default function Index({accountUsers, queryParams = null}) {
         else{
             delete queryParams[name];
         }
-        router.get(route('public-view'), queryParams)
+        router.get(route('public.view'), queryParams)
     };
     const onKeyPress = (name, e) => {
         if(e.key !== 'Enter') return;
@@ -38,7 +38,7 @@ export default function Index({accountUsers, queryParams = null}) {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('public-view'), queryParams)
+        router.get(route('public.view'), queryParams)
     };
     
     
@@ -52,7 +52,7 @@ export default function Index({accountUsers, queryParams = null}) {
             <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                 <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div className="p-6 text-gray-900 dark:text-gray-100">
-                        {/* <pre>{JSON.stringify(accountUsers, undefined, 2)}</pre> */}
+                        {/* <pre>{JSON.stringify(employees, undefined, 2)}</pre> */}
                         <div className="overflow-auto">
                             <div className="flex justify-start py-2">
                                 <div>
@@ -93,14 +93,14 @@ export default function Index({accountUsers, queryParams = null}) {
                                         >
                                             Department
                                         </TableHeading>
-                                        <TableHeading
+                                        {/* <TableHeading
                                             name="initial"
                                             sort_field={queryParams.sort_field} 
                                             sort_direction={queryParams.sort_direction}
                                             sortChanged={sortChanged}
                                         >
                                             Initials
-                                        </TableHeading>
+                                        </TableHeading> */}
 
                                         <TableHeading
                                             name="outlookEmail"
@@ -111,15 +111,15 @@ export default function Index({accountUsers, queryParams = null}) {
                                             Email
                                         </TableHeading>
 
-                                        <TableHeading
+                                        {/* <TableHeading
                                             name="status"
                                             sort_field={queryParams.sort_field} 
                                             sort_direction={queryParams.sort_direction}
                                             sortChanged={sortChanged}
                                         >
                                             Status
-                                        </TableHeading>
-                                        <th className="px-3 py-3">Created By</th>
+                                        </TableHeading> */}
+                                        {/* <th className="px-3 py-3">Created By</th>
                                         <TableHeading
                                             name="created_at"
                                             sort_field={queryParams.sort_field} 
@@ -127,7 +127,7 @@ export default function Index({accountUsers, queryParams = null}) {
                                             sortChanged={sortChanged}
                                         >
                                             Created Date
-                                        </TableHeading>
+                                        </TableHeading> */}
                                     </tr>
                                 </thead>
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
@@ -137,46 +137,33 @@ export default function Index({accountUsers, queryParams = null}) {
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
                                         <th className="px-3 py-3"></th>
-                                        <th className="px-3 py-3"></th>
-                                        <th className="px-3 py-3">
-                                            <SelectInput 
-                                                className="w-full text-sm h-8 py-1"
-                                                defaultValue={queryParams.status} 
-                                                onChange={ e => searchFieldChanged('status', e.target.value)}
-                                            >
-                                                <option value="">Select Status</option>
-                                                <option value="Employed">Employed</option>
-                                                <option value="Resigned">Resigned</option>
-                                                <option value="Terminated">Terminated</option>
-                                            </SelectInput>
-                                        </th>
-                                        <th className="px-3 py-3"></th>
-                                        <th className="px-3 py-3"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {accountUsers?.data?.map(accountusers => (
-                                        <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={accountusers.account_id}>
-                                            <td className="px-3 py-2">{accountusers.account_id}</td>
-                                            <th className="px-3 py-2 hover:underline hover:text-white">
-                                                {/* <Link href="#" onClick={(e) => openModal(accountusers, e)}>
-                                                    {accountusers.name}
-                                                </Link> */}
-                                                {accountusers.name}
-                                            </th>
-                                            <td className="px-3 py-2">
-                                                <img src={accountusers.profile_path} alt="" style={{width: 60}} />
-                                            </td>
-                                            <td className="px-3 py-2">{accountusers.department_users}</td>
-                                            <td className="px-3 py-2">{accountusers.initial}</td>
-                                            <td className="px-3 py-2">{accountusers.outlookEmail}</td>
-                                            <td className="px-3 py-2">
-                                                <span className={'px-2 rounded-e-full text-white ' + ACCOUNTUSERS_STATUS_CLASS_MAP[accountusers.status]}>{ACCOUNTUSERS_STATUS_TEXT_MAP[accountusers.status]}</span>
-                                            </td>
-                                            <td className="px-3 py-2">{accountusers.createdBy.name}</td>
-                                            <td className="px-3 py-2 text-nowrap">{accountusers.created_at}</td>
-                                        </tr>
-                                    )) || (
+                                    {employees?.data?.length > 0 ? (
+                                        employees.data.map(employee => (
+                                            <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={employee.account_id}>
+                                                <td className="px-3 py-2">{employee.account_id}</td>
+                                                <th className="px-3 py-2 hover:underline hover:text-white">
+                                                    {/* <Link href="#" onClick={(e) => openModal(employee, e)}>
+                                                        {employee.name}
+                                                    </Link> */}
+                                                    {employee.name}
+                                                </th>
+                                                <td className="px-3 py-2">
+                                                    <img src={employee.profile_path} alt="" style={{width: 60}} />
+                                                </td>
+                                                <td className="px-3 py-2">{employee.department_users}</td>
+                                                {/* <td className="px-3 py-2">{employee.initial}</td> */}
+                                                <td className="px-3 py-2">{employee.outlookEmail}</td>
+                                                {/* <td className="px-3 py-2">
+                                                    <span className={'px-2 rounded-e-full text-white ' + ACCOUNTUSERS_STATUS_CLASS_MAP[employee.status]}>{ACCOUNTUSERS_STATUS_TEXT_MAP[employee.status]}</span>
+                                                </td> */}
+                                                {/* <td className="px-3 py-2">{employee.createdBy.name}</td>
+                                                <td className="px-3 py-2 text-nowrap">{employee.created_at}</td> */}
+                                            </tr>
+                                        ))
+                                    ) : (
                                         <tr>
                                             <td colSpan="9" className="px-3 py-2 text-center">
                                                 No data available
@@ -186,8 +173,8 @@ export default function Index({accountUsers, queryParams = null}) {
                                 </tbody>
                             </table>
                         </div>
-                        {/* <Pagination links={accountUsers.meta.links} /> */}
-                        <Pagination links={accountUsers?.meta?.links || []} />
+                        {/* <Pagination links={employees.meta.links} /> */}
+                        <Pagination links={employees?.meta?.links || []} />
                     </div>
                 </div>
             </div>

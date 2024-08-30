@@ -30,16 +30,18 @@ class PublicViewController extends Controller
             $query->where('status', request('status'));
         }
 
-        $accountUsers = $query->orderBy($sortField, $sortDirection)
+        $employees = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)->onEachSide(1);
+        
+        // dd($employees);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $accountUsersAllData = AccountUsers::orderBy('account_id')->get();
+        $employeesAllData = AccountUsers::orderBy('account_id')->get();
 
         return inertia("PublicView/Index", [
-            'accountUsers' => AccountUsersResource::collection($accountUsers),
+            'employees' => AccountUsersResource::collection($employees),
             // 'departmentsList' => DepartmentsResource::collection($departmentsList),
-            'accountUsersAllData' => AccountUsersResource::collection($accountUsersAllData),
+            'employeesAllData' => AccountUsersResource::collection($employeesAllData),
             'queryParams' => request()->query() ?: null,
         ]);
     }
