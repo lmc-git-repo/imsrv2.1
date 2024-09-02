@@ -21,36 +21,36 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const { showModal, selectedComp, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
-    const searchFieldChanged = (name, value) =>{
-        if(value){
-            queryParams[name] = value;
-        }
-        else{
-            delete queryParams[name];
-        }
-        router.get(route('computers.index'), queryParams)
-    };
+    
+    const [search, setSearch] = useState('');
 
+    // Search field change handler
+    const searchFieldChanged = (value) => {
+        if (value) {
+            queryParams.name = value;
+        } else {
+            delete queryParams.name;
+        }
+        router.get(route('computers.index'), queryParams, { preserveScroll: true, replace: true });
+    };
+    
+    // Key press event handler (specifically for Enter key)
     const onKeyPress = (name, e) => {
         if(e.key !== 'Enter') return;
         
         searchFieldChanged(name, e.target.value);
     }
 
+
+    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
-            if(queryParams.sort_direction === 'asc'){
-                queryParams.sort_direction = "desc";
-            }
-            else{
-                queryParams.sort_direction = "asc";
-            }
-        }
-        else{
+            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        } else {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('computers.index'), queryParams)
+        router.replace(route('computers.index'), queryParams, { preserveScroll: true });
     };
 
     const deleteComputers = (computer) => {
@@ -109,10 +109,12 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.search} 
+                                            defaultValue={search} 
                                             placeholder="Computer"
                                             onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onChange={e => searchFieldChanged('search', e.target.value)}
+                                            onChange={e => {
+                                                setSearch(e.target.value);
+                                            }}
                                             onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
@@ -166,14 +168,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 Computer Name
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
-                                            {/* <TableHeading
-                                                name="comp_model"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Computer Model
-                                            </TableHeading> */}
+                                            
                                             <TableHeading
                                                 name="comp_type"
                                                 sort_field={queryParams.sort_field} 
@@ -182,14 +177,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Computer Type
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="comp_user"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                User
-                                            </TableHeading> */}
+                                            
                                             
                                             <TableHeading
                                                 name="fullName"
@@ -208,30 +196,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Department
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="comp_os"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Operating System
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="comp_storage"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Computer Storage
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="comp_serial"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Computer Serial
-                                            </TableHeading> */}
+                                            
                                             <TableHeading
                                                 name="comp_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -240,14 +205,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Computer Asset
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="comp_cpu"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Processor
-                                            </TableHeading> */}
+                                            
                                             <TableHeading
                                                 name="comp_gen"
                                                 sort_field={queryParams.sort_field} 
@@ -264,14 +222,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Mac Address
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="comp_prdctkey"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Product Key
-                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="comp_status"
@@ -281,23 +231,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             >
                                                 Status
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="remarks"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Remarks
-                                            </TableHeading> */}
-                                            {/* <th className="px-3 py-3">Created By</th> */}
-                                            {/* <TableHeading
-                                                name="created_at"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Created Date
-                                            </TableHeading> */}
+                                            
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -318,13 +252,15 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     </thead>
                                     <tbody>
                                         {computers.data ? (
-                                                computers.data.map(computer => (
+                                                computers.data.filter((computer => {
+                                                    return search.toLowerCase() === '' 
+                                                    ? computer 
+                                                    : computer.comp_name ? computer.comp_name.toLowerCase().includes(search) : '' 
+                                                    || computer.fullName ? computer.fullName.toLowerCase().includes(search) : ''
+                                                })).map(computer => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                                                         <td className="px-3 py-2">{computer.CID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("computers.show", { CID: computer.CID })}>
-                                                                {computer.comp_name}
-                                                            </Link> */}
                                                             <Link href="#" onClick={(e) => openModal(computer, e)}>
                                                                 {computer.comp_name}
                                                             </Link>
@@ -332,27 +268,16 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                         <td className="px-3 py-2">
                                                             <img src={computer.img_path} alt="" style={{width: 60}} />
                                                         </td>
-                                                        {/* <td className="px-3 py-2">{computer.comp_model}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_type}</td>
-                                                        {/* <td className="px-3 py-2">{computer.comp_user}</td> */}
                                                         <td className="px-3 py-2 font-bold text-slate-300">{computer.fullName}</td>
                                                         <td className="px-3 py-2">{computer.department_comp}</td>
-                                                        {/* <td className="px-3 py-2">{computer.comp_os}</td> */}
-                                                        {/* <td className="px-3 py-2">{computer.comp_storage}</td> */}
-                                                        {/* <td className="px-3 py-2">{computer.comp_serial}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_asset}</td>
-                                                        {/* <td className="px-3 py-2">{computer.comp_cpu}</td> */}
                                                         <td className="px-3 py-2">{computer.comp_gen}</td>
                                                         <td className="px-3 py-2">{computer.comp_address}</td>
-                                                        {/* <td className="px-3 py-2">{computer.comp_prdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[computer.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[computer.comp_status]}</span>
                                                         </td>
-                                                        {/* <td className="px-3 py-2">{computer.remarks}</td> */}
-                                                        {/* <td className="px-3 py-2">{computer.createdBy.name}</td> */}
-                                                        {/* <td className="px-3 py-2 text-nowrap">{computer.created_at}</td> */}
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('computers.edit', computer.CID)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
                                                                 onClick={(e) => openModal(computer, e)}
