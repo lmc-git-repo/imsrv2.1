@@ -79,7 +79,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, consumablesUsers
     return (
         <Modal show={show} onClose={onClose}>
             <Modal.Header className="p-4">
-                Add New Phone
+                Add New Consumables
             </Modal.Header>
             <Modal.Body>
                 <form action="" onSubmit={onSubmit}>

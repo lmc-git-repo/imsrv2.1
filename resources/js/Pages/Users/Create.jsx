@@ -2,6 +2,7 @@ import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, Label, TextInput } from 'flowbite-react';
+import { useState } from 'react';
 
 
 const CreateModalComponent = ({ show, onClose }) => {

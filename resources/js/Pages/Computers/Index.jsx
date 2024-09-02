@@ -112,6 +112,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             defaultValue={queryParams.search} 
                                             placeholder="Computer"
                                             onBlur={e => searchFieldChanged('search', e.target.value)}
+                                            onChange={e => searchFieldChanged('search', e.target.value)}
                                             onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
