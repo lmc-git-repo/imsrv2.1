@@ -23,6 +23,25 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
     
     const [search, setSearch] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // Filter the entire dataset
+    const filteredComputers = computers.data.filter((computer) => {
+        return search.toLowerCase() === '' 
+            ? computer 
+            : (computer.comp_name && computer.comp_name.toLowerCase().includes(search)) ||
+              (computer.fullName && computer.fullName.toLowerCase().includes(search));
+    });
+
+    // Get current page data
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentComputers = filteredComputers.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     // Search field change handler
     const searchFieldChanged = (value) => {
@@ -251,13 +270,8 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {computers.data ? (
-                                                computers.data.filter((computer => {
-                                                    return search.toLowerCase() === '' 
-                                                    ? computer 
-                                                    : computer.comp_name ? computer.comp_name.toLowerCase().includes(search) : '' 
-                                                    || computer.fullName ? computer.fullName.toLowerCase().includes(search) : ''
-                                                })).map(computer => (
+                                        {currentComputers.length > 0 ? (
+                                                currentComputers.map((computer) => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                                                         <td className="px-3 py-2">{computer.CID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
@@ -325,7 +339,13 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={computers.meta.links} />
+                            <Pagination  
+                                links={computers.meta.links} 
+                                totalItems={filteredComputers.length}
+                                itemsPerPage={itemsPerPage}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>
