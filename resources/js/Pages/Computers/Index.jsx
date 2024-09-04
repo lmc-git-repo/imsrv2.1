@@ -22,33 +22,25 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
     
-    const [search, setSearch] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    // const [search, setSearch] = useState('');
+    
+    // console.log(computers);
+    // console.log(computersAllData);
 
     // Filter the entire dataset
-    const filteredComputers = computers.data.filter((computer) => {
-        return search.toLowerCase() === '' 
-            ? computer 
-            : (computer.comp_name && computer.comp_name.toLowerCase().includes(search)) ||
-              (computer.fullName && computer.fullName.toLowerCase().includes(search));
-    });
-
-    // Get current page data
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentComputers = filteredComputers.slice(indexOfFirstItem, indexOfLastItem);
-
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    // const filteredComputers = computers.data.filter((computer) => {
+    //     return search.toLowerCase() === '' 
+    //         ? computer 
+    //         : (computer.comp_name && computer.comp_name.toLowerCase().includes(search)) ||
+    //           (computer.fullName && computer.fullName.toLowerCase().includes(search));
+    // });
 
     // Search field change handler
-    const searchFieldChanged = (value) => {
+    const searchFieldChanged = (name, value) => {
         if (value) {
-            queryParams.name = value;
+            queryParams[name] = value;
         } else {
-            delete queryParams.name;
+            delete queryParams[name];
         }
         router.get(route('computers.index'), queryParams, { preserveScroll: true, replace: true });
     };
@@ -69,7 +61,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.replace(route('computers.index'), queryParams, { preserveScroll: true });
+        router.get(route('computers.index'), queryParams, { preserveScroll: true });
     };
 
     const deleteComputers = (computer) => {
@@ -128,12 +120,13 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={search} 
+                                            defaultValue={queryParams.search} 
                                             placeholder="Computer"
                                             onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onChange={e => {
-                                                setSearch(e.target.value);
-                                            }}
+                                            // onChange={e => {
+                                            //     setSearch(e.target.value);
+                                            // }}
+                                            onChange={e => searchFieldChanged('search', e.target.value)}
                                             onKeyPress={ e => onKeyPress('search', e)} 
                                         />
                                     </div>
@@ -149,6 +142,18 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Barrow">Barrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={queryParams.comp_type} 
+                                            onChange={ e => searchFieldChanged('comp_type', e.target.value)}
+                                        >
+                                            <option value="">Comp Type</option>
+                                            <option value="Desktop">Desktop</option>
+                                            <option value="Laptop">Laptop</option>
                                         </SelectInput>
                                     </div>
 
@@ -270,8 +275,8 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentComputers.length > 0 ? (
-                                                currentComputers.map((computer) => (
+                                        {computers.data ? (
+                                                computers.data.map((computer) => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                                                         <td className="px-3 py-2">{computer.CID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
@@ -341,10 +346,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                             </div>
                             <Pagination  
                                 links={computers.meta.links} 
-                                totalItems={filteredComputers.length}
-                                itemsPerPage={itemsPerPage}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
                             />
                         </div>
                     </div>

@@ -47,6 +47,10 @@ class ComputersController extends Controller
             $query->where('comp_status', request('comp_status'));
         }
 
+        if(request('comp_type')){
+            $query->where('comp_type', request('comp_type'));
+        }
+
         if(request('department_comp')){
             $query->where('department_comp', request('department_comp'));
         }
@@ -60,6 +64,7 @@ class ComputersController extends Controller
         $computersAllData = Computers::orderBy('CID')->get();
 
         // echo $computersAllData;
+        // dd($computersAllData);
 
         return inertia("Computers/Index", [
             'computers' => ComputersResource::collection($computers),
