@@ -10,6 +10,7 @@ use App\Models\Computers;
 use App\Http\Requests\StoreComputersRequest;
 use App\Http\Requests\UpdateComputersRequest;
 use App\Models\Departments;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -22,41 +23,31 @@ class ComputersController extends Controller
      */
     public function index()
     {
-        //
-        // return inertia("Computers/Index", [
-
-        // ]);
         $query = Computers::query();
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("comp_name")){
-        //     $query->where("comp_name","like","%". request("comp_name") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('comp_name', 'like', '%' . $search . '%')
-                  ->orWhere('fullName', 'like', '%' . $search . '%')
-                  ->orWhere('comp_user', 'like', '%' . $search . '%');
-
-            });
-        }
-
-        if(request('comp_status')){
-            $query->where('comp_status', request('comp_status'));
-        }
-
-        if(request('comp_type')){
-            $query->where('comp_type', request('comp_type'));
-        }
-
-        if(request('department_comp')){
-            $query->where('department_comp', request('department_comp'));
-        }
-
         $computers = $query->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $query->where('comp_name', 'like', "%{$search}%")
+                    ->orWhere('fullName', 'like', "%{$search}%")
+                    ->orWhere('comp_user', 'like', "%{$search}%");
+            })
+            ->when(request('comp_status'), function (Builder $query, $compStatus) {
+                $query->where('comp_status',  $compStatus);
+            })
+            ->when(request('comp_type'), function (Builder $query, $compType) {
+                $query->where('comp_type',  $compType);
+            })
+            ->when(request('department_comp'), function (Builder $query, $depComp) {
+                $query->where('department_comp',  $depComp);
+            })
+            ->when(request('comp_gen'), function (Builder $query, $compGen) {
+                $query->where('comp_gen',  $compGen);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $compUsersList = AccountUsers::orderBy('initial')->get();

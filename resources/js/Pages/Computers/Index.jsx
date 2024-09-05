@@ -26,22 +26,47 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [compStatus, setCompStatus] = useState(queryParams.comp_status || '');
     const [compType, setCompType] = useState(queryParams.comp_type || '');
+    const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
     const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
 
     // Handle search query change with debouncing to improve performance
-    const handleSearchChange = useMemo(() => debounce((query) => {
-        setSearchQuery(query);
-    }, 300), []); // No need to depend on computers.data
+    const handleSearchChange = useMemo(() =>
+        debounce((query) => {
+    
+          setSearchQuery(query);
+    
+          router.get(
+            route('computers.index'),
+            {
+              ...queryParams,
+              search: query,
+              
+              // This time add other filters 
+              comp_status: compStatus,
+              comp_type: compType,
+              comp_gen: compGen,
+              department_comp: departmentComp,
+              page: 1
+            },
+            {preserveState: true, preserveScroll: true}
+          )
+        }, 300), [queryParams, compStatus, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
+    //end
 
     const handleFilterChange = useCallback((name, value) => {
-        if (value) {
-            queryParams[name] = value;
-        } else {
-            delete queryParams[name];
-        }
-        router.get(route('computers.index'), queryParams, { preserveScroll: true });
-    }, [queryParams]);
-
+        router.get(
+          route('computers.index'),
+            {
+                ...queryParams,
+                [name]: value,
+                search: searchQuery,
+                page: 1
+            },
+            {preserveScroll: true}
+        );
+      }, [queryParams]);
+    //end
+    
     const searchFieldChanged = (value) => {
         handleSearchChange(value);
     }; 
@@ -61,39 +86,29 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [compStatus, compType, departmentComp, searchQuery]);
+    }, [compStatus, compType, compGen, departmentComp, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
-            case 'comp_status':
-                setCompStatus(value);
-                break;
-            case 'comp_type':
-                setCompType(value);
-                break;
-            case 'department_comp':
-                setDepartmentComp(value);
-                break;
-            default:
-                break;
+          case 'comp_status':
+            setCompStatus(value);
+            break;
+          case 'comp_type':
+            setCompType(value);
+            break;
+          case 'comp_gen':
+            setCompGen(value);
+            break;  
+          case 'department_comp':
+            setDepartmentComp(value);
+            break;
+          default:
+            break;
         }
         handleFilterChange(name, value);
     };
-
-
-    const filteredComputers = useMemo(() => {
-        if (!computers || !computers.data) return [];
-        
-        return computers.data.filter((computer) =>
-            computer.comp_name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (compStatus ? computer.comp_status === compStatus : true) &&
-            (compType ? computer.comp_type === compType : true) &&
-            (departmentComp ? computer.department_comp === departmentComp : true)
-        );
-    }, [computers, searchQuery, compStatus, compType, departmentComp]);
-
-
+    
     // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
@@ -164,10 +179,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             defaultValue={searchQuery} 
                                             placeholder="Computer"
                                             onBlur={e => searchFieldChanged(e.target.value)}
-                                            // onChange={e => {
-                                            //     setSearch(e.target.value);
-                                            // }}
-                                            // onChange={e => searchFieldChanged('search', e.target.value)}
                                             onChange={(e) => searchFieldChanged(e.target.value)}
                                             onKeyPress={e => onKeyPress(e)}
                                         />
@@ -175,10 +186,8 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            // defaultValue={queryParams.comp_status} 
                                             defaultValue={compStatus}
                                             onChange={(e) => handleSelectChange('comp_status', e.target.value)}
-                                            // onChange={ e => searchFieldChanged('comp_status', e.target.value)}
                                         >
                                             <option value="">Select Status</option>
                                             <option value="Deployed">Deployed</option>
@@ -192,10 +201,8 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            // defaultValue={queryParams.comp_type} 
                                             defaultValue={compType}
                                             onChange={(e) => handleSelectChange('comp_type', e.target.value)}
-                                            // onChange={ e => searchFieldChanged('comp_type', e.target.value)}
                                         >
                                             <option value="">Comp Type</option>
                                             <option value="Desktop">Desktop</option>
@@ -206,10 +213,35 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            // defaultValue={queryParams.department_comp} 
+                                            defaultValue={compGen}
+                                            onChange={(e) => handleSelectChange('comp_gen', e.target.value)}
+                                        >
+                                            <option value="">Select Generation: </option>
+                                            <option value="3rd">3rd</option>
+                                            <option value="4th">4th</option>
+                                            <option value="5th">5th</option>
+                                            <option value="6th">6th</option>
+                                            <option value="7th">7th</option>
+                                            <option value="8th">8th</option>
+                                            <option value="9th">9th</option>
+                                            <option value="10th">10th</option>
+                                            <option value="11th">11th</option>
+                                            <option value="12th">12th</option>
+                                            <option value="13th">13th</option>
+                                            <option value="14th">14th</option>
+                                            <option value="15th">15th</option>
+                                            <option value="16th">16th</option>
+                                            <option value="17th">17th</option>
+                                            <option value="Pentium">Pentium</option>
+                                            <option value="N/A">N/A</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
                                             defaultValue={departmentComp}
                                             onChange={(e) => handleSelectChange('department_comp', e.target.value)}
-                                            // onChange={ e => searchFieldChanged('department_comp', e.target.value)}
                                         >
                                             <option value="">Select Department</option>
                                             {departmentsList.data.map(dept => (
@@ -325,10 +357,10 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                     <tbody>
                                         {loading ? (
                                             <tr className="text-center">
-                                                <td colSpan="10" className="py-4 text-gray-500">Please wait while rendering...</td>
+                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
                                             </tr>
-                                        ) : filteredComputers.length > 0 ? (
-                                                filteredComputers.map((computer) => (
+                                        ) : computers.data && computers.data.length > 0 ? (
+                                                computers.data.map((computer) => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                                                         <td className="px-3 py-2">{computer.CID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
@@ -389,7 +421,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                                 ))
                                             ) : (
                                                 <tr className='text-center'>
-                                                    <td className='font-medium text-base' colSpan="17">No data available</td>
+                                                    <td className='font-medium text-base py-4' colSpan="17">No data available</td>
                                                 </tr>
                                             )
                                         }
@@ -411,7 +443,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                 listDepartments={departmentsList.data}
                 listCompUsers={compUsersList.data}
                 listCompUsersFname={compUsersFnameList.data}
-                // accountUsersEdit={computers}
                 selectedEditComp={selectedEditComp}
             />
     </AuthenticatedLayout>
