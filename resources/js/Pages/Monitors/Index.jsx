@@ -14,43 +14,97 @@ import useEditModal from './hooks/useEditModal'
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { debounce } from 'lodash'
+import SelectInput from '@/Components/SelectInput'
 
 export default function Index({auth, monitors, departmentsList, mntrUsersList, compNameList, queryParams = null, success}) {
     
-    queryParams = queryParams || {}
     const { showModal, selectedMntr, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditMntr, openEditModal, closeEditModal } = useEditModal();
-    const searchFieldChanged = (name, value) =>{
-        if(value){
-            queryParams[name] = value;
-        }
-        else{
-            delete queryParams[name];
-        }
-        router.get(route('monitors.index'), queryParams)
-    };
 
-    const onKeyPress = (name, e) => {
+    queryParams = queryParams || {}
+    const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
+    const [mntrComp, setMntrComp] = useState(queryParams.mntr_department || '');
+
+    // Handle search query change with debouncing to improve performance
+    const handleSearchChange = useMemo(() =>
+        debounce((query) => {
+    
+          setSearchQuery(query);
+    
+          router.get(
+            route('monitors.index'),
+            {
+              ...queryParams,
+              search: query,
+              
+              // This time add other filters 
+              mntr_department: mntrComp,
+              page: 1
+            },
+            {preserveState: true, preserveScroll: true}
+          )
+        }, 300), [queryParams, mntrComp]); // need to add dependency for queryParams changes
+    //end
+
+    const handleFilterChange = useCallback((name, value) => {
+        router.get(
+          route('monitors.index'),
+            {
+                ...queryParams,
+                [name]: value,
+                search: searchQuery,
+                page: 1
+            },
+            {preserveScroll: true}
+        );
+      }, [queryParams]);
+    //end
+
+    const searchFieldChanged = (value) => {
+        handleSearchChange(value);
+    }; 
+
+    // Key press event handler (specifically for Enter key)
+    const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
         
-        searchFieldChanged(name, e.target.value);
+        searchFieldChanged(e.target.value);
     }
 
+    const [loading, setLoading] = useState(false);
+    // Update loading state based on filtering
+     useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Simulate a delay, adjust based on actual data processing
+        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+    }, [mntrComp, searchQuery]);
+
+    const handleSelectChange = (name, value) => {
+        setLoading(true);
+        switch (name) {
+          case 'mntr_department':
+            setMntrComp(value);
+            break;
+          default:
+            break;
+        }
+        handleFilterChange(name, value);
+    };
+
+    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
-            if(queryParams.sort_direction === 'asc'){
-                queryParams.sort_direction = "desc";
-            }
-            else{
-                queryParams.sort_direction = "asc";
-            }
-        }
-        else{
+            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        } else {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('monitors.index'), queryParams)
+        router.get(route('monitors.index'), queryParams, { preserveScroll: true });
     };
 
     const deleteComputers = (monitor) => {
@@ -105,15 +159,30 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             {/* <pre>{JSON.stringify(monitors, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
-                                <div className="flex justify-start py-2">
+                                <div className="flex justify-between py-2">
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.search} 
+                                            defaultValue={searchQuery} 
                                             placeholder="Computer Name / User"
-                                            onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('search', e)} 
+                                            onBlur={e => searchFieldChanged(e.target.value)}
+                                            onChange={(e) => searchFieldChanged(e.target.value)}
+                                            onKeyPress={e => onKeyPress(e)}
                                         />
+                                    </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={mntrComp}
+                                            onChange={(e) => handleSelectChange('mntr_department', e.target.value)}
+                                        >
+                                            <option value="">Select Department</option>
+                                            {departmentsList.data.map(dept => (
+                                                <option key={dept.dept_id} value={dept.dept_list}>
+                                                    {dept.dept_list}
+                                                </option>
+                                            ))}
+                                        </SelectInput>
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -216,7 +285,11 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {monitors.data ? (
+                                        {loading ? (
+                                            <tr className="text-center">
+                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
+                                            </tr>
+                                        ) : monitors.data && monitors.data.length > 0 ? (
                                                 monitors.data.map(monitor => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={monitor.monitor_id}>
                                                         <td className="px-3 py-2">{monitor.monitor_id}</td>
@@ -279,8 +352,8 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                                     </tr>
                                                 ))
                                             ) : (
-                                                <tr>
-                                                    <td colSpan="17">No data available</td>
+                                                <tr className='text-center'>
+                                                    <td className='font-medium text-base py-4' colSpan="17">No data available</td>
                                                 </tr>
                                             )
                                         }

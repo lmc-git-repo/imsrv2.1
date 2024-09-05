@@ -12,6 +12,7 @@ use App\Models\Departments;
 use App\Models\Monitors;
 use App\Http\Requests\StoreMonitorsRequest;
 use App\Http\Requests\UpdateMonitorsRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -29,23 +30,35 @@ class MonitorsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("compName")){
-        //     $query->where("compName","like","%". request("compName") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('compName', 'like', '%' . $search . '%')
-                  ->orWhere('mntr_user', 'like', '%' . $search . '%');
-
-            });
-        }
-
-        // if(request('comp_status')){
-        //     $query->where('comp_status', request('comp_status'));
-        // }
-
         $monitors = $query->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $query->where('compName', 'like', "%{$search}%")
+                    ->orWhere('mntr_user', 'like', "%{$search}%")
+                    ->orWhere('mntr_model', 'like', "%{$search}%");
+            })
+            ->when(request('mntr_department'), function (Builder $query, $mntrDept) {
+                $query->where('mntr_department',  $mntrDept);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
+
+        // // if(request("compName")){
+        // //     $query->where("compName","like","%". request("compName") .'%');
+        // // }
+        // if ($search = request('search')) {
+        //     $query->where(function ($q) use ($search) {
+        //         $q->where('compName', 'like', '%' . $search . '%')
+        //           ->orWhere('mntr_user', 'like', '%' . $search . '%');
+
+        //     });
+        // }
+
+        // // if(request('comp_status')){
+        // //     $query->where('comp_status', request('comp_status'));
+        // // }
+
+        // $monitors = $query->orderBy($sortField, $sortDirection)
+        //     ->paginate(10)->onEachSide(1);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $mntrUsersList = AccountUsers::orderBy('name')->get();
