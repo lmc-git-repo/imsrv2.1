@@ -29,36 +29,21 @@ class MonitorsController extends Controller
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
-
-        $monitors = $query->orderBy($sortField, $sortDirection)
+        
+        $monitors = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
             ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
                 $query->where('compName', 'like', "%{$search}%")
                     ->orWhere('mntr_user', 'like', "%{$search}%")
                     ->orWhere('mntr_model', 'like', "%{$search}%");
             })
             ->when(request('mntr_department'), function (Builder $query, $mntrDept) {
-                $query->where('mntr_department',  $mntrDept);
+                $query->where('mntr_department', $mntrDept);
             })
             ->paginate(10)->onEachSide(1);
         //end
-
-        // // if(request("compName")){
-        // //     $query->where("compName","like","%". request("compName") .'%');
-        // // }
-        // if ($search = request('search')) {
-        //     $query->where(function ($q) use ($search) {
-        //         $q->where('compName', 'like', '%' . $search . '%')
-        //           ->orWhere('mntr_user', 'like', '%' . $search . '%');
-
-        //     });
-        // }
-
-        // // if(request('comp_status')){
-        // //     $query->where('comp_status', request('comp_status'));
-        // // }
-
-        // $monitors = $query->orderBy($sortField, $sortDirection)
-        //     ->paginate(10)->onEachSide(1);
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $mntrUsersList = AccountUsers::orderBy('name')->get();

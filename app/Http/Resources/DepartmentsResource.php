@@ -19,8 +19,12 @@ class DepartmentsResource extends JsonResource
             'dept_id' => $this->dept_id,
             'dept_list' => $this->dept_list,
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
-            'createdBy' => new UserResource($this->createdBy),
-            'updatedBy' => new UserResource($this->updatedBy),
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return new UserResource($this->createdBy);
+            }),
+            'updatedBy' => $this->whenLoaded('updatedBy', function () {
+                return new UserResource($this->updatedBy);
+            }),
         ];
     }
 }

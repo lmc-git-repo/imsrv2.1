@@ -28,23 +28,23 @@ class ComputersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        $computers = $query->orderBy($sortField, $sortDirection)
+        $computers = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
             ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
                 $query->where('comp_name', 'like', "%{$search}%")
                     ->orWhere('fullName', 'like', "%{$search}%")
                     ->orWhere('comp_user', 'like', "%{$search}%");
             })
             ->when(request('comp_status'), function (Builder $query, $compStatus) {
-                $query->where('comp_status',  $compStatus);
+                $query->where('comp_status', $compStatus);
             })
             ->when(request('comp_type'), function (Builder $query, $compType) {
-                $query->where('comp_type',  $compType);
+                $query->where('comp_type', $compType);
             })
             ->when(request('department_comp'), function (Builder $query, $depComp) {
-                $query->where('department_comp',  $depComp);
-            })
-            ->when(request('comp_gen'), function (Builder $query, $compGen) {
-                $query->where('comp_gen',  $compGen);
+                $query->where('department_comp', $depComp);
             })
             ->paginate(10)->onEachSide(1);
         //end

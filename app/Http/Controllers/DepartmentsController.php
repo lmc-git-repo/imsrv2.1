@@ -6,6 +6,7 @@ use App\Http\Resources\DepartmentsResource;
 use App\Models\Departments;
 use App\Http\Requests\StoreDepartmentsRequest;
 use App\Http\Requests\UpdateDepartmentsRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -30,16 +31,15 @@ class DepartmentsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        if(request("dept_list")){
-            $query->where("dept_list","like","%". request("dept_list") .'%');
-        }
-
-        // if(request('status')){
-        //     $query->where('status', request('status'));
-        // }
-
-        $departments = $query->orderBy($sortField, $sortDirection)
+        $departments = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('dept_list', 'like', "%{$search}%");
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsAllData = Departments::orderBy('dept_id')->get();
 

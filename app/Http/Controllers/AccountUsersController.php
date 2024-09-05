@@ -8,6 +8,7 @@ use App\Models\AccountUsers;
 use App\Http\Requests\StoreAccountUsersRequest;
 use App\Http\Requests\UpdateAccountUsersRequest;
 use App\Models\Departments;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,23 +25,23 @@ class AccountUsersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("name")){
-        //     $query->where("name","like","%". request("name") .'%');
-        // }
-
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('outlookEmail', 'like', '%' . $search . '%');
-            });
-        } 
-
-        if(request('status')){
-            $query->where('status', request('status'));
-        }
-
-        $accountUsers = $query->orderBy($sortField, $sortDirection)
+        $accountUsers = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('outlookEmail', 'like', "%{$search}%")
+                    ->orWhere('initial', 'like', "%{$search}%");
+            })
+            ->when(request('status'), function (Builder $query, $accUserStatus) {
+                $query->where('status', $accUserStatus);
+            })
+            ->when(request('department_users'), function (Builder $query, $deptUsers) {
+                $query->where('department_users', $deptUsers);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $accountUsersAllData = AccountUsers::orderBy('account_id')->get();
