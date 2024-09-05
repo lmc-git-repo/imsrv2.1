@@ -43,6 +43,9 @@ class ComputersController extends Controller
             ->when(request('comp_type'), function (Builder $query, $compType) {
                 $query->where('comp_type', $compType);
             })
+            ->when(request('comp_gen'), function (Builder $query, $compGen) {
+                $query->where('comp_gen', $compGen);
+            })
             ->when(request('department_comp'), function (Builder $query, $depComp) {
                 $query->where('department_comp', $depComp);
             })
