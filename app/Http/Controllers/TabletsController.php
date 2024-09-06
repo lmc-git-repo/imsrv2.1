@@ -11,6 +11,7 @@ use App\Models\Departments;
 use App\Models\Tablets;
 use App\Http\Requests\StoreTabletsRequest;
 use App\Http\Requests\UpdateTabletsRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,25 +29,27 @@ class TabletsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("tablet_name")){
-        //     $query->where("tablet_name","like","%". request("tablet_name") .'%');
-        // }
-
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('tablet_name', 'like', '%' . $search . '%')
-                  ->orWhere('fullName', 'like', '%' . $search . '%')
-                  ->orWhere('tablet_user', 'like', '%' . $search . '%');
-
-            });
-        }
-
-        if(request('tablet_status')){
-            $query->where('tablet_status', request('tablet_status'));
-        }
-
-        $tablets = $query->orderBy($sortField, $sortDirection)
+        $tablets = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('tablet_name', 'like', "%{$search}%")
+                    ->orWhere('fullName', 'like', "%{$search}%")
+                    ->orWhere('tablet_model', 'like', "%{$search}%")
+                    ->orWhere('tablet_user', 'like', "%{$search}%");
+            })
+            ->when(request('tablet_status'), function (Builder $query, $tabletStatus) {
+                $query->where('tablet_status', $tabletStatus);
+            })
+            ->when(request('tablet_gen'), function (Builder $query, $tabletGen) {
+                $query->where('tablet_gen', $tabletGen);
+            })
+            ->when(request('department_tablet'), function (Builder $query, $depTablet) {
+                $query->where('department_tablet', $depTablet);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $tabletUsersList = AccountUsers::orderBy('initial')->get();

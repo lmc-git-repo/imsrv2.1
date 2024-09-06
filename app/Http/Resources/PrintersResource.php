@@ -27,8 +27,12 @@ class PrintersResource extends JsonResource
             'printer_serial' => $this->printer_serial,
             'printer_asset' => $this->printer_asset,
             'remarks' => $this->remarks,
-            'createdBy'=> new UserResource($this->createdBy),
-            'updatedBy'=> new UserResource($this->updatedBy),
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return new UserResource($this->createdBy);
+            }),
+            'updatedBy' => $this->whenLoaded('updatedBy', function () {
+                return new UserResource($this->updatedBy);
+            }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
             // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];

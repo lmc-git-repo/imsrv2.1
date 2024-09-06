@@ -10,6 +10,7 @@ use App\Models\Departments;
 use App\Models\ServerUPS;
 use App\Http\Requests\StoreServerUPSRequest;
 use App\Http\Requests\UpdateServerUPSRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -28,23 +29,29 @@ class ServerUPSController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("S_UName")){
-        //     $query->where("S_UName","like","%". request("S_UName") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('S_UName', 'like', '%' . $search . '%')
-                  ->orWhere('S_UUser', 'like', '%' . $search . '%');
-
-            });
-        }
-
-        if(request('S_UStatus')){
-            $query->where('S_UStatus', request('S_UStatus'));
-        }
-
-        $serverUps = $query->orderBy($sortField, $sortDirection)
+        $serverUps = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('S_UName', 'like', "%{$search}%")
+                    ->orWhere('S_UUser', 'like', "%{$search}%")
+                    ->orWhere('S_UModel', 'like', "%{$search}%");
+            })
+            ->when(request('S_UStatus'), function (Builder $query, $serverUpsStatus) {
+                $query->where('S_UStatus', $serverUpsStatus);
+            })
+            ->when(request('S_UType'), function (Builder $query, $serverUpsType) {
+                $query->where('S_UType', $serverUpsType);
+            })
+            ->when(request('S_UGen'), function (Builder $query, $serverUpsGen) {
+                $query->where('S_UGen', $serverUpsGen);
+            })
+            ->when(request('department_S_U'), function (Builder $query, $depSU) {
+                $query->where('department_S_U', $depSU);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $serverUpsUsersList = AccountUsers::orderBy('initial')->get();

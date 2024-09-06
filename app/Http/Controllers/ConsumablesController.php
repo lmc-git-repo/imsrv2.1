@@ -10,6 +10,7 @@ use App\Models\Consumables;
 use App\Http\Requests\StoreConsumablesRequest;
 use App\Http\Requests\UpdateConsumablesRequest;
 use App\Models\Departments;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,25 +28,19 @@ class ConsumablesController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("po_num")){
-        //     $query->where("po_num","like","%". request("po_num") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('po_num', 'like', '%' . $search . '%')
-                  ->orWhere('si_code', 'like', '%' . $search . '%')
-                  ->orWhere('brand', 'like', '%' . $search . '%')
-                  ->orWhere('model', 'like', '%' . $search . '%')
-                  ->orWhere('installedTo', 'like', '%' . $search . '%');
-            });
-        }
-
-        // if(request('consumables_status')){
-        //     $query->where('consumables_status', request('consumables_status'));
-        // }
-
-        $consumables = $query->orderBy($sortField, $sortDirection)
+        $consumables = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('po_num', 'like', "%{$search}%")
+                    ->orWhere('si_code', 'like', "%{$search}%")
+                    ->orWhere('model', 'like', "%{$search}%")
+                    ->orWhere('installedTo', 'like', "%{$search}%")
+                    ->orWhere('brand', 'like', "%{$search}%");
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $consumablesUsersFnameList = AccountUsers::orderBy('name')->get();

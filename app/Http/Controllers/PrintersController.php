@@ -10,6 +10,7 @@ use App\Models\Departments;
 use App\Models\Printers;
 use App\Http\Requests\StorePrintersRequest;
 use App\Http\Requests\UpdatePrintersRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,22 +28,20 @@ class PrintersController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("printer_user")){
-        //     $query->where("printer_user","like","%". request("printer_user") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('printer_user', 'like', '%' . $search . '%')
-                  ->orWhere('printer_model', 'like', '%' . $search . '%');
-            });
-        }              
-
-        // if(request('printer_status')){
-        //     $query->where('printer_status', request('printer_status'));
-        // }
-
-        $printers = $query->orderBy($sortField, $sortDirection)
+        $printers = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('printer_user', 'like', "%{$search}%")
+                    ->orWhere('printer_model', 'like', "%{$search}%")
+                    ->orWhere('printer_asset', 'like', "%{$search}%");
+            })
+            ->when(request('printer_department'), function (Builder $query, $deptPrinter) {
+                $query->where('printer_department', $deptPrinter);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $printerUsersList = AccountUsers::orderBy('name')->get();

@@ -36,8 +36,12 @@ class ConsumablesResource extends JsonResource
             'deliveryRecieptDate' => $this->deliveryRecieptDate,
             'department_consumables' => $this->department_consumables,
             'remarks' => $this->remarks,
-            'createdBy'=> new UserResource($this->createdBy),
-            'updatedBy'=> new UserResource($this->updatedBy),
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return new UserResource($this->createdBy);
+            }),
+            'updatedBy' => $this->whenLoaded('updatedBy', function () {
+                return new UserResource($this->updatedBy);
+            }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
             // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];

@@ -8,6 +8,7 @@ use App\Models\Departments;
 use App\Models\PurchaseRequisitions;
 use App\Http\Requests\StorePurchaseRequisitionsRequest;
 use App\Http\Requests\UpdatePurchaseRequisitionsRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,22 +26,23 @@ class PurchaseRequisitionsController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("control_num")){
-        //     $query->where("control_num","like","%". request("control_num") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('control_num', 'like', '%' . $search . '%')
-                  ->orWhere('po_num', 'like', '%' . $search . '%');
-            });
-        }
-
-        if(request('item_category')){
-            $query->where('item_category', request('item_category'));
-        }
-
-        $purchase_req = $query->orderBy($sortField, $sortDirection)
+        $purchase_req = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('control_num', 'like', "%{$search}%")
+                    ->orWhere('po_num', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->when(request('item_category'), function (Builder $query, $itemCategory) {
+                $query->where('item_category', $itemCategory);
+            })
+            ->when(request('department_pr'), function (Builder $query, $depPR) {
+                $query->where('department_pr', $depPR);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $purchase_reqAllData = PurchaseRequisitions::orderBy('pr_id')->get();

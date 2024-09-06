@@ -36,8 +36,12 @@ class ServerUPSResource extends JsonResource
             'S_UPrdctkey' => $this->S_UPrdctkey,
             'S_UStatus' => $this->S_UStatus,
             'S_URemarks' => $this->S_URemarks,
-            'createdBy'=> new UserResource($this->createdBy),
-            'updatedBy'=> new UserResource($this->updatedBy),
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return new UserResource($this->createdBy);
+            }),
+            'updatedBy' => $this->whenLoaded('updatedBy', function () {
+                return new UserResource($this->updatedBy);
+            }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
             // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];

@@ -6,7 +6,7 @@ import { SERVERUPS_STATUS_CLASS_MAP, SERVERUPS_STATUS_TEXT_MAP } from '@/constan
 import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
@@ -14,43 +14,110 @@ import useEditModal from './hooks/useEditModal'
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
+import { debounce } from 'lodash'
 
 export default function Index({auth, serverUps, departmentsList, serverUpsUsersList, queryParams = null, success}) {
     
-    queryParams = queryParams || {}
     const { showModal, selectedServerUps, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditServerUps, openEditModal, closeEditModal } = useEditModal();
-    const searchFieldChanged = (name, value) =>{
-        if(value){
-            queryParams[name] = value;
-        }
-        else{
-            delete queryParams[name];
-        }
-        router.get(route('serverUps.index'), queryParams)
-    };
 
-    const onKeyPress = (name, e) => {
+    queryParams = queryParams || {}
+    const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
+    const [serverUpsStatus, setServerUpsStatus] = useState(queryParams.S_UStatus || '');
+    const [serverUpsType, setServerUpsType] = useState(queryParams.S_UType || '');
+    const [serverUpsGen, setServerUpsGen] = useState(queryParams.S_UGen || '');
+    const [departmentSU, setdepartmentSU] = useState(queryParams.department_S_U || '');
+
+    // Handle search query change with debouncing to improve performance
+    const handleSearchChange = useMemo(() =>
+        debounce((query) => {
+    
+          setSearchQuery(query);
+    
+          router.get(
+            route('serverUps.index'),
+            {
+              ...queryParams,
+              search: query,
+              
+              // This time add other filters 
+              S_UStatus: serverUpsStatus,
+              S_UType: serverUpsType,
+              S_UGen: serverUpsGen,
+              department_S_U: departmentSU,
+              page: 1
+            },
+            {preserveState: true, preserveScroll: true}
+          )
+        }, 300), [queryParams, serverUpsStatus, serverUpsType, serverUpsGen, departmentSU]); // need to add dependency for queryParams changes
+    //end
+
+    const handleFilterChange = useCallback((name, value) => {
+        router.get(
+          route('serverUps.index'),
+            {
+                ...queryParams,
+                [name]: value,
+                search: searchQuery,
+                page: 1
+            },
+            {preserveScroll: true}
+        );
+      }, [queryParams]);
+    //end
+
+    const searchFieldChanged = (value) => {
+        handleSearchChange(value);
+    }; 
+
+    // Key press event handler (specifically for Enter key)
+    const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
         
-        searchFieldChanged(name, e.target.value);
+        searchFieldChanged(e.target.value);
     }
 
+    const [loading, setLoading] = useState(false);
+    // Update loading state based on filtering
+     useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Simulate a delay, adjust based on actual data processing
+        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+    }, [serverUpsStatus, serverUpsType, serverUpsGen, departmentSU, searchQuery]);
+
+    const handleSelectChange = (name, value) => {
+        setLoading(true);
+        switch (name) {
+          case 'S_UStatus':
+            setServerUpsStatus(value);
+            break;
+          case 'S_UType':
+            setServerUpsType(value);
+            break;
+          case 'S_UGen':
+            setServerUpsGen(value);
+            break;  
+          case 'department_S_U':
+            setdepartmentSU(value);
+            break;
+          default:
+            break;
+        }
+        handleFilterChange(name, value);
+    };
+
+    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
-            if(queryParams.sort_direction === 'asc'){
-                queryParams.sort_direction = "desc";
-            }
-            else{
-                queryParams.sort_direction = "asc";
-            }
-        }
-        else{
+            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        } else {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('serverUps.index'), queryParams)
+        router.get(route('serverUps.index'), queryParams, { preserveScroll: true });
     };
 
     const deleteComputers = (serverups) => {
@@ -109,17 +176,18 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.search} 
+                                            defaultValue={searchQuery} 
                                             placeholder="SERVER/UPS /User"
-                                            onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('search', e)} 
+                                            onBlur={e => searchFieldChanged(e.target.value)}
+                                            onChange={(e) => searchFieldChanged(e.target.value)}
+                                            onKeyPress={e => onKeyPress(e)}
                                         />
                                     </div>
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={queryParams.S_UStatus} 
-                                            onChange={ e => searchFieldChanged('S_UStatus', e.target.value)}
+                                            defaultValue={serverUpsStatus} 
+                                            onChange={(e) => handleSelectChange('S_UStatus', e.target.value)}
                                         >
                                             <option value="">Select Status</option>
                                             <option value="Deployed">Deployed</option>
@@ -127,6 +195,59 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Barrow">Barrow</option>
+                                        </SelectInput>
+                                    </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={serverUpsType}
+                                            onChange={(e) => handleSelectChange('S_UType', e.target.value)}
+                                        >
+                                            <option value="">Type</option>
+                                            <option value="SERVER">SERVER</option>
+                                            <option value="UPS">UPS</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={serverUpsGen}
+                                            onChange={(e) => handleSelectChange('S_UGen', e.target.value)}
+                                        >
+                                            <option value="">Select Generation: </option>
+                                            <option value="3rd">3rd</option>
+                                            <option value="4th">4th</option>
+                                            <option value="5th">5th</option>
+                                            <option value="6th">6th</option>
+                                            <option value="7th">7th</option>
+                                            <option value="8th">8th</option>
+                                            <option value="9th">9th</option>
+                                            <option value="10th">10th</option>
+                                            <option value="11th">11th</option>
+                                            <option value="12th">12th</option>
+                                            <option value="13th">13th</option>
+                                            <option value="14th">14th</option>
+                                            <option value="15th">15th</option>
+                                            <option value="16th">16th</option>
+                                            <option value="17th">17th</option>
+                                            <option value="Pentium">Pentium</option>
+                                            <option value="N/A">N/A</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={departmentSU}
+                                            onChange={(e) => handleSelectChange('department_S_U', e.target.value)}
+                                        >
+                                            <option value="">Select Department</option>
+                                            {departmentsList.data.map(dept => (
+                                                <option key={dept.dept_id} value={dept.dept_list}>
+                                                    {dept.dept_list}
+                                                </option>
+                                            ))}
                                         </SelectInput>
                                     </div>
                                 </div>
@@ -293,7 +414,11 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {serverUps.data ? (
+                                        {loading ? (
+                                            <tr className="text-center">
+                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
+                                            </tr>
+                                        ) : serverUps.data && serverUps.data.length > 0 ? (
                                                 serverUps.data.map(serverups => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={serverups.S_UID}>
                                                         <td className="px-3 py-2">{serverups.S_UID}</td>
@@ -367,8 +492,8 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                     </tr>
                                                 ))
                                             ) : (
-                                                <tr>
-                                                    <td colSpan="17">No data available</td>
+                                                <tr className='text-center'>
+                                                    <td className='font-medium text-base py-4' colSpan="17">No data available</td>
                                                 </tr>
                                             )
                                         }
@@ -387,7 +512,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
                 listServerUPSUsers={serverUpsUsersList.data}
-                // accountUsersEdit={computers}
                 selectedEditServerUps={selectedEditServerUps}
             />
     </AuthenticatedLayout>

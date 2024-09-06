@@ -6,7 +6,7 @@ import { PHONES_STATUS_CLASS_MAP, PHONES_STATUS_TEXT_MAP, TABLETS_STATUS_CLASS_M
 import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import useModal from './hooks/useModal'
 import useCreateModal from './hooks/useCreateModal'
@@ -14,43 +14,100 @@ import useEditModal from './hooks/useEditModal'
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
+import { debounce } from 'lodash'
 
 export default function Index({auth, purchase_requisitions, departmentsList, queryParams = null, success}) {
     
-    queryParams = queryParams || {}
     const { showModal, selectedPR, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
     const { showEditModal, selectedEditPR, openEditModal, closeEditModal } = useEditModal();
-    const searchFieldChanged = (name, value) =>{
-        if(value){
-            queryParams[name] = value;
-        }
-        else{
-            delete queryParams[name];
-        }
-        router.get(route('purchase_requisitions.index'), queryParams)
-    };
 
-    const onKeyPress = (name, e) => {
+    queryParams = queryParams || {}
+    const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
+    const [itemCategory, setItemCategory] = useState(queryParams.item_category || '');
+    const [departmentPR, setDepartmentPR] = useState(queryParams.department_pr || '');
+
+    // Handle search query change with debouncing to improve performance
+    const handleSearchChange = useMemo(() =>
+        debounce((query) => {
+    
+          setSearchQuery(query);
+    
+          router.get(
+            route('purchase_requisitions.index'),
+            {
+              ...queryParams,
+              search: query,
+              
+              // This time add other filters 
+              item_category: itemCategory,
+              department_pr: departmentPR,
+              page: 1
+            },
+            {preserveState: true, preserveScroll: true}
+          )
+        }, 300), [queryParams, itemCategory, departmentPR]); // need to add dependency for queryParams changes
+    //end
+
+    const handleFilterChange = useCallback((name, value) => {
+        router.get(
+          route('purchase_requisitions.index'),
+            {
+                ...queryParams,
+                [name]: value,
+                search: searchQuery,
+                page: 1
+            },
+            {preserveScroll: true}
+        );
+      }, [queryParams]);
+    //end
+    
+    const searchFieldChanged = (value) => {
+        handleSearchChange(value);
+    }; 
+
+    // Key press event handler (specifically for Enter key)
+    const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
         
-        searchFieldChanged(name, e.target.value);
+        searchFieldChanged(e.target.value);
     }
 
+    const [loading, setLoading] = useState(false);
+    // Update loading state based on filtering
+     useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Simulate a delay, adjust based on actual data processing
+        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+    }, [itemCategory, departmentPR, searchQuery]);
+
+    const handleSelectChange = (name, value) => {
+        setLoading(true);
+        switch (name) {
+          case 'item_category':
+            setItemCategory(value);
+            break;
+          case 'department_pr':
+            setDepartmentPR(value);
+            break;
+          default:
+            break;
+        }
+        handleFilterChange(name, value);
+    };
+
+    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
-            if(queryParams.sort_direction === 'asc'){
-                queryParams.sort_direction = "desc";
-            }
-            else{
-                queryParams.sort_direction = "asc";
-            }
-        }
-        else{
+            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        } else {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('purchase_requisitions.index'), queryParams)
+        router.get(route('purchase_requisitions.index'), queryParams, { preserveScroll: true });
     };
 
     const deletePR = (pr) => {
@@ -107,21 +164,36 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                     <div>
                                         <TextInput 
                                             className="w-full"
-                                            defaultValue={queryParams.search} 
+                                            defaultValue={searchQuery} 
                                             placeholder="Control Number / PO"
-                                            onBlur={e => searchFieldChanged('search', e.target.value)}
-                                            onKeyPress={ e => onKeyPress('search', e)} 
+                                            onBlur={e => searchFieldChanged(e.target.value)}
+                                            onChange={(e) => searchFieldChanged(e.target.value)}
+                                            onKeyPress={e => onKeyPress(e)}
                                         />
                                     </div>
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={queryParams.item_category} 
-                                            onChange={ e => searchFieldChanged('item_category', e.target.value)}
+                                            defaultValue={itemCategory} 
+                                            onChange={ (e) => handleSelectChange('item_category', e.target.value)}
                                         >
                                             <option value="">Select Category</option>
                                             <option value="Consumables">Consumables</option>
                                             <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                        </SelectInput>
+                                    </div>
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={departmentPR}
+                                            onChange={(e) => handleSelectChange('department_pr', e.target.value)}
+                                        >
+                                            <option value="">Select Department</option>
+                                            {departmentsList.data.map(dept => (
+                                                <option key={dept.dept_id} value={dept.dept_list}>
+                                                    {dept.dept_list}
+                                                </option>
+                                            ))}
                                         </SelectInput>
                                     </div>
                                 </div>
@@ -265,7 +337,11 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {purchase_requisitions.data ? (
+                                        {loading ? (
+                                            <tr className="text-center">
+                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
+                                            </tr>
+                                        ) : purchase_requisitions.data && purchase_requisitions.data.length > 0 ? (
                                                 purchase_requisitions.data.map(pr => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={pr.pr_id}>
                                                         <td className="px-3 py-2">{pr.pr_id}</td>
@@ -327,8 +403,8 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                                     </tr>
                                                 ))
                                             ) : (
-                                                <tr>
-                                                    <td colSpan="17">No data available</td>
+                                                <tr className='text-center'>
+                                                    <td className='font-medium text-base py-4' colSpan="17">No data available</td>
                                                 </tr>
                                             )
                                         }

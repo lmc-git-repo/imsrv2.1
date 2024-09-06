@@ -10,6 +10,7 @@ use App\Models\Departments;
 use App\Models\Phones;
 use App\Http\Requests\StorePhonesRequest;
 use App\Http\Requests\UpdatePhonesRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,22 +28,23 @@ class PhonesController extends Controller
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
 
-        // if(request("phone_name")){
-        //     $query->where("phone_name","like","%". request("phone_name") .'%');
-        // }
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('phone_name', 'like', '%' . $search . '%')
-                  ->orWhere('fullName', 'like', '%' . $search . '%');
-            });
-        }
-
-        if(request('phone_status')){
-            $query->where('phone_status', request('phone_status'));
-        }
-
-        $phones = $query->orderBy($sortField, $sortDirection)
+        $phones = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('phone_name', 'like', "%{$search}%")
+                    ->orWhere('fullName', 'like', "%{$search}%")
+                    ->orWhere('phone_model', 'like', "%{$search}%");
+            })
+            ->when(request('phone_status'), function (Builder $query, $phoneStatus) {
+                $query->where('phone_status', $phoneStatus);
+            })
+            ->when(request('department_phone'), function (Builder $query, $depPhone) {
+                $query->where('department_phone', $depPhone);
+            })
             ->paginate(10)->onEachSide(1);
+        //end
 
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $phoneUsersFnameList = AccountUsers::orderBy('name')->get();
