@@ -66,7 +66,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
+                <div className="flex justify-between items-center mt-4">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -75,6 +75,12 @@ export default function Login({ status, canResetPassword }) {
                         />
                         <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
                     </label>
+                    <Link 
+                        href={route('public.view')} 
+                        className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 hover:scale-105"
+                    >
+                        <span className="">Check me</span>
+                    </Link>
                 </div>
 
                 <div className="flex items-center justify-end mt-4">

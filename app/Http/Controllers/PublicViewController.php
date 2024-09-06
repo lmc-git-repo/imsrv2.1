@@ -6,6 +6,7 @@ use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\DepartmentsResource;
 use App\Models\AccountUsers;
 use App\Models\Departments;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PublicViewController extends Controller
@@ -18,20 +19,18 @@ class PublicViewController extends Controller
 
         $sortField = request("sort_field", 'created_at');
         $sortDirection = request("sort_direction", "desc");
-
-        if ($search = request('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('outlookEmail', 'like', '%' . $search . '%');
-            });
-        } 
-
-        if(request('status')){
-            $query->where('status', request('status'));
-        }
-
-        $employees = $query->orderBy($sortField, $sortDirection)
+        
+        $employees = $query
+            ->with(['createdBy', 'updatedBy']) // eto yung kulang mo
+            ->orderBy($sortField, $sortDirection)
+            ->when(request('search'), function (Builder $query, $search) {
+                $search = (string)$search;
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('outlookEmail', 'like', "%{$search}%")
+                    ->orWhere('initial', 'like', "%{$search}%");
+            })
             ->paginate(10)->onEachSide(1);
+        //end        
         
         // dd($employees);
 

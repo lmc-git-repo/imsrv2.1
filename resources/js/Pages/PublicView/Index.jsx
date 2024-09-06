@@ -3,49 +3,96 @@ import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import { ACCOUNTUSERS_STATUS_CLASS_MAP, ACCOUNTUSERS_STATUS_TEXT_MAP } from '@/constants'
 
-import { Head, router } from '@inertiajs/react'
+import { Head, Link, router } from '@inertiajs/react'
 import TableHeading from '@/Components/TableHeading'
 import PublicLayout from '@/Layouts/PublicLayout'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { debounce } from 'lodash'
 
 export default function Index({employees, queryParams = null}) {
     queryParams = queryParams || {}
+    const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
 
-    const searchFieldChanged = (name, value) =>{
-        if(value){
-            queryParams[name] = value;
-        }
-        else{
-            delete queryParams[name];
-        }
-        router.get(route('public.view'), queryParams)
-    };
-    const onKeyPress = (name, e) => {
+    // Handle search query change with debouncing to improve performance
+    const handleSearchChange = useMemo(() =>
+        debounce((query) => {
+    
+          setSearchQuery(query);
+    
+          router.get(
+            route('public.view'),
+            {
+              ...queryParams,
+              search: query,
+              
+              page: 1
+            },
+            {preserveState: true, preserveScroll: true}
+          )
+        }, 300), [queryParams]); // need to add dependency for queryParams changes
+    //end
+
+    const handleFilterChange = useCallback((name, value) => {
+        router.get(
+          route('public.view'),
+            {
+                ...queryParams,
+                [name]: value,
+                search: searchQuery,
+                page: 1
+            },
+            {preserveScroll: true}
+        );
+      }, [queryParams]);
+    //end
+
+    const searchFieldChanged = (value) => {
+        handleSearchChange(value);
+    }; 
+
+    // Key press event handler (specifically for Enter key)
+    const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
         
-        searchFieldChanged(name, e.target.value);
+        searchFieldChanged(e.target.value);
     }
 
+    const [loading, setLoading] = useState(false);
+    // Update loading state based on filtering
+     useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 800); // Simulate a delay, adjust based on actual data processing
+        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+    }, [searchQuery]);
+
+    const handleSelectChange = (name, value) => {
+        setLoading(true);
+        handleFilterChange(name, value);
+    };
+
+    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
-            if(queryParams.sort_direction === 'asc'){
-                queryParams.sort_direction = "desc";
-            }
-            else{
-                queryParams.sort_direction = "asc";
-            }
-        }
-        else{
+            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        } else {
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('public.view'), queryParams)
+        router.get(route('public.view'), queryParams, { preserveScroll: true });
     };
     
     
   return (
     <PublicLayout>   
         <div className='flex justify-between items-center'>
-            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Employees</h2>
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Employees </h2>
+            <Link>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-6 hover:scale-110">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+            </Link>
         </div>
         <Head title="Employees Email" />
         <div className="py-12">
@@ -58,10 +105,11 @@ export default function Index({employees, queryParams = null}) {
                                 <div>
                                     <TextInput 
                                         className="w-full"
-                                        defaultValue={queryParams.search} 
+                                        defaultValue={searchQuery} 
                                         placeholder="Employee Name"
-                                        onBlur={e => searchFieldChanged('search', e.target.value)}
-                                        onKeyPress={ e => onKeyPress('search', e)} 
+                                        onBlur={e => searchFieldChanged(e.target.value)}
+                                        onChange={(e) => searchFieldChanged(e.target.value)}
+                                        onKeyPress={e => onKeyPress(e)}
                                     />
                                 </div>
                             </div>
@@ -93,14 +141,6 @@ export default function Index({employees, queryParams = null}) {
                                         >
                                             Department
                                         </TableHeading>
-                                        {/* <TableHeading
-                                            name="initial"
-                                            sort_field={queryParams.sort_field} 
-                                            sort_direction={queryParams.sort_direction}
-                                            sortChanged={sortChanged}
-                                        >
-                                            Initials
-                                        </TableHeading> */}
 
                                         <TableHeading
                                             name="outlookEmail"
@@ -110,24 +150,6 @@ export default function Index({employees, queryParams = null}) {
                                         >
                                             Email
                                         </TableHeading>
-
-                                        {/* <TableHeading
-                                            name="status"
-                                            sort_field={queryParams.sort_field} 
-                                            sort_direction={queryParams.sort_direction}
-                                            sortChanged={sortChanged}
-                                        >
-                                            Status
-                                        </TableHeading> */}
-                                        {/* <th className="px-3 py-3">Created By</th>
-                                        <TableHeading
-                                            name="created_at"
-                                            sort_field={queryParams.sort_field} 
-                                            sort_direction={queryParams.sort_direction}
-                                            sortChanged={sortChanged}
-                                        >
-                                            Created Date
-                                        </TableHeading> */}
                                     </tr>
                                 </thead>
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
@@ -140,7 +162,11 @@ export default function Index({employees, queryParams = null}) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {employees?.data?.length > 0 ? (
+                                    {loading ? (
+                                        <tr className="text-center">
+                                            <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
+                                        </tr>
+                                    ) : employees.data && employees?.data?.length > 0 ? (
                                         employees.data.map(employee => (
                                             <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={employee.account_id}>
                                                 <td className="px-3 py-2">{employee.account_id}</td>
@@ -154,26 +180,20 @@ export default function Index({employees, queryParams = null}) {
                                                     <img src={employee.profile_path} alt="" style={{width: 60}} />
                                                 </td>
                                                 <td className="px-3 py-2">{employee.department_users}</td>
-                                                {/* <td className="px-3 py-2">{employee.initial}</td> */}
                                                 <td className="px-3 py-2">{employee.outlookEmail}</td>
                                                 {/* <td className="px-3 py-2">
                                                     <span className={'px-2 rounded-e-full text-white ' + ACCOUNTUSERS_STATUS_CLASS_MAP[employee.status]}>{ACCOUNTUSERS_STATUS_TEXT_MAP[employee.status]}</span>
                                                 </td> */}
-                                                {/* <td className="px-3 py-2">{employee.createdBy.name}</td>
-                                                <td className="px-3 py-2 text-nowrap">{employee.created_at}</td> */}
                                             </tr>
                                         ))
                                     ) : (
-                                        <tr>
-                                            <td colSpan="9" className="px-3 py-2 text-center">
-                                                No data available
-                                            </td>
+                                        <tr className='text-center'>
+                                            <td className='font-medium text-base py-4' colSpan="9">No data available</td>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
                         </div>
-                        {/* <Pagination links={employees.meta.links} /> */}
                         <Pagination links={employees?.meta?.links || []} />
                     </div>
                 </div>
