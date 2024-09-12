@@ -38,11 +38,12 @@ class UpdateServerUPSRequest extends FormRequest
             "S_UStorage" => ['required', 'max:255'],
             "S_USerial" => ['required', 'max:255'],
             "S_UAsset" => ['required', 'max:255'],
+            "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance', 'Capital', 'N/A'])],
             "S_UCpu" => ['required', 'max:255'],
             "S_UGen" => ['required', Rule::in(['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A'])],
             "S_UAddress" => ['required', 'max:255'],
             "S_UPrdctkey" => ['required', 'max:255'],
-            "S_UStatus" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Barrow'])],
+            "S_UStatus" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
             "S_URemarks" => ['required', 'max:255'],
         ];
     }

@@ -14,14 +14,14 @@ export const COMPUTERS_STATUS_CLASS_MAP = {
   'Spare': 'bg-amber-500',
   'For Disposal': 'bg-yellow-500',
   'Already Disposed': 'bg-red-500',
-  'Barrow': 'bg-amber-900',
+  'Borrow': 'bg-amber-900',
 }
 export const COMPUTERS_STATUS_TEXT_MAP = {
     'Deployed': 'Deployed',
     'Spare': 'Spare',
     'For Disposal': 'For Disposal',
     'Already Disposed': 'Already Disposed',
-    'Barrow': 'Barrow',
+    'Borrow': 'Borrow',
 }
 
 export const SERVERUPS_STATUS_CLASS_MAP = {
@@ -29,14 +29,14 @@ export const SERVERUPS_STATUS_CLASS_MAP = {
   'Spare': 'bg-amber-500',
   'For Disposal': 'bg-yellow-500',
   'Already Disposed': 'bg-red-500',
-  'Barrow': 'bg-amber-900',
+  'Borrow': 'bg-amber-900',
 }
 export const SERVERUPS_STATUS_TEXT_MAP = {
     'Deployed': 'Deployed',
     'Spare': 'Spare',
     'For Disposal': 'For Disposal',
     'Already Disposed': 'Already Disposed',
-    'Barrow': 'Barrow',
+    'Borrow': 'Borrow',
 }
 
 export const TABLETS_STATUS_CLASS_MAP = {
@@ -44,14 +44,14 @@ export const TABLETS_STATUS_CLASS_MAP = {
   'Spare': 'bg-amber-500',
   'For Disposal': 'bg-yellow-500',
   'Already Disposed': 'bg-red-500',
-  'Barrow': 'bg-amber-900',
+  'Borrow': 'bg-amber-900',
 }
 export const TABLETS_STATUS_TEXT_MAP = {
     'Deployed': 'Deployed',
     'Spare': 'Spare',
     'For Disposal': 'For Disposal',
     'Already Disposed': 'Already Disposed',
-    'Barrow': 'Barrow',
+    'Borrow': 'Borrow',
 }
 
 export const PHONES_STATUS_CLASS_MAP = {
@@ -59,13 +59,13 @@ export const PHONES_STATUS_CLASS_MAP = {
   'Spare': 'bg-amber-500',
   'For Disposal': 'bg-yellow-500',
   'Already Disposed': 'bg-red-500',
-  'Barrow': 'bg-amber-900',
+  'Borrow': 'bg-amber-900',
 }
 export const PHONES_STATUS_TEXT_MAP = {
     'Deployed': 'Deployed',
     'Spare': 'Spare',
     'For Disposal': 'For Disposal',
     'Already Disposed': 'Already Disposed',
-    'Barrow': 'Barrow',
+    'Borrow': 'Borrow',
 }
   

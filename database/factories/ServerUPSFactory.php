@@ -28,6 +28,7 @@ class ServerUPSFactory extends Factory
             'S_UStorage' => fake()->word(),
             'S_USerial' => fake()->word(),
             'S_UAsset' => fake()->word(),
+            'asset_class' => fake()->word(),
             'S_UCpu' => fake()->word(),
             'S_UGen' => fake()->word(),
             'S_UAddress' => fake()->word(),

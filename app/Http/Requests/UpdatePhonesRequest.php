@@ -39,10 +39,11 @@ class UpdatePhonesRequest extends FormRequest
             "phone_ram" => ['required', 'max:255'],
             "phone_serial" => ['required', 'max:255'],
             "phone_asset" => ['required', 'max:255'],
+            "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
             "phone_cpu" => ['required', 'max:255'],
             "phone_address" => ['required', 'max:255'],
             "phone_imei" => ['required', 'max:255'],
-            "phone_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Barrow'])],
+            "phone_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
             "remarks" => ['required', 'max:255'],
         ];
     }

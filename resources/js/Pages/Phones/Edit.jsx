@@ -21,6 +21,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
         phone_ram: selectedEditPhone.phone_ram || '',
         phone_serial: selectedEditPhone.phone_serial || '',
         phone_asset: selectedEditPhone.phone_asset || '',
+        asset_class: selectedEditPhone.asset_class || '',
         phone_cpu: selectedEditPhone.phone_cpu || '',
         phone_address: selectedEditPhone.phone_address || '',
         phone_imei: selectedEditPhone.phone_imei || '',
@@ -262,6 +263,27 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
 
                         <div>
                             <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Classification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                value={data.asset_class}
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Clasification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
                                 <Label htmlFor="phone_cpu" value="Enter Processor" />
                             </div>
                             <TextInput 
@@ -322,7 +344,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                                 <option value="Spare">Spare</option>
                                 <option value="For Disposal">For Disposal</option>
                                 <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
+                                <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.phone_status} className='mt-2' />
                         </div>

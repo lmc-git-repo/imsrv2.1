@@ -36,6 +36,8 @@ class StoreMonitorsRequest extends FormRequest
             "mntr_user" => ['required', Rule::in($mntr_user)],
             "mntr_department" => ['required', Rule::in($departments)],
             "mntr_model" => ['required', 'max:255'],
+            "mntr_asset" => ['required', 'max:255'],
+            "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
             "mntr_serial" => ['required', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];

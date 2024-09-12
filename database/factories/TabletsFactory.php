@@ -28,6 +28,7 @@ class TabletsFactory extends Factory
             'tablet_storage' => fake()->word(),
             'tablet_serial' => fake()->word(),
             'tablet_asset' => fake()->word(),
+            'asset_class' => fake()->word(),
             'tablet_cpu' => fake()->word(),
             'tablet_gen' => fake()->word(),
             'tablet_address' => fake()->word(),

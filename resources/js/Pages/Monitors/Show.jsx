@@ -21,12 +21,14 @@ const ModalComponent = ({ show, onClose, user }) => {
             <div className="flex justify-around p-1">
                 <div className="rounded p-3 w-full">
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.monitor_id}</p>
-                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer User:</strong> {user.mntr_user}</p>
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Monitor User:</strong> {user.mntr_user}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.mntr_department}</p>
-                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Model:</strong> {user.mntr_model}</p>
-                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Serial:</strong> {user.mntr_serial}</p>
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Monitor Model:</strong> {user.mntr_model}</p>
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Monitor Serial:</strong> {user.mntr_serial}</p>
                 </div>
                 <div className="rounded p-3 w-full">
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Monitor Asset:</strong> {user.mntr_asset}</p>
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Classification:</strong> {user.asset_class}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>

@@ -26,11 +26,12 @@ return new class extends Migration
             $table->string('tablet_storage');
             $table->string('tablet_serial');
             $table->string('tablet_asset');
+            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A']);
             $table->longText('tablet_cpu');
             $table->enum('tablet_gen',['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A']);
             $table->longText('tablet_address');
             $table->longText('tablet_prdctkey');
-            $table->enum('tablet_status',['Deployed','Spare','For Disposal','Already Disposed','Barrow']);
+            $table->enum('tablet_status',['Deployed','Spare','For Disposal','Already Disposed','Borrow']);
             $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

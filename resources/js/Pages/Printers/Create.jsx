@@ -18,6 +18,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
         printer_model: '',
         printer_serial: '',
         printer_asset: '',
+        asset_class: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -170,6 +171,26 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
                                 required 
                             />
                             <InputError message={errors.printer_asset} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Classification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Clasification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
                         </div>
                         
                         <div>

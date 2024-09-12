@@ -31,6 +31,7 @@ class PhonesResource extends JsonResource
             'phone_ram' => $this->phone_ram,
             'phone_serial' => $this->phone_serial,
             'phone_asset' => $this->phone_asset,
+            'asset_class' => $this->asset_class,
             'phone_cpu' => $this->phone_cpu,
             'phone_address' => $this->phone_address,
             'phone_imei' => $this->phone_imei,

@@ -29,6 +29,7 @@ class ComputersFactory extends Factory
             'comp_storage' => fake()->word(),
             'comp_serial' => fake()->word(),
             'comp_asset' => fake()->word(),
+            'asset_class' => fake()->word(),
             'comp_cpu' => fake()->word(),
             'comp_gen' => fake()->word(),
             'comp_address' => fake()->word(),

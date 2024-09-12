@@ -21,6 +21,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameL
         phone_ram: '',
         phone_serial: '',
         phone_asset: '',
+        asset_class: '',
         phone_cpu: '',
         phone_address: '',
         phone_imei: '',
@@ -235,6 +236,26 @@ const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameL
                             />
                             <InputError message={errors.phone_asset} className='mt-2' />
                         </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Classification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Clasification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
+                        </div>
                         
                         <div>
                             <div className="mb-2 block">
@@ -298,7 +319,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameL
                                 <option value="Spare">Spare</option>
                                 <option value="For Disposal">For Disposal</option>
                                 <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
+                                <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.phone_status} className='mt-2' />
                         </div>

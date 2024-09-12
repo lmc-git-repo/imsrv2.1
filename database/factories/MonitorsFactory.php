@@ -23,6 +23,8 @@ class MonitorsFactory extends Factory
             'mntr_user' => fake()->unique()->name(),
             'mntr_department' => fake()->word(),
             'mntr_model' => fake()->word(),
+            'mntr_asset' => fake()->word(),
+            'asset_class' => fake()->word(),
             'mntr_serial' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,

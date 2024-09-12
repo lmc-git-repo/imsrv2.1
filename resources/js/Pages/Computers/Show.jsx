@@ -32,6 +32,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                 </div>
                 <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Tag:</strong> {user.comp_asset}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Classification:</strong> {user.asset_class}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Processor:</strong> {user.comp_cpu}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Computer Gen:</strong> {user.comp_gen}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Mac Address:</strong> {user.comp_address}</p>

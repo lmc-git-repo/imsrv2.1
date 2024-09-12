@@ -17,6 +17,8 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
         mntr_user: selectedEditMntr.mntr_user || '',
         mntr_department: selectedEditMntr.mntr_department || '',
         mntr_model: selectedEditMntr.mntr_model || '',
+        mntr_asset: selectedEditMntr.mntr_asset || '',
+        asset_class: selectedEditMntr.asset_class || '',
         // comp_os: selectedEditMntr.comp_os || '',
         // comp_storage: selectedEditMntr.comp_storage || '',
         mntr_serial: selectedEditMntr.mntr_serial || '',
@@ -158,6 +160,42 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
                                 required 
                             />
                             <InputError message={errors.mntr_model} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="mntr_asset" value="Enter Monitor Asset" />
+                            </div>
+                            <TextInput
+                                id="mntr_asset"
+                                type='text'
+                                name='mntr_asset'
+                                value={data.mntr_asset}
+                                onChange={(e) => setData("mntr_asset", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.mntr_asset} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Classification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                value={data.asset_class}
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Clasification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
                         </div>
 
                         <div>

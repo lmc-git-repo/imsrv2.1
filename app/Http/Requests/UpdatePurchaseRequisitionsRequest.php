@@ -36,7 +36,7 @@ class UpdatePurchaseRequisitionsRequest extends FormRequest
             "date_required" => ['required', 'max:255'],
             "department_pr" => ['required', Rule::in($departments)],
             "purpose" => ['required', 'max:255'],
-            "item_category" => ['required', Rule::in(['Consumables','Repair and Maintenance'])],
+            "item_category" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital'])],
             "remarks" => ['required', 'max:255'],
         ];
     }

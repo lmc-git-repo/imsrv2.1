@@ -31,6 +31,7 @@ class ComputersResource extends JsonResource
             'comp_storage' => $this->comp_storage,
             'comp_serial' => $this->comp_serial,
             'comp_asset' => $this->comp_asset,
+            'asset_class' => $this->asset_class,
             'comp_cpu' => $this->comp_cpu,
             'comp_gen' => $this->comp_gen,
             'comp_address' => $this->comp_address,

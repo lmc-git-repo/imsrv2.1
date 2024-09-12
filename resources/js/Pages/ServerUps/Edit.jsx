@@ -22,6 +22,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
         S_UStorage: selectedEditServerUps.S_UStorage || '',
         S_USerial: selectedEditServerUps.S_USerial || '',
         S_UAsset: selectedEditServerUps.S_UAsset || '',
+        asset_class: selectedEditServerUps.asset_class || '',
         S_UCpu: selectedEditServerUps.S_UCpu || '',
         S_UGen: selectedEditServerUps.S_UGen || '',
         S_UAddress: selectedEditServerUps.S_UAddress || '',
@@ -254,6 +255,27 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
 
                         <div>
                             <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Clasification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                value={data.asset_class}
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Classification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
                                 <Label htmlFor="S_UCpu" value="Enter Processor" />
                             </div>
                             <TextInput 
@@ -346,7 +368,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 <option value="Spare">Spare</option>
                                 <option value="For Disposal">For Disposal</option>
                                 <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
+                                <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.S_UStatus} className='mt-2' />
                         </div>

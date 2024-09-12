@@ -28,6 +28,7 @@ class PhonesFactory extends Factory
             'phone_ram' => fake()->word(),
             'phone_serial' => fake()->word(),
             'phone_asset' => fake()->word(),
+            'asset_class' => fake()->word(),
             'phone_cpu' => fake()->word(),
             'phone_address' => fake()->word(),
             'phone_imei' => fake()->word(),

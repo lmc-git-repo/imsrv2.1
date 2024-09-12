@@ -255,8 +255,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditPR }) 
                                 required 
                             >
                                 <option value="">Category: </option>
+                                <option value="Office Supplies">Office Supplies</option>
                                 <option value="Consumables">Consumables</option>
                                 <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
                             </SelectInput>
                             <InputError message={errors.item_category} className='mt-2' />
                         </div>

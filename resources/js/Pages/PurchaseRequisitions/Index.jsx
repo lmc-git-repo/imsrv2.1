@@ -178,8 +178,10 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                             onChange={ (e) => handleSelectChange('item_category', e.target.value)}
                                         >
                                             <option value="">Select Category</option>
+                                            <option value="Office Supplies">Office Supplies</option>
                                             <option value="Consumables">Consumables</option>
                                             <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
                                         </SelectInput>
                                     </div>
                                     <div>

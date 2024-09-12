@@ -37,6 +37,9 @@ class PrintersController extends Controller
                     ->orWhere('printer_model', 'like', "%{$search}%")
                     ->orWhere('printer_asset', 'like', "%{$search}%");
             })
+            ->when(request('asset_class'), function (Builder $query, $assetClass) {
+                $query->where('asset_class', $assetClass);
+            })
             ->when(request('printer_department'), function (Builder $query, $deptPrinter) {
                 $query->where('printer_department', $deptPrinter);
             })

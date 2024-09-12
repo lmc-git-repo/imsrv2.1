@@ -30,6 +30,7 @@ class ServerUPSResource extends JsonResource
             'S_UStorage' => $this->S_UStorage,
             'S_USerial' => $this->S_USerial,
             'S_UAsset' => $this->S_UAsset,
+            'asset_class' => $this->asset_class,
             'S_UCpu' => $this->S_UCpu,
             'S_UGen' => $this->S_UGen,
             'S_UAddress' => $this->S_UAddress,

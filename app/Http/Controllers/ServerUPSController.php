@@ -36,10 +36,14 @@ class ServerUPSController extends Controller
                 $search = (string)$search;
                 $query->where('S_UName', 'like', "%{$search}%")
                     ->orWhere('S_UUser', 'like', "%{$search}%")
+                    ->orWhere('S_UAsset', 'like', "%{$search}%")
                     ->orWhere('S_UModel', 'like', "%{$search}%");
             })
             ->when(request('S_UStatus'), function (Builder $query, $serverUpsStatus) {
                 $query->where('S_UStatus', $serverUpsStatus);
+            })
+            ->when(request('asset_class'), function (Builder $query, $assetClass) {
+                $query->where('asset_class', $assetClass);
             })
             ->when(request('S_UType'), function (Builder $query, $serverUpsType) {
                 $query->where('S_UType', $serverUpsType);

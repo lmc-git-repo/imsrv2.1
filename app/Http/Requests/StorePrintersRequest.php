@@ -36,6 +36,7 @@ class StorePrintersRequest extends FormRequest
             "printer_model" => ['required', 'max:255'],
             "printer_serial" => ['required', 'max:255'],
             "printer_asset" => ['nullable', 'max:255'],
+            "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
             "remarks" => ['required', 'max:255'],
         ];
     }

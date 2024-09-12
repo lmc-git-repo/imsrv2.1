@@ -27,6 +27,7 @@ class MonitorsResource extends JsonResource
             'mntr_model' => $this->mntr_model,
             'mntr_serial' => $this->mntr_serial,
             'mntr_asset' => $this->mntr_asset,
+            'asset_class' => $this->asset_class,
             'remarks' => $this->remarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

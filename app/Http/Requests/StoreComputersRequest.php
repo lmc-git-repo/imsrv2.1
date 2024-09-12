@@ -40,11 +40,12 @@ class StoreComputersRequest extends FormRequest
             "comp_storage" => ['required', 'max:255'],
             "comp_serial" => ['required', 'max:255'],
             "comp_asset" => ['required', 'max:255'],
+            "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
             "comp_cpu" => ['required', 'max:255'],
             "comp_gen" => ['required', Rule::in(['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A'])],
             "comp_address" => ['required', 'max:255'],
             "comp_prdctkey" => ['required', 'max:255'],
-            "comp_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Barrow'])],
+            "comp_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
             "remarks" => ['required', 'max:255'],
         ];
     }

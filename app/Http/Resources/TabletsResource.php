@@ -31,6 +31,7 @@ class TabletsResource extends JsonResource
             'tablet_storage' => $this->tablet_storage,
             'tablet_serial' => $this->tablet_serial,
             'tablet_asset' => $this->tablet_asset,
+            'asset_class' => $this->asset_class,
             'tablet_cpu' => $this->tablet_cpu,
             'tablet_gen' => $this->tablet_gen,
             'tablet_address' => $this->tablet_address,

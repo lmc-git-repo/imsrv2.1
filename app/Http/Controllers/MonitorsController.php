@@ -37,7 +37,11 @@ class MonitorsController extends Controller
                 $search = (string)$search;
                 $query->where('compName', 'like', "%{$search}%")
                     ->orWhere('mntr_user', 'like', "%{$search}%")
+                    ->orWhere('mntr_asset', 'like', "%{$search}%")
                     ->orWhere('mntr_model', 'like', "%{$search}%");
+            })
+            ->when(request('asset_class'), function (Builder $query, $assetClass) {
+                $query->where('asset_class', $assetClass);
             })
             ->when(request('mntr_department'), function (Builder $query, $mntrDept) {
                 $query->where('mntr_department', $mntrDept);

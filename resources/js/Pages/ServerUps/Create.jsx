@@ -21,6 +21,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, serverUpsUsersLi
         S_UStorage: '',
         S_USerial: '',
         S_UAsset: '',
+        asset_class: '',
         S_UCpu: '',
         S_UGen: '',
         S_UAddress: '',
@@ -227,6 +228,26 @@ const CreateModalComponent = ({ show, onClose, departmentsList, serverUpsUsersLi
                             />
                             <InputError message={errors.S_UAsset} className='mt-2' />
                         </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="asset_class" value="Asset Clasification" />
+                            </div>
+                            <SelectInput 
+                                name='asset_class' 
+                                id="asset_class" 
+                                onChange={(e) => setData("asset_class", e.target.value)}
+                                required 
+                            >
+                                <option value="">Choose Asset Classification: </option>
+                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Consumables">Consumables</option>
+                                <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                <option value="Capital">Capital</option>
+                                <option value="N/A">N/A</option>
+                            </SelectInput>
+                            <InputError message={errors.asset_class} className='mt-2' />
+                        </div>
                         
                         <div>
                             <div className="mb-2 block">
@@ -320,7 +341,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, serverUpsUsersLi
                                 <option value="Spare">Spare</option>
                                 <option value="For Disposal">For Disposal</option>
                                 <option value="Already Disposed">Already Disposed</option>
-                                <option value="Barrow">Barrow</option>
+                                <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.S_UStatus} className='mt-2' />
                         </div>

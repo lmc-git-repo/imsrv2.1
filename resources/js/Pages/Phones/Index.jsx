@@ -184,7 +184,7 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                             <option value="Spare">Spare</option>
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
-                                            <option value="Barrow">Barrow</option>
+                                            <option value="Borrow">Borrow</option>
                                         </SelectInput>
                                     </div>
 
