@@ -26,6 +26,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
+    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [departmentPrinter, setDepartmentPrinter] = useState(queryParams.printer_department || '');
 
     // Handle search query change with debouncing to improve performance
@@ -41,12 +42,13 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
               search: query,
               
               // This time add other filters 
+              asset_class: assetClass,
               printer_department: departmentPrinter,
               page: 1
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, departmentPrinter]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, assetClass,departmentPrinter]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -82,11 +84,14 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [departmentPrinter, searchQuery]);
+    }, [assetClass,departmentPrinter, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
+          case 'asset_class':
+            setAssetClass(value);
+            break;  
           case 'printer_department':
             setDepartmentPrinter(value);
             break;
@@ -170,6 +175,22 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                             onKeyPress={e => onKeyPress(e)}
                                         />
                                     </div>
+                                    
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={assetClass}
+                                            onChange={(e) => handleSelectChange('asset_class', e.target.value)}
+                                        >
+                                            <option value="">Choose Asset Classification</option>
+                                            <option value="Office Supplies">Office Supplies</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
+                                            <option value="N/A">N/A</option>
+                                        </SelectInput>
+                                    </div>
+
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"

@@ -25,6 +25,7 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [phoneStatus, setPhoneStatus] = useState(queryParams.phone_status || '');
+    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [departmentPhone, setDepartmentPhone] = useState(queryParams.department_phone || '');
 
     // Handle search query change with debouncing to improve performance
@@ -41,12 +42,13 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
               
               // This time add other filters 
               phone_status: phoneStatus,
+              asset_class: assetClass,
               department_phone: departmentPhone,
               page: 1
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, phoneStatus, departmentPhone]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, phoneStatus, assetClass, departmentPhone]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -82,13 +84,16 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [phoneStatus, departmentPhone, searchQuery]);
+    }, [phoneStatus, assetClass, departmentPhone, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
           case 'phone_status':
             setPhoneStatus(value);
+            break;
+          case 'asset_class':
+            setAssetClass(value);
             break;
           case 'department_phone':
             setDepartmentPhone(value);
@@ -185,6 +190,21 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Borrow">Borrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={assetClass}
+                                            onChange={(e) => handleSelectChange('asset_class', e.target.value)}
+                                        >
+                                            <option value="">Choose Asset Classification</option>
+                                            <option value="Office Supplies">Office Supplies</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
+                                            <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
 

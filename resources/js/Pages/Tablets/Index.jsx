@@ -25,6 +25,7 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [tabletStatus, setTabletStatus] = useState(queryParams.tablet_status || '');
+    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [tabletGen, setTabletGen] = useState(queryParams.tablet_gen || '');
     const [departmentTablet, setDepartmentTablet] = useState(queryParams.department_tablet || '');
 
@@ -42,13 +43,14 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
               
               // This time add other filters 
               tablet_status: tabletStatus,
+              asset_status: assetClass,
               tablet_gen: tabletGen,
               department_tablet: departmentTablet,
               page: 1
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, tabletStatus, tabletGen, departmentTablet]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, tabletStatus, assetClass, tabletGen, departmentTablet]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -84,13 +86,16 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [tabletStatus, tabletGen, departmentTablet, searchQuery]);
+    }, [tabletStatus, assetClass, tabletGen, departmentTablet, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
           case 'tablet_status':
             setTabletStatus(value);
+            break;
+          case 'asset_class':
+            setAssetClass(value);
             break;
           case 'tablet_gen':
             setTabletGen(value);
@@ -190,6 +195,21 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Borrow">Borrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={assetClass}
+                                            onChange={(e) => handleSelectChange('asset_class', e.target.value)}
+                                        >
+                                            <option value="">Choose Asset Classification</option>
+                                            <option value="Office Supplies">Office Supplies</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
+                                            <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
 

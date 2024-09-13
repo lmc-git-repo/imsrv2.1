@@ -25,6 +25,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [compStatus, setCompStatus] = useState(queryParams.comp_status || '');
+    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [compType, setCompType] = useState(queryParams.comp_type || '');
     const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
     const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
@@ -43,6 +44,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
               
               // This time add other filters 
               comp_status: compStatus,
+              asset_class: assetClass,
               comp_type: compType,
               comp_gen: compGen,
               department_comp: departmentComp,
@@ -50,7 +52,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, compStatus, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, compStatus, assetClass, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -86,13 +88,16 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [compStatus, compType, compGen, departmentComp, searchQuery]);
+    }, [compStatus, assetClass, compType, compGen, departmentComp, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
           case 'comp_status':
             setCompStatus(value);
+            break;
+          case 'asset_class':
+            setAssetClass(value);
             break;
           case 'comp_type':
             setCompType(value);
@@ -195,6 +200,21 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Borrow">Borrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={assetClass}
+                                            onChange={(e) => handleSelectChange('asset_class', e.target.value)}
+                                        >
+                                            <option value="">Choose Asset Classification</option>
+                                            <option value="Office Supplies">Office Supplies</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
+                                            <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
 

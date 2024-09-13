@@ -25,6 +25,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [serverUpsStatus, setServerUpsStatus] = useState(queryParams.S_UStatus || '');
+    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [serverUpsType, setServerUpsType] = useState(queryParams.S_UType || '');
     const [serverUpsGen, setServerUpsGen] = useState(queryParams.S_UGen || '');
     const [departmentSU, setdepartmentSU] = useState(queryParams.department_S_U || '');
@@ -43,6 +44,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
               
               // This time add other filters 
               S_UStatus: serverUpsStatus,
+              asset_class: assetClass,
               S_UType: serverUpsType,
               S_UGen: serverUpsGen,
               department_S_U: departmentSU,
@@ -50,7 +52,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, serverUpsStatus, serverUpsType, serverUpsGen, departmentSU]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, serverUpsStatus, assetClass, serverUpsType, serverUpsGen, departmentSU]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -86,13 +88,16 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [serverUpsStatus, serverUpsType, serverUpsGen, departmentSU, searchQuery]);
+    }, [serverUpsStatus, assetClass, serverUpsType, serverUpsGen, departmentSU, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
           case 'S_UStatus':
             setServerUpsStatus(value);
+            break;
+          case 'asset_class':
+            setAssetClass(value);
             break;
           case 'S_UType':
             setServerUpsType(value);
@@ -197,6 +202,22 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             <option value="Borrow">Borrow</option>
                                         </SelectInput>
                                     </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={assetClass}
+                                            onChange={(e) => handleSelectChange('asset_class', e.target.value)}
+                                        >
+                                            <option value="">Choose Asset Classification</option>
+                                            <option value="Office Supplies">Office Supplies</option>
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="Repair and Maintenance">Repair and Maintenance</option>
+                                            <option value="Capital">Capital</option>
+                                            <option value="N/A">N/A</option>
+                                        </SelectInput>
+                                    </div>
+
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
