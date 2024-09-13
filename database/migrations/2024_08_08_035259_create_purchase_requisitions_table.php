@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('department_pr');
             $table->foreign('department_pr')->references('dept_list')->on('departments');
             $table->longText('purpose');
-            $table->enum('item_category',['Office Supplies','Consumables','Repair and Maintenance','Capital']); 
+            $table->enum('item_category',['Office Supplies','Consumables','Repair and Maintenance','Capital'])->nullable(); 
             $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

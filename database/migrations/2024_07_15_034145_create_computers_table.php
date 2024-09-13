@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('comp_storage');
             $table->string('comp_serial');
             $table->string('comp_asset');
-            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A']);
+            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])->nullable();
             $table->longText('comp_cpu');
             $table->enum('comp_gen',['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A']);
             $table->longText('comp_address');

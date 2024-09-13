@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('S_UStorage');
             $table->string('S_USerial');
             $table->string('S_UAsset');
-            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A']);
+            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])->nullable();
             $table->longText('S_UCpu');
             $table->enum('S_UGen',['3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th','Pentium','N/A']);
             $table->longText('S_UAddress');

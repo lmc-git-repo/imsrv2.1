@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreign('mntr_department')->references('dept_list')->on('departments');
             $table->string('mntr_model');
             $table->string('mntr_serial');
-            $table->string('mntr_asset');
-            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A']);
+            $table->string('mntr_asset')->nullable();
+            $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])->nullable();
             $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
