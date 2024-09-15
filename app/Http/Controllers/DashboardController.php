@@ -13,29 +13,44 @@ class DashboardController extends Controller
 {    
     public function index()
     {
-        $statuses = ['Deployed', 'Spare', 'Barrow'];
+        $statuses = ['Deployed', 'Spare', 'Borrow'];
         $generations = ['N/A', 'Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
         
-        $totalOperationals = Computers::query()->whereIn('comp_status', ['Deployed','Barrow'])->count()
-            + Tablets::query()->whereIn('tablet_status', ['Deployed','Barrow'])->count()
-            + ServerUPS::query()->whereIn('S_UStatus', ['Deployed','Barrow'])->count()
-            + Phones::query()->whereIn('phone_status', ['Deployed','Barrow'])->count();
+        $totalOperationals = Computers::query()->whereIn('comp_status', ['Deployed','Borrow','Spare'])->count()
+            + Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->count()
+            + ServerUPS::query()->whereIn('S_UStatus', ['Deployed','Borrow','Spare'])->count()
+            + Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->count();
+        
+        // Fetch records for each model where status matches 'Deployed', 'Borrow', or 'Spare'
+        $computers = Computers::query()
+        ->whereIn('comp_status', $statuses)
+        ->get();
 
-            $operationalsTotal = Computers::query()->whereIn('comp_status', ['Deployed','Barrow'])->get()
-            ->merge(Tablets::query()->whereIn('tablet_status', ['Deployed','Barrow'])->get())
-            ->merge(ServerUPS::query()->whereIn('S_UStatus', ['Deployed','Barrow'])->get())
-            ->merge(Phones::query()->whereIn('phone_status', ['Deployed','Barrow'])->get());
+        $tablets = Tablets::query()
+            ->whereIn('tablet_status', $statuses)
+            ->get();
+
+        $serverUPS = ServerUPS::query()
+            ->whereIn('S_UStatus', $statuses)
+            ->get();
+
+        $phones = Phones::query()
+            ->whereIn('phone_status', $statuses)
+            ->get();
+
+            // Merge all records into one collection
+        $operationalsTotal = $computers->merge($tablets)->merge($serverUPS)->merge($phones);
         //end
-        // dd($operationalsTotal);
-
+        
+        
         $totalUsers = Computers::query()->whereIn('comp_type', ['Desktop','Laptop'])->count()
             + Tablets::query()->count()
             + ServerUPS::query()->count()
             + Phones::query()->count();
 
         $totalSpareUnits = Computers::query()->where('comp_status', 'Spare')->count();
-        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Barrow'])->count();
-        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Barrow'])->count();
+        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Borrow'])->count();
+        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->count();
         $totalTablets = Tablets::query()->count();
         $totalPhones = Phones::query()->count();
         
@@ -55,11 +70,11 @@ class DashboardController extends Controller
         $totalNACeleron = Computers::query()
         ->where(function ($query) {
             $query->where('comp_gen', 'N/A')
-                ->whereIn('comp_status', ['Deployed', 'Spare', 'Barrow'])
+                ->whereIn('comp_status', ['Deployed', 'Spare', 'Borrow'])
                 ->orWhere('comp_cpu', 'like', '%celeron%');
         })->count()
         + Tablets::query()
-        ->whereIn('tablet_status', ['Deployed', 'Spare', 'Barrow', 'For Disposal', 'Already Disposed'])
+        ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
         ->where('tablet_cpu', 'like', '%celeron%')->count();
 
         $totalDesktopPentiumto7thGen = Computers::query()

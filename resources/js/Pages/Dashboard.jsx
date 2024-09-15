@@ -1,11 +1,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
-import Show from './Show';
+import { useState } from 'react';
+import Modal from './Show';
 
 // Reusable Card Component
-const Card = ({ title, value = 0, color, textColor }) => (
-    <div className={`bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 ${color} hover:scale-105 transition-transform duration-300 ease-in-out`}>
+const Card = ({ title, value = 0, color, textColor, onClick  }) => (
+    <div onClick={onClick} className={`bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg border-l-4 ${color} hover:scale-105 transition-transform duration-300 ease-in-out`}>
         <div className="p-6 text-gray-900 dark:text-gray-100">
             <h3 className={`text-xl font-semibold ${textColor}`}>{title}</h3>
             <p>{value}</p>
@@ -20,31 +20,12 @@ export default function Dashboard({
     total9thGen, total10thGen, total11thGen, total12thGen, total13thGen, totalDesktopPentiumto7thGen,
     totalLaptopPentiumto7thGen, totalDisposedOrDisposal
  }) {
-    useEffect(() => {
-        console.log(operationalsTotal);
-    }, [operationalsTotal]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedData, setSelectedData] = useState({});
-    const [tableData, setTableData] = useState([]);
+    const [selectedCard, setSelectedCard] = useState({});
 
-    const exampleTableData1 = [
-        { column1: 'Operational 1', column2: 'Data 2', column3: 'Data 3' },
-        { column1: 'Operational 2', column2: 'Data 5', column3: 'Data 6' },
-        { column1: 'Operational 3', column2: 'Data 8', column3: 'Data 9' },
-    ];
-
-    const exampleTableData2 = [
-        { column1: 'User 1', column2: 'Info 2', column3: 'Info 3' },
-        { column1: 'User 2', column2: 'Info 5', column3: 'Info 6' },
-        { column1: 'User 3', column2: 'Info 8', column3: 'Info 9' },
-    ];
-
-    // Add more example table data as needed...
-
-    const openModal = (data, tableData) => {
-        setSelectedData(data);
-        setTableData(tableData);
+    const openModal = (card) => {
+        setSelectedCard(card);
         setIsModalOpen(true);
     };
 
@@ -78,10 +59,10 @@ export default function Dashboard({
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {/* General Metrics */}
-                    <div onClick={() => openModal({ title: "Operationals", value: totalOperationals }, exampleTableData1)}>
+                    <div onClick={() => openModal({ title: "Operationals", value: operationalsTotal.length })}>
                         <Card title="Operationals" value={totalOperationals} color="border-green-400" textColor="text-green-600"/>
                     </div>
-                    <div onClick={() => openModal({ title: "Total Users", value: totalUsers }, exampleTableData2)}>
+                    <div onClick={() => openModal({ title: "Total Users", value: totalUsers })}>
                         <Card title="Users" value={totalUsers} color="border-amber-400" textColor="text-amber-600" />
                     </div>
                     <div onClick={() => openModal({ title: "Total Spare Units", value: totalSpareUnits })}>
@@ -123,9 +104,13 @@ export default function Dashboard({
                     </div>
                 </div>
             </div>
-
-            {/* Modal Component */}
-            <Show isOpen={isModalOpen} closeModal={closeModal} data={selectedData} tableData={tableData} />
+            {/* Modal */}
+            <Modal 
+                isOpen={isModalOpen} 
+                onClose={closeModal} 
+                title={selectedCard.title} 
+                value={selectedCard.value} 
+            />
         </AuthenticatedLayout>
     );
 }
