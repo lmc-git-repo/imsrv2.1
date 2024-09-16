@@ -20,6 +20,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
         asset_class: '',
         mntr_serial: '',
         // mntr_asset: '',
+        datePurchased: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -207,6 +208,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList, mntrUsersList, c
                             />
                             <InputError message={errors.mntr_asset} className='mt-2' />
                         </div> */}
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
+                        </div>
                         
                         <div>
                             <div className="mb-2 block">

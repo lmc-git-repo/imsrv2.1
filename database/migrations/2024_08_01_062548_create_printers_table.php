@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('printer_serial');
             $table->string('printer_asset')->nullable();
             $table->enum('asset_class',['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])->nullable();
+            $table->date('datePurchased')->nullable();
             $table->string('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

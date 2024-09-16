@@ -22,12 +22,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
         // comp_os: selectedEditMntr.comp_os || '',
         // comp_storage: selectedEditMntr.comp_storage || '',
         mntr_serial: selectedEditMntr.mntr_serial || '',
-        // comp_asset: selectedEditMntr.comp_asset || '',
-        // comp_cpu: selectedEditMntr.comp_cpu || '',
-        // comp_gen: selectedEditMntr.comp_gen || '',
-        // comp_address: selectedEditMntr.comp_address || '',
-        // comp_prdctkey: selectedEditMntr.comp_prdctkey || '',
-        // comp_status: selectedEditMntr.comp_status || '',
+        datePurchased: selectedEditMntr.datePurchased || '',
         remarks: selectedEditMntr.remarks || '',
         _method: 'PUT',
     });
@@ -227,6 +222,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
                             />
                             <InputError message={errors.mntr_asset} className='mt-2' />
                         </div> */}
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
+                        </div>
 
                         <div>
                             <div className="mb-2 block">

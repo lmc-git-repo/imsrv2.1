@@ -44,6 +44,7 @@ class StorePhonesRequest extends FormRequest
             "phone_address" => ['required', 'max:255'],
             "phone_imei" => ['required', 'max:255'],
             "phone_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
+            "datePurchased" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }

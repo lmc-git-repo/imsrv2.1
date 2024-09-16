@@ -28,6 +28,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
         S_UAddress: selectedEditServerUps.S_UAddress || '',
         S_UPrdctkey: selectedEditServerUps.S_UPrdctkey || '',
         S_UStatus: selectedEditServerUps.S_UStatus || '',
+        datePurchased: selectedEditServerUps.datePurchased || '',
         S_URemarks: selectedEditServerUps.S_URemarks || '',
         _method: 'PUT',
     });
@@ -371,6 +372,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                 <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.S_UStatus} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
                         </div>
 
                         <div>

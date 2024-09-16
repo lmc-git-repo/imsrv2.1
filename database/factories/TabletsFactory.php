@@ -34,6 +34,7 @@ class TabletsFactory extends Factory
             'tablet_address' => fake()->word(),
             'tablet_prdctkey' => fake()->word(),
             'tablet_status' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,

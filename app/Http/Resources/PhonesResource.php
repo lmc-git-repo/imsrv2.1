@@ -36,6 +36,7 @@ class PhonesResource extends JsonResource
             'phone_address' => $this->phone_address,
             'phone_imei' => $this->phone_imei,
             'phone_status' => $this->phone_status,
+            'datePurchased' => $this->datePurchased,
             'remarks' => $this->remarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

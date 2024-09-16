@@ -44,6 +44,7 @@ class StoreServerUPSRequest extends FormRequest
             "S_UAddress" => ['required', 'max:255'],
             "S_UPrdctkey" => ['required', 'max:255'],
             "S_UStatus" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
+            "datePurchased" => ['nullable', 'max:255'],
             "S_URemarks" => ['required', 'max:255'],
         ];
     }

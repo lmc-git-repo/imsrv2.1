@@ -25,6 +25,7 @@ class PrintersFactory extends Factory
             'printer_serial' => fake()->word(),
             'printer_asset' => fake()->word(),
             'asset_class' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,

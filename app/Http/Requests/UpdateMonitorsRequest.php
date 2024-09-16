@@ -39,6 +39,7 @@ class UpdateMonitorsRequest extends FormRequest
             "mntr_asset" => ['required', 'max:255'],
             "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
             "mntr_serial" => ['required', 'max:255'],
+            "datePurchased" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }

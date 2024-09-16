@@ -37,6 +37,7 @@ class ComputersResource extends JsonResource
             'comp_address' => $this->comp_address,
             'comp_prdctkey' => $this->comp_prdctkey,
             'comp_status' => $this->comp_status,
+            'datePurchased' => $this->datePurchased,
             'remarks' => $this->remarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

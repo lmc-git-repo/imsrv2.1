@@ -26,6 +26,7 @@ class MonitorsFactory extends Factory
             'mntr_asset' => fake()->word(),
             'asset_class' => fake()->word(),
             'mntr_serial' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,

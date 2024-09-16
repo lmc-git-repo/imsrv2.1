@@ -32,6 +32,7 @@ return new class extends Migration
             $table->longText('tablet_address');
             $table->longText('tablet_prdctkey');
             $table->enum('tablet_status',['Deployed','Spare','For Disposal','Already Disposed','Borrow']);
+            $table->date('datePurchased')->nullable();
             $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

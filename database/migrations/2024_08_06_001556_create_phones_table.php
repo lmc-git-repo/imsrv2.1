@@ -35,6 +35,7 @@ return new class extends Migration
             $table->longText('phone_imei');
             $table->enum('phone_status',['Deployed','Spare','For Disposal','Already Disposed','Borrow']);
             $table->longText('remarks');
+            $table->date('datePurchased')->nullable();
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();

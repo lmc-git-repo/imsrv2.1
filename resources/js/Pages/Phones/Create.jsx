@@ -26,6 +26,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameL
         phone_address: '',
         phone_imei: '',
         phone_status: '',
+        datePurchased: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -322,6 +323,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList, phoneUsersFnameL
                                 <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.phone_status} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
                         </div>
                         
                         <div>

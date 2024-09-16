@@ -33,6 +33,7 @@ return new class extends Migration
             $table->longText('comp_address');
             $table->longText('comp_prdctkey');
             $table->enum('comp_status',['Deployed','Spare','For Disposal','Already Disposed','Borrow']);
+            $table->date('datePurchased')->nullable();
             $table->longText('remarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

@@ -36,6 +36,7 @@ class UpdatePrintersRequest extends FormRequest
             "printer_serial" => ['required', 'max:255'],
             "printer_asset" => ['nullable', 'max:255'],
             "asset_class" => ['required', Rule::in(['Office Supplies','Consumables','Repair and Maintenance','Capital','N/A'])],
+            "datePurchased" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }

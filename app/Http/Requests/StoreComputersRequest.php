@@ -46,6 +46,7 @@ class StoreComputersRequest extends FormRequest
             "comp_address" => ['required', 'max:255'],
             "comp_prdctkey" => ['required', 'max:255'],
             "comp_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
+            "datePurchased" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }

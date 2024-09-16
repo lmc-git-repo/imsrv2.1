@@ -40,6 +40,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                         {/* {user.status} */}
                         <span className={'px-2 rounded-e-full text-white ' + PHONES_STATUS_CLASS_MAP[user.phone_status]}>{PHONES_STATUS_TEXT_MAP[user.phone_status]}</span>
                     </p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Purchased:</strong> {user.datePurchased}</p>  
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>

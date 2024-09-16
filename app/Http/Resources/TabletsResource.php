@@ -37,6 +37,7 @@ class TabletsResource extends JsonResource
             'tablet_address' => $this->tablet_address,
             'tablet_prdctkey' => $this->tablet_prdctkey,
             'tablet_status' => $this->tablet_status,
+            'datePurchased' => $this->datePurchased,
             'remarks' => $this->remarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

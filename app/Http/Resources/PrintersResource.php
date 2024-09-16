@@ -27,6 +27,7 @@ class PrintersResource extends JsonResource
             'printer_serial' => $this->printer_serial,
             'printer_asset' => $this->printer_asset,
             'asset_class' => $this->asset_class,
+            'datePurchased' => $this->datePurchased,
             'remarks' => $this->remarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

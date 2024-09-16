@@ -45,6 +45,7 @@ class StoreTabletsRequest extends FormRequest
             "tablet_address" => ['required', 'max:255'],
             "tablet_prdctkey" => ['required', 'max:255'],
             "tablet_status" => ['required', Rule::in(['Deployed','Spare','For Disposal', 'Already Disposed', 'Borrow'])],
+            "datePurchased" => ['nullable', 'max:255'],
             "remarks" => ['required', 'max:255'],
         ];
     }

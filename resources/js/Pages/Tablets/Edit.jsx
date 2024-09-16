@@ -29,6 +29,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
         tablet_address: selectedEditTablet.tablet_address || '',
         tablet_prdctkey: selectedEditTablet.tablet_prdctkey || '',
         tablet_status: selectedEditTablet.tablet_status || '',
+        datePurchased: selectedEditTablet.datePurchased || '',
         remarks: selectedEditTablet.remarks || '',
         _method: 'PUT',
     });
@@ -392,6 +393,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
                                 <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.tablet_status} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
                         </div>
 
                         <div>

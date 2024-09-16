@@ -35,6 +35,7 @@ class ComputersFactory extends Factory
             'comp_address' => fake()->word(),
             'comp_prdctkey' => fake()->word(),
             'comp_status' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,

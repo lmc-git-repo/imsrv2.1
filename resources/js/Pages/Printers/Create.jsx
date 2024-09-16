@@ -19,6 +19,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
         printer_serial: '',
         printer_asset: '',
         asset_class: '',
+        datePurchased: '',
         remarks: '',
     })
     const [imagePreview, setImagePreview] = useState(null);
@@ -191,6 +192,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList, prntrUsersList }
                                 <option value="N/A">N/A</option>
                             </SelectInput>
                             <InputError message={errors.asset_class} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
                         </div>
                         
                         <div>

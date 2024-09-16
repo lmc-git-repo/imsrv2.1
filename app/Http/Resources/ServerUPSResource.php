@@ -36,6 +36,7 @@ class ServerUPSResource extends JsonResource
             'S_UAddress' => $this->S_UAddress,
             'S_UPrdctkey' => $this->S_UPrdctkey,
             'S_UStatus' => $this->S_UStatus,
+            'datePurchased' => $this->datePurchased,
             'S_URemarks' => $this->S_URemarks,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

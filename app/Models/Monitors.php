@@ -11,7 +11,7 @@ class Monitors extends Model
 
     protected $primaryKey = 'monitor_id';
     protected $fillable = [
-        'compName', 'img_path', 'mntr_user', 'mntr_department', 'mntr_model', 'mntr_asset', 'asset_class', 'mntr_serial', 'remarks', 'created_by', 'updated_by'
+        'compName', 'img_path', 'mntr_user', 'mntr_department', 'mntr_model', 'mntr_asset', 'asset_class', 'mntr_serial', 'datePurchased', 'remarks', 'created_by', 'updated_by'
     ];
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');

@@ -26,6 +26,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
         phone_address: selectedEditPhone.phone_address || '',
         phone_imei: selectedEditPhone.phone_imei || '',
         phone_status: selectedEditPhone.phone_status || '',
+        datePurchased: selectedEditPhone.datePurchased || '',
         remarks: selectedEditPhone.remarks || '',
         _method: 'PUT',
     });
@@ -347,6 +348,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                                 <option value="Borrow">Borrow</option>
                             </SelectInput>
                             <InputError message={errors.phone_status} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="datePurchased" value="Date Purchased: " />
+                            </div>
+                            <TextInput
+                                id="datePurchased"
+                                type='date'
+                                name='datePurchased'
+                                value={data.datePurchased}
+                                onChange={(e) => setData("datePurchased", e.target.value)}
+                                required
+                            />
+                            <InputError message={errors.datePurchased} className='mt-2' />
                         </div>
 
                         <div>

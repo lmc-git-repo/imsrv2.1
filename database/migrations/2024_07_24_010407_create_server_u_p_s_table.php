@@ -31,6 +31,7 @@ return new class extends Migration
             $table->longText('S_UAddress');
             $table->longText('S_UPrdctkey');
             $table->enum('S_UStatus',['Deployed','Spare','For Disposal','Already Disposed','Borrow']);
+            $table->date('datePurchased')->nullable();
             $table->longText('S_URemarks');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');

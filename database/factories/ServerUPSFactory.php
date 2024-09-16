@@ -34,6 +34,7 @@ class ServerUPSFactory extends Factory
             'S_UAddress' => fake()->word(),
             'S_UPrdctkey' => fake()->word(),
             'S_UStatus' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'S_URemarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,

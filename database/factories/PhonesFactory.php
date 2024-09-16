@@ -33,6 +33,7 @@ class PhonesFactory extends Factory
             'phone_address' => fake()->word(),
             'phone_imei' => fake()->word(),
             'phone_status' => fake()->word(),
+            'datePurchased' => fake()->word(),
             'remarks' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,
