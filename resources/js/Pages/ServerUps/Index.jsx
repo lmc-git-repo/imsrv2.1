@@ -16,6 +16,7 @@ import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 import { debounce } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, serverUps, departmentsList, serverUpsUsersList, queryParams = null, success}) {
     
@@ -136,6 +137,33 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
     const handlePrint = (serverups) => {
         printAssetTag(serverups, 'serverups');
     };
+
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectItem = (S_UID) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(S_UID)
+            ? prevSelected.filter((id) => id !== S_UID)
+            : [...prevSelected, S_UID]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDs = serverUps.data.map((item) => item.S_UID);
+            setSelectedItems(allIDs);
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = serverUps.data.filter((item) =>
+            selectedItems.includes(item.S_UID)
+        );
+         // Call the bulk print function
+        bulkPrintAssetTags(selectedItemDetails, 'serverups');
+    };
     
   return (
     <AuthenticatedLayout
@@ -143,19 +171,28 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Server / UPS</h2>
-                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                    <Button 
-                        onClick={() => openCreateModal()} 
-                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                <div className='flex justify-between w-1/4'>
+                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                        <Button 
+                            onClick={() => openCreateModal()} 
+                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        >
+                            <span className='flex items-center'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
+                                </svg>
+                                Add
+                            </span>
+                        </Button>
+                    )}
+                    <button
+                        onClick={handleBulkPrint}
+                        disabled={selectedItems.length === 0}
+                        className="bg-blue-500 text-white rounded shadow p-2"
                     >
-                        <span className='flex items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
-                            </svg>
-                            Add
-                        </span>
-                    </Button>
-                )}
+                        Bulk Print Asset Tags
+                    </button>
+                </div>
             </div>
         }
     >
@@ -280,6 +317,9 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th>
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <TableHeading
                                                 name="S_UID"
                                                 sort_field={queryParams.sort_field} 
@@ -437,6 +477,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -447,6 +488,13 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                         ) : serverUps.data && serverUps.data.length > 0 ? (
                                                 serverUps.data.map(serverups => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={serverups.S_UID}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(serverups.S_UID)}
+                                                                onChange={() => handleSelectItem(serverups.S_UID)}
+                                                            />
+                                                        </td>
                                                         <td className="px-3 py-2">{serverups.S_UID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("serverUps.show", { S_UID: serverups.S_UID })}>

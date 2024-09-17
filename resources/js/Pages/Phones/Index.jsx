@@ -16,6 +16,7 @@ import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 import { debounce } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, phones, departmentsList, phoneUsersFnameList, queryParams = null, success}) {
     
@@ -127,25 +128,60 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
         printAssetTag(phone, 'phone');
     };
     
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectItem = (phone_id) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(phone_id)
+            ? prevSelected.filter((id) => id !== phone_id)
+            : [...prevSelected, phone_id]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDs = phones.data.map((item) => item.phone_id);
+            setSelectedItems(allIDs);
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = phones.data.filter((item) =>
+            selectedItems.includes(item.phone_id)
+        );
+         // Call the bulk print function
+        bulkPrintAssetTags(selectedItemDetails, 'phone');
+    };
   return (
     <AuthenticatedLayout
         user={auth.user}
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Phones</h2>
-                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                    <Button 
-                        onClick={() => openCreateModal()} 
-                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                <div className='flex justify-between w-1/4'>
+                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                        <Button 
+                            onClick={() => openCreateModal()} 
+                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        >
+                            <span className='flex items-center'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                                </svg>
+                                Add
+                            </span>
+                        </Button>
+                    )}
+                    <button
+                        onClick={handleBulkPrint}
+                        disabled={selectedItems.length === 0}
+                        className="bg-blue-500 text-white rounded shadow p-2"
                     >
-                        <span className='flex items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                            </svg>
-                            Add
-                        </span>
-                    </Button>
-                )}
+                        Bulk Print Asset Tags
+                    </button>
+                </div>
             </div>
         }
     >
@@ -231,6 +267,9 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th>
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <TableHeading
                                                 name="phone_id"
                                                 sort_field={queryParams.sort_field} 
@@ -389,6 +428,7 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -399,6 +439,13 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                         ) : phones.data && phones.data.length > 0 ? (
                                                 phones.data.map(phone => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={phone.phone_id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(phone.phone_id)}
+                                                                onChange={() => handleSelectItem(phone.phone_id)}
+                                                            />
+                                                        </td>
                                                         <td className="px-3 py-2">{phone.phone_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("phones.show", { phone_id: phone.phone_id })}>

@@ -16,6 +16,7 @@ import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
 import { debounce } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, tablets, departmentsList, tabletUsersList, tabletUsersFnameList, queryParams = null, success}) {
     
@@ -131,6 +132,33 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
     const handlePrint = (tablet) => {
         printAssetTag(tablet, 'tablet');
     };
+
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectItem = (tablet_id) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(tablet_id)
+            ? prevSelected.filter((id) => id !== tablet_id)
+            : [...prevSelected, tablet_id]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDs = tablets.data.map((item) => item.tablet_id);
+            setSelectedItems(allIDs);
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = tablets.data.filter((item) =>
+            selectedItems.includes(item.tablet_id)
+        );
+         // Call the bulk print function
+        bulkPrintAssetTags(selectedItemDetails, 'tablet');
+    };
     
   return (
     <AuthenticatedLayout
@@ -138,19 +166,28 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Tablets</h2>
-                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                    <Button 
-                        onClick={() => openCreateModal()} 
-                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                <div className='flex justify-between w-1/4'>
+                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                        <Button 
+                            onClick={() => openCreateModal()} 
+                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        >
+                            <span className='flex items-center'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-15a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                                Add
+                            </span>
+                        </Button>
+                    )}
+                    <button
+                        onClick={handleBulkPrint}
+                        disabled={selectedItems.length === 0}
+                        className="bg-blue-500 text-white rounded shadow p-2"
                     >
-                        <span className='flex items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-15a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25Z" />
-                            </svg>
-                            Add
-                        </span>
-                    </Button>
-                )}
+                        Bulk Print Asset Tags
+                    </button>
+                </div>
             </div>
         }
     >
@@ -248,6 +285,9 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th>
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <TableHeading
                                                 name="tablet_id"
                                                 sort_field={queryParams.sort_field} 
@@ -414,6 +454,7 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -424,6 +465,13 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                         ) : tablets.data && tablets.data.length > 0 ? (
                                                 tablets.data.map(tablet => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={tablet.tablet_id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(tablet.tablet_id)}
+                                                                onChange={() => handleSelectItem(tablet.tablet_id)}
+                                                            />
+                                                        </td>
                                                         <td className="px-3 py-2">{tablet.tablet_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("tablets.show", { tablet_id: tablet.tablet_id })}>

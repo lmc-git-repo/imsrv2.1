@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { debounce } from 'lodash'
 import SelectInput from '@/Components/SelectInput'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, monitors, departmentsList, mntrUsersList, compNameList, queryParams = null, success}) {
     
@@ -123,6 +124,33 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
     const handlePrint = (monitor) => {
         printAssetTag(monitor, 'monitor');
     };
+
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectItem = (monitor_id) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(monitor_id)
+            ? prevSelected.filter((id) => id !== monitor_id)
+            : [...prevSelected, monitor_id]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDs = monitors.data.map((item) => item.monitor_id);
+            setSelectedItems(allIDs);
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = monitors.data.filter((item) =>
+            selectedItems.includes(item.monitor_id)
+        );
+         // Call the bulk print function
+        bulkPrintAssetTags(selectedItemDetails, 'monitor');
+    };
     
   return (
     <AuthenticatedLayout
@@ -130,19 +158,28 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Monitors</h2>
-                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                    <Button 
-                        onClick={() => openCreateModal()} 
-                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                <div className='flex justify-between w-1/4'>
+                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                        <Button 
+                            onClick={() => openCreateModal()} 
+                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        >
+                            <span className='flex items-center'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                                </svg>
+                                Add
+                            </span>
+                        </Button>
+                    )}
+                    <button
+                        onClick={handleBulkPrint}
+                        disabled={selectedItems.length === 0}
+                        className="bg-blue-500 text-white rounded shadow p-2"
                     >
-                        <span className='flex items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
-                            </svg>
-                            Add
-                        </span>
-                    </Button>
-                )}
+                        Bulk Print Asset Tags
+                    </button>
+                </div>
             </div>
         }
     >
@@ -214,6 +251,9 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th>
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <TableHeading
                                                 name="monitor_id"
                                                 sort_field={queryParams.sort_field} 
@@ -308,6 +348,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -318,6 +359,13 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                         ) : monitors.data && monitors.data.length > 0 ? (
                                                 monitors.data.map(monitor => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={monitor.monitor_id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(monitor.monitor_id)}
+                                                                onChange={() => handleSelectItem(monitor.monitor_id)}
+                                                            />
+                                                        </td>
                                                         <td className="px-3 py-2">{monitor.monitor_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("monitors.show", { monitor_id: monitor.monitor_id })}>

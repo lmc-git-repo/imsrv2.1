@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { debounce } from 'lodash'
 import SelectInput from '@/Components/SelectInput'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, printers, departmentsList, prntrUsersList, queryParams = null, success}) {
     
@@ -123,6 +124,33 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
     const handlePrint = (printer) => {
         printAssetTag(printer, 'printer');
     };
+
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleSelectItem = (printer_id) => {
+        setSelectedItems((prevSelected) =>
+            prevSelected.includes(printer_id)
+            ? prevSelected.filter((id) => id !== printer_id)
+            : [...prevSelected, printer_id]
+        );
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDs = printers.data.map((item) => item.printer_id);
+            setSelectedItems(allIDs);
+        } else {
+            setSelectedItems([]);
+        }
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = printers.data.filter((item) =>
+            selectedItems.includes(item.printer_id)
+        );
+         // Call the bulk print function
+        bulkPrintAssetTags(selectedItemDetails, 'printer');
+    };
     
   return (
     <AuthenticatedLayout
@@ -130,19 +158,28 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Printers</h2>
-                {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                    <Button 
-                        onClick={() => openCreateModal()} 
-                        className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                <div className='flex justify-between w-1/4'>
+                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                        <Button 
+                            onClick={() => openCreateModal()} 
+                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        >
+                            <span className='flex items-center'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                </svg>
+                                Add
+                            </span>
+                        </Button>
+                    )}
+                    <button
+                        onClick={handleBulkPrint}
+                        disabled={selectedItems.length === 0}
+                        className="bg-blue-500 text-white rounded shadow p-2"
                     >
-                        <span className='flex items-center'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-                            </svg>
-                            Add
-                        </span>
-                    </Button>
-                )}
+                        Bulk Print Asset Tags
+                    </button>
+                </div>
             </div>
         }
     >
@@ -214,6 +251,9 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th>
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <TableHeading
                                                 name="printer_id"
                                                 sort_field={queryParams.sort_field} 
@@ -300,6 +340,7 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
                                             <th className="px-3 py-3"></th>
+                                            <th className="px-3 py-3"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -310,6 +351,13 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                         ) : printers.data && printers.data.length > 0 ? (
                                                 printers.data.map(printer => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={printer.printer_id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedItems.includes(printer.printer_id)}
+                                                                onChange={() => handleSelectItem(printer.printer_id)}
+                                                            />
+                                                        </td>
                                                         <td className="px-3 py-2">{printer.printer_id}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
                                                             {/* <Link href={route("printers.show", { printer_id: printer.printer_id })}>
