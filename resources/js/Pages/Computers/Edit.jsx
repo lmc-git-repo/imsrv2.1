@@ -414,7 +414,6 @@ const EditModalComponent = ({ show, onClose, listDepartments, listCompUsers, lis
                                             name='datePurchased'
                                             value={data.datePurchased}
                                             onChange={(e) => setData("datePurchased", e.target.value)}
-                                            required
                                         />
                                         <InputError message={errors.datePurchased} className='mt-2' />
                                     </div>

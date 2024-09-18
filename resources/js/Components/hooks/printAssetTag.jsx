@@ -2,61 +2,106 @@
 const generateAssetContent = (asset, assetType) => {
     const assetDetails = {
         computer: `
-            <h3>${asset.comp_name}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.comp_asset}</p>
-            <p><strong>Computer ID:</strong> ${asset.CID}</p>
-            <p><strong>Type:</strong> ${asset.comp_type}</p>
-            <p><strong>Generation:</strong> ${asset.comp_gen}</p>
-            <p><strong>MAC Address:</strong> ${asset.comp_address}</p>
-            <p><strong>Serial:</strong> ${asset.comp_serial}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.department_comp}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.comp_asset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.comp_model}</td>
+                <td class="label">Department:</td><td>${asset.department_comp}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.comp_model}</td>
+                <td class="label">Issued To:</td><td>${asset.fullName}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.comp_serial}</td>
+            </tr>
         `,
         serverups: `
-            <h3>${asset.S_UName}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.S_UAsset}</p>
-            <p><strong>ID:</strong> ${asset.S_UID}</p>
-            <p><strong>Type:</strong> ${asset.S_UType}</p>
-            <p><strong>Generation:</strong> ${asset.S_UGen}</p>
-            <p><strong>MAC Address:</strong> ${asset.S_UAddress}</p>
-            <p><strong>Serial:</strong> ${asset.S_USerial}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.department_S_U}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.S_UAsset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.S_UModel}</td>
+                <td class="label">Department:</td><td>${asset.department_S_U}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.S_UModel}</td>
+                <td class="label">Issued To:</td><td>${asset.S_UUser}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.S_USerial}</td>
+            </tr>
         `,
         monitor: `
-            <h3>${asset.compName}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.mntr_asset}</p>
-            <p><strong>ID:</strong> ${asset.monitor_id}</p>
-            <p><strong>Model:</strong> ${asset.mntr_model}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.mntr_department}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.mntr_asset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.mntr_model}</td>
+                <td class="label">Department:</td><td>${asset.mntr_department}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.mntr_model}</td>
+                <td class="label">Issued To:</td><td>${asset.mntr_user}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.mntr_serial}</td>
+            </tr>
         `,
         printer: `
-            <h3>${asset.printer_model}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.printer_asset}</p>
-            <p><strong>ID:</strong> ${asset.printer_id}</p>
-            <p><strong>Serial:</strong> ${asset.printer_serial}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.printer_department}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.printer_asset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.printer_model}</td>
+                <td class="label">Department:</td><td>${asset.printer_department}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.printer_model}</td>
+                <td class="label">Issued To:</td><td>${asset.printer_user}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.printer_serial}</td>
+            </tr>
         `,
         tablet: `
-            <h3>${asset.tablet_name}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.tablet_asset}</p>
-            <p><strong>ID:</strong> ${asset.tablet_id}</p>
-            <p><strong>Model:</strong> ${asset.tablet_model}</p>
-            <p><strong>Serial:</strong> ${asset.tablet_serial}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.department_tablet}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.tablet_asset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.tablet_model}</td>
+                <td class="label">Department:</td><td>${asset.department_tablet}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.tablet_model}</td>
+                <td class="label">Issued To:</td><td>${asset.fullName}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.tablet_serial}</td>
+            </tr>
         `,
         phone: `
-            <h3>${asset.phone_name}</h3>
-            <p><strong>Asset Tag:</strong> ${asset.phone_asset}</p>
-            <p><strong>ID:</strong> ${asset.phone_id}</p>
-            <p><strong>Model:</strong> ${asset.phone_model}</p>
-            <p><strong>Serial:</strong> ${asset.phone_serial}</p>
-            <p><strong>IMEI:</strong> ${asset.phone_imei}</p>
-            <p><strong>Date Purchased:</strong> ${asset.datePurchased}</p>
-            <p><strong>Department:</strong> ${asset.department_phone}</p>
+            <tr>
+                <td class="label">Asset Tag No:</td><td><strong>${asset.phone_asset}<strong></td>
+                <td class="label">Date Purchased:</td><td>${asset.datePurchased}</td>
+            </tr>
+            <tr>
+                <td class="label">Description:</td><td>${asset.phone_model}</td>
+                <td class="label">Department:</td><td>${asset.department_phone}</td>
+            </tr>
+            <tr>
+                <td class="label">Model No:</td><td>${asset.phone_model}</td>
+                <td class="label">Issued To:</td><td>${asset.fullName}</td>
+            </tr>
+            <tr>
+                <td class="label">Serial No:</td><td colspan="3">${asset.phone_serial}</td>
+            </tr>
         `,
     };
 
@@ -65,42 +110,102 @@ const generateAssetContent = (asset, assetType) => {
 
 export const printAssetTag = (asset, assetType) => {
     const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title>Print Asset Tag</title>');
-    printWindow.document.write('<style>');
+    printWindow.document.write('<html><head><title></title>');
+    // Inline styles from your HTML example
     printWindow.document.write(`
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .asset-tag {
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background-color: #fff;
-            margin: 20px auto;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .asset-tag h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 1.5em;
-        }
-        .asset-tag p {
-            margin: 5px 0;
-            color: #555;
-        }
-        .asset-tag p strong {
-            color: #000;
-        }
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            .asset-tag {
+                width: 600px;
+                border: 2px solid black;
+                padding: 10px;
+                margin: 20px auto;
+            }
+            .header {
+                background-color: #283593;
+                color: white;
+                padding: 10px 0;
+                display: flex;
+                text-align: center;
+                margin-bottom: 1%;
+                border: 2px solid black;
+            }
+            .header h1 {
+                font-size: 20px;
+                margin: 0;
+            }
+            .header .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0 1%;
+            }
+            .header .lmc {
+                flex-grow: 1;
+            }
+            .header .lmc h1, p{
+                margin: 0;
+            }   
+            .content-table {
+                width: 100%;
+                border: 2px solid black;
+                border-collapse: collapse;
+                margin-bottom: 1%;
+            }
+            .content-table td {
+                border: 1px solid black;
+                padding: 5px;
+                font-size: 14px;
+            }
+            .content-table .label {
+                font-weight: bold;
+                width: 150px;
+            }
+            .footer {
+                background-color: #283593;
+                color: white;
+                text-align: center;
+                font-size: 9px;
+                border: 2px solid black;
+                padding: 1px 0;
+            }
+            .footer p{
+                margin: 0;
+            }
+        </style>
     `);
-    printWindow.document.write('</style></head><body>');
+
+    printWindow.document.write('</head><body>');
     printWindow.document.write('<div class="asset-tag">');
+
+    // Header
+    printWindow.document.write(`
+        <div class="header">
+            <div class="logo">
+                <img src="/imgs/LMC-Logo-Wht.png" alt="LMC Logo" height="70">
+            </div>
+            <div class="lmc">
+                <h1>Property of<br>Laguna Metts Corporation</h1>
+                <p>118 East Science Ave., LTI, SEPZ Biñan, Laguna, PH</p>
+            </div>
+        </div>
+    `);
+
+    // Asset details table
+    printWindow.document.write('<table class="content-table">');
     printWindow.document.write(generateAssetContent(asset, assetType));
+    printWindow.document.write('</table>');
+
+    // Footer
+    printWindow.document.write(`
+        <div class="footer">
+            <p>DO NOT REMOVE UNDER LMC-GCP POLICY</p>
+            <p>If found, please call tel. # +63 49 541 2713</p>
+        </div>
+    `);
+
     printWindow.document.write('</div>');
     printWindow.document.write('</body></html>');
     printWindow.document.close();
