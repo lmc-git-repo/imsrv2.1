@@ -10,6 +10,7 @@ use App\Models\Departments;
 use App\Models\Printers;
 use App\Http\Requests\StorePrintersRequest;
 use App\Http\Requests\UpdatePrintersRequest;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -72,7 +73,7 @@ class PrintersController extends Controller
     
         try {
             // Load the Excel template
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Template.xlsx'));
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Format.xlsx'));
         } catch (\Exception $e) {
             return back()->with('error', 'Asset tag template not found.');
         }
@@ -85,6 +86,9 @@ class PrintersController extends Controller
         $sheet->setCellValue('C10',($asset->printer_model ?? ''));
         $sheet->setCellValue('C12',($asset->printer_model ?? ''));
         $sheet->setCellValue('C14',($asset->printer_serial ?? ''));
+        // Format datePurchased to 'm/d/y' (e.g., 4/25/2024)
+        $datePurchased = $asset->datePurchased ? Carbon::parse($asset->datePurchased)->format('m/d/Y') : '';
+        $sheet->setCellValue('G8', $datePurchased);
         $sheet->setCellValue('G10',($asset->printer_department ?? ''));
         $sheet->setCellValue('G11', 'Issued To: ' . ($asset->printer_user ?? ''));
     

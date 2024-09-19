@@ -12,6 +12,7 @@ use App\Models\Departments;
 use App\Models\Monitors;
 use App\Http\Requests\StoreMonitorsRequest;
 use App\Http\Requests\UpdateMonitorsRequest;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -75,7 +76,7 @@ class MonitorsController extends Controller
     
         try {
             // Load the Excel template
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Template.xlsx'));
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Format.xlsx'));
         } catch (\Exception $e) {
             return back()->with('error', 'Asset tag template not found.');
         }
@@ -88,6 +89,9 @@ class MonitorsController extends Controller
         $sheet->setCellValue('C10',($asset->mntr_model ?? ''));
         $sheet->setCellValue('C12',($asset->mntr_model ?? ''));
         $sheet->setCellValue('C14',($asset->mntr_serial ?? ''));
+        // Format datePurchased to 'm/d/y' (e.g., 4/25/2024)
+        $datePurchased = $asset->datePurchased ? Carbon::parse($asset->datePurchased)->format('m/d/Y') : '';
+        $sheet->setCellValue('G8', $datePurchased);
         $sheet->setCellValue('G10',($asset->mntr_department ?? ''));
         $sheet->setCellValue('G11', 'Issued To: ' . ($asset->mntr_user ?? ''));
     
