@@ -134,8 +134,9 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
         router.delete(route('serverUps.destroy', serverups.S_UID))
     };    
 
+    // Function to handle the printing of individual asset tags
     const handlePrint = (serverups) => {
-        printAssetTag(serverups, 'serverups');
+        printAssetTag(serverups, 'serverups'); // Adjusted to use Excel-based printing
     };
 
     const [selectedItems, setSelectedItems] = useState([]);
@@ -157,12 +158,18 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
         }
     };
 
+    // const handleBulkPrint = () => {
+    //     const selectedItemDetails = serverUps.data.filter((item) =>
+    //         selectedItems.includes(item.S_UID)
+    //     );
+    //      // Call the bulk print function
+    //     bulkPrintAssetTags(selectedItemDetails, 'serverups');
+    // };
     const handleBulkPrint = () => {
         const selectedItemDetails = serverUps.data.filter((item) =>
             selectedItems.includes(item.S_UID)
         );
-         // Call the bulk print function
-        bulkPrintAssetTags(selectedItemDetails, 'serverups');
+        bulkPrintAssetTags(selectedItemDetails); // Adjusted to use Excel-based printing
     };
     
   return (
@@ -369,30 +376,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             >
                                                 Department
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="S_UOs"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Operating System
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="S_UStorage"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                S & U Storage
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="S_USerial"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                S & U Serial
-                                            </TableHeading> */}
+                                            
                                             <TableHeading
                                                 name="S_UAsset"
                                                 sort_field={queryParams.sort_field} 
@@ -401,38 +385,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             >
                                                 S & U Asset
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="S_UCpu"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Processor
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="S_UGen"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                S & U Gen
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="S_UAddress"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Mac Address
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="S_UPrdctkey"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Product Key
-                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="S_UStatus"
@@ -462,24 +414,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                                        <tr className="text-nowrap">
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                            <th className="px-3 py-3"></th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         {loading ? (
                                             <tr className="text-center">
@@ -497,9 +431,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                         </td>
                                                         <td className="px-3 py-2">{serverups.S_UID}</td>
                                                         <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
-                                                            {/* <Link href={route("serverUps.show", { S_UID: serverups.S_UID })}>
-                                                                {serverups.S_UName}
-                                                            </Link> */}
                                                             <Link href="#" onClick={(e) => openModal(serverups, e)}>
                                                                 {serverups.S_UName}
                                                             </Link>
@@ -511,14 +442,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                         <td className="px-3 py-2">{serverups.S_UType}</td>
                                                         <td className="px-3 py-2">{serverups.S_UUser}</td>
                                                         <td className="px-3 py-2">{serverups.department_S_U}</td>
-                                                        {/* <td className="px-3 py-2">{serverups.S_UOs}</td> */}
-                                                        {/* <td className="px-3 py-2">{serverups.S_UStorage}</td> */}
-                                                        {/* <td className="px-3 py-2">{serverups.S_USerial}</td> */}
                                                         <td className="px-3 py-2">{serverups.S_UAsset}</td>
-                                                        {/* <td className="px-3 py-2">{serverups.S_UCpu}</td> */}
-                                                        {/* <td className="px-3 py-2">{serverups.S_UGen}</td> */}
-                                                        {/* <td className="px-3 py-2">{serverups.S_UAddress}</td> */}
-                                                        {/* <td className="px-3 py-2">{serverups.S_UPrdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + SERVERUPS_STATUS_CLASS_MAP[serverups.S_UStatus]}>{SERVERUPS_STATUS_TEXT_MAP[serverups.S_UStatus]}</span>
                                                         </td>
@@ -526,7 +450,6 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                                         <td className="px-3 py-2">{serverups.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{serverups.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('computers.edit', serverups.S_UID)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
                                                                 onClick={(e) => openModal(serverups, e)}

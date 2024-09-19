@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PhonesController extends Controller
 {
@@ -64,6 +66,39 @@ class PhonesController extends Controller
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
+    }
+
+    public function printAssetTag($assetId) {
+        // Find the full asset record by ID
+        $asset = Phones::findOrFail($assetId);
+    
+        try {
+            // Load the Excel template
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Template.xlsx'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Asset tag template not found.');
+        }
+    
+        // Get the active sheet
+        $sheet = $spreadsheet->getActiveSheet();
+    
+        // Populate the Excel template with data from the asset
+        $sheet->setCellValue('F7',($asset->phone_asset ?? ''));
+        $sheet->setCellValue('C10',($asset->phone_model ?? ''));
+        $sheet->setCellValue('C12',($asset->phone_model ?? ''));
+        $sheet->setCellValue('C14',($asset->phone_serial ?? ''));
+        $sheet->setCellValue('G10',($asset->department_phone ?? ''));
+        $sheet->setCellValue('G11', 'Issued To: ' . ($asset->fullName ?? ''));
+    
+        // Save the file to a temporary location
+        $fileName = 'asset_tag_' . uniqid() . '.xlsx';
+        $tempFile = sys_get_temp_dir() . '/' . $fileName;
+        
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+    
+        // Download the file and delete it after sending
+        return response()->download($tempFile)->deleteFileAfterSend(true);
     }
 
     /**

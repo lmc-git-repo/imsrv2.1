@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ServerUPSController extends Controller
 {
@@ -72,6 +74,39 @@ class ServerUPSController extends Controller
             'success' => session('success'),
         ]);
     }
+
+    public function printAssetTag($assetId) {
+        // Find the full asset record by ID
+        $asset = ServerUPS::findOrFail($assetId);
+    
+        try {
+            // Load the Excel template
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(resource_path('js/Components/hooks/Asset Tag Template.xlsx'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Asset tag template not found.');
+        }
+    
+        // Get the active sheet
+        $sheet = $spreadsheet->getActiveSheet();
+    
+        // Populate the Excel template with data from the asset
+        $sheet->setCellValue('F7',($asset->S_UAsset ?? ''));
+        $sheet->setCellValue('C10',($asset->S_UModel ?? ''));
+        $sheet->setCellValue('C12',($asset->S_UModel ?? ''));
+        $sheet->setCellValue('C14',($asset->S_USerial ?? ''));
+        $sheet->setCellValue('G10',($asset->department_S_U ?? ''));
+        $sheet->setCellValue('G11', 'Issued To: ' . ($asset->S_UUser ?? ''));
+    
+        // Save the file to a temporary location
+        $fileName = 'asset_tag_' . uniqid() . '.xlsx';
+        $tempFile = sys_get_temp_dir() . '/' . $fileName;
+        
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+    
+        // Download the file and delete it after sending
+        return response()->download($tempFile)->deleteFileAfterSend(true);
+    }  
 
     /**
      * Show the form for creating a new resource.

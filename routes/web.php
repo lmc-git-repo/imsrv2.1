@@ -42,6 +42,25 @@ Route::middleware(['auth', 'verified']) ->group(function(){
 
     // Restrict 'user' resource to admins only
     Route::resource('user', UserController::class)->middleware(CheckRole::class.':admin,super admin');
+
+    // Add routes for printing asset tags
+    Route::get('/computers/{id}/print', [ComputersController::class, 'printAssetTag'])->name('computers.printAssetTag');
+    Route::get('/computers/bulk-print', [ComputersController::class, 'bulkPrintAssetTags'])->name('computers.bulkPrintAssetTags');
+
+    Route::get('/serverups/{id}/print', [ServerUPSController::class, 'printAssetTag'])->name('serverups.printAssetTag');
+    Route::get('/serverups/bulk-print', [ServerUPSController::class, 'bulkPrintAssetTags'])->name('serverups.bulkPrintAssetTags');
+
+    Route::get('/monitors/{id}/print', [MonitorsController::class, 'printAssetTag'])->name('monitors.printAssetTag');
+    Route::get('/monitors/bulk-print', [MonitorsController::class, 'bulkPrintAssetTags'])->name('monitors.bulkPrintAssetTags');
+
+    Route::get('/printers/{id}/print', [PrintersController::class, 'printAssetTag'])->name('printers.printAssetTag');
+    Route::get('/printers/bulk-print', [PrintersController::class, 'bulkPrintAssetTags'])->name('printers.bulkPrintAssetTags');
+
+    Route::get('/tablets/{id}/print', [TabletsController::class, 'printAssetTag'])->name('tablets.printAssetTag');
+    Route::get('/tablets/bulk-print', [TabletsController::class, 'bulkPrintAssetTags'])->name('tablets.bulkPrintAssetTags');
+
+    Route::get('/phones/{id}/print', [PhonesController::class, 'printAssetTag'])->name('phones.printAssetTag');
+    Route::get('/phones/bulk-print', [PhonesController::class, 'bulkPrintAssetTags'])->name('phones.bulkPrintAssetTags');
 });
 
 // Route::get('/test-role', function () {

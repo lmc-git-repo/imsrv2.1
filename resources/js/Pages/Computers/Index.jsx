@@ -134,9 +134,14 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
         router.delete(route('computers.destroy', computer.CID))
     };    
 
+    // const handlePrint = (computer) => {
+    //     printAssetTag(computer, 'computer');
+    // };        
+
+    // Function to handle the printing of individual asset tags
     const handlePrint = (computer) => {
-        printAssetTag(computer, 'computer');
-    };        
+        printAssetTag(computer, 'computer'); // Adjusted to use Excel-based printing
+    };
 
     const [selectedItems, setSelectedItems] = useState([]);
 
@@ -157,12 +162,19 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
         }
     };
 
+    // const handleBulkPrint = () => {
+    //     const selectedItemDetails = computers.data.filter((comp) =>
+    //         selectedItems.includes(comp.CID)
+    //     );
+    //      // Call the bulk print function
+    //     bulkPrintAssetTags(selectedItemDetails, 'computer');
+    // };
+    // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
         const selectedItemDetails = computers.data.filter((comp) =>
             selectedItems.includes(comp.CID)
         );
-         // Call the bulk print function
-        bulkPrintAssetTags(selectedItemDetails, 'computer');
+        bulkPrintAssetTags(selectedItemDetails); // Adjusted to use Excel-based printing
     };
 
   return (
