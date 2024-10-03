@@ -33,7 +33,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.department || 'N/A'}</div>
+                    <div class="large-text">${asset.department || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -67,7 +67,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.department_S_U || 'N/A'}</div>
+                    <div class="large-text">${asset.department_S_U || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -101,7 +101,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.mntr_department || 'N/A'}</div>
+                    <div class="large-text">${asset.mntr_department || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -135,7 +135,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.printer_department || 'N/A'}</div>
+                    <div class="large-text">${asset.printer_department || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -169,7 +169,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.department_tablet || 'N/A'}</div>
+                    <div class="large-text">${asset.department_tablet || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -203,7 +203,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="small-text">${asset.department_phone || 'N/A'}</div>
+                    <div class="large-text">${asset.department_phone || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -225,26 +225,31 @@ const bulkPrintAssetTags = (assets, assetType) => {
             body {
                 font-family: Arial, sans-serif;
             }
+            .asset-tag-container{
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
+                gap: 16px; /* Space between grid items */
+            }
             .asset-tag {
                 width: 320px;
                 border: 2px solid black;
-                padding: 10px;
+                padding: 3px;
                 /* margin: 20px auto; */
             }
 
             .header {
                 background-color: #283593;
                 color: white;
-                padding: 5px 0;
+                padding: 3px 0;
                 display: flex;
                 /* border: 1px solid red; */
                 text-align: center;
                 margin-bottom: 1%;
-                border: 2px solid black;
+                border: 1px solid black;
             }
 
             .header h1 {
-                font-size: 12px;
+                font-size: 11px;
                 margin: 0;
             }
             .header .logo{
@@ -268,9 +273,9 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 background-color: #283593;
                 color: white;
                 text-align: center;
-                padding: 5px 0;
+                padding: 4px 0;
                 font-size: 7px;
-                border: 2px solid black;
+                border: 1px solid black;
             }
 
             .footer p {
@@ -279,7 +284,7 @@ const bulkPrintAssetTags = (assets, assetType) => {
             .asset-tag-body{
                 display: flex;
                 justify-content: space-between;
-                border: 1px solid #333;
+                border: 0.3px solid #333;
                 /* padding: 1%; */
                 margin-bottom: 1%;
             }
@@ -294,7 +299,7 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 /* border: 1px solid #333; */
             }
             .column2 .row:last-child{
-                border: 1px solid #333;
+                border: 0.1px solid #333;
                 flex-grow: 1;
             }
             .column2 .row:last-child .small-text{
@@ -304,31 +309,35 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 max-width: 100%;     /* Set the max width to control when the overflow happens */
             }
             .row{
-                border: 1px solid #333;
+                border: 0.1px solid #333;
                 padding: 1%;
             }
             .label{
                 /* border: 1px solid green; */
                 font-weight: bold;
+                padding: 0 auto;
                 font-size: 9px; /* Reduced font size */
             }
             .large-text{
                 display: flex;
                 justify-content: center;
                 font-weight: bold;
-                font-size: 9px; /* Reduced font size */
+                padding: 0 auto;
+                font-size: 12px; /* Reduced font size */
             }
             .small-text{
                 display: flex;
                 justify-content: center;
                 font-weight: bold;
-                font-size: 7px; /* Reduced font size */
+                padding: 0 auto;
+                font-size: 8px; /* Reduced font size */
             }
         </style>
     `);
 
     printWindow.document.write('</head><body>');
     
+    printWindow.document.write('<div class="asset-tag-container">');
     assets.forEach(asset => {
         printWindow.document.write('<div class="asset-tag">');
 
@@ -359,6 +368,7 @@ const bulkPrintAssetTags = (assets, assetType) => {
         `);
         printWindow.document.write('</div>');
     });
+    printWindow.document.write('</div>');
 
     printWindow.document.write('</body></html>');
     printWindow.document.close();
