@@ -33,7 +33,7 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
-                    <div class="large-text">${asset.department || 'N/A'}</div>
+                    <div class="large-text">${asset.department_comp || 'N/A'}</div>
                 </div>
                 <div class="row">
                     <div class="label">Issued To:</div>
@@ -218,33 +218,37 @@ const generateAssetContent = (asset, assetType) => {
 
 const bulkPrintAssetTags = (assets, assetType) => {
     const printWindow = window.open('', '', 'height=600,width=800');
-    printWindow.document.write('<html><head><title></title>');
+    printWindow.document.write('<html><head><title>Asset Tags</title>');
     // Updated inline styles
     printWindow.document.write(`
         <style>
             body {
                 font-family: Arial, sans-serif;
             }
+
             .asset-tag-container{
                 display: grid;
                 grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
                 gap: 16px; /* Space between grid items */
+                width: 100%;
             }
+                
             .asset-tag {
-                width: 320px;
+                width: 100%;
+                max-width: 325px;
                 border: 2px solid black;
-                padding: 3px;
+                padding: 2px;
                 /* margin: 20px auto; */
             }
 
             .header {
                 background-color: #283593;
                 color: white;
-                padding: 3px 0;
+                padding: 0px 0;
                 display: flex;
                 /* border: 1px solid red; */
                 text-align: center;
-                margin-bottom: 1%;
+                margin-bottom: 1px;
                 border: 1px solid black;
             }
 
@@ -273,7 +277,7 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 background-color: #283593;
                 color: white;
                 text-align: center;
-                padding: 4px 0;
+                padding: 1px 0;
                 font-size: 7px;
                 border: 1px solid black;
             }
@@ -284,22 +288,33 @@ const bulkPrintAssetTags = (assets, assetType) => {
             .asset-tag-body{
                 display: flex;
                 justify-content: space-between;
-                border: 0.3px solid #333;
+                border: 1px solid #000;
                 /* padding: 1%; */
-                margin-bottom: 1%;
+                margin-bottom: 1px;
             }
             .column{
                 flex-grow: 1;
-                /* border: 1px solid #333; */
+                // border: 1px solid red;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
             .column2{
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
-                /* border: 1px solid #333; */
+                // border: 1px solid green;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            .column2 .row:nth-child(2) .large-text{
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
             .column2 .row:last-child{
-                border: 0.1px solid #333;
+                border-bottom: none;
                 flex-grow: 1;
             }
             .column2 .row:last-child .small-text{
@@ -307,10 +322,27 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 overflow: hidden;    /* Hide the overflowing text */
                 text-overflow: ellipsis; /* Show "..." when text overflows */
                 max-width: 100%;     /* Set the max width to control when the overflow happens */
+                font-size: 10px;
             }
+            .column2 .row:first-child .large-text{
+                font-size: 12px;
+            }
+            .column .row {
+                border-bottom: 0.01px solid #000;
+                border-right: 0.01px solid #000;
+            }
+
+            .column .row:last-child {
+                border-bottom: none;
+                border-right: 0.01px solid #000;
+            }
+            
+            .column2 .row{
+                border-bottom: 0.01px solid #000;
+            }
+
             .row{
-                border: 0.1px solid #333;
-                padding: 1%;
+                padding: 0 1%;
             }
             .label{
                 /* border: 1px solid green; */
@@ -323,7 +355,7 @@ const bulkPrintAssetTags = (assets, assetType) => {
                 justify-content: center;
                 font-weight: bold;
                 padding: 0 auto;
-                font-size: 12px; /* Reduced font size */
+                font-size: 15px; /* Reduced font size */
             }
             .small-text{
                 display: flex;

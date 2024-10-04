@@ -169,7 +169,7 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
         const selectedItemDetails = serverUps.data.filter((item) =>
             selectedItems.includes(item.S_UID)
         );
-        bulkPrintAssetTags(selectedItemDetails); // Adjusted to use Excel-based printing
+        bulkPrintAssetTags(selectedItemDetails, 'serverups'); // Adjusted to use Excel-based printing
     };
     
   return (

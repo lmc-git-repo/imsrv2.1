@@ -174,7 +174,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
         const selectedItemDetails = computers.data.filter((comp) =>
             selectedItems.includes(comp.CID)
         );
-        bulkPrintAssetTags(selectedItemDetails); // Adjusted to use Excel-based printing
+        bulkPrintAssetTags(selectedItemDetails, 'computer'); // Adjusted to use Excel-based printing
     };
 
   return (
