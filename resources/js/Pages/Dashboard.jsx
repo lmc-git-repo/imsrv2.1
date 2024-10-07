@@ -15,16 +15,19 @@ const Card = ({ title, value = 0, color, textColor, onClick  }) => (
 
 export default function Dashboard({ 
     auth, 
-    totalOperationals, operationalsTotal, totalUsers, totalSpareUnits, totalDesktops, totalLaptops, totalTablets, totalPhones,
+    totalOperationals, operationalsTotal, totalUsers, usersTotal, totalSpareUnits, spareUnitsTotal, totalDesktops, desktopsTotal, totalLaptops, laptopsTotal, 
+    totalTablets, tabletsTotal, totalPhones, phonesTotal,
     totalNACeleron, totalPentium, total3rdGen, total4thGen, total5thGen, total6thGen, total7thGen, total8thGen,
-    total9thGen, total10thGen, total11thGen, total12thGen, total13thGen, totalDesktopPentiumto7thGen,
-    totalLaptopPentiumto7thGen, totalDisposedOrDisposal
+    total9thGen, total10thGen, total11thGen, total12thGen, total13thGen, totalDesktopPentiumto7thGen, desktopPentiumto7thGenTotal,
+    totalLaptopPentiumto7thGen, laptopPentiumto7thGenTotal, totalDisposedOrDisposal, disposedOrDisposalTotal
  }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState({});
 
     const openModal = (cardData) => {
+        // console.log(cardData.value);
+        // console.log(cardData.title);
         setSelectedCard({
             title: cardData.title,
             value: cardData.value,
@@ -98,10 +101,10 @@ export default function Dashboard({
                     <div onClick={() => openModal({ title: "Total Laptops", value: laptopsTotal })}>
                         <Card title="Laptop" value={totalLaptops} color="border-sky-400" textColor="text-sky-600" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Tablets", value: totalTablets })}>
+                    <div onClick={() => openModal({ title: "Total Tablets", value: tabletsTotal })}>
                         <Card title="Tablets" value={totalTablets} color="border-sky-400" textColor="text-sky-600" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Phones", value: totalPhones })}>
+                    <div onClick={() => openModal({ title: "Total Phones", value: phonesTotal })}>
                         <Card title="Phones" value={totalPhones} color="border-sky-400" textColor="text-sky-600" />
                     </div>
                     
@@ -117,13 +120,13 @@ export default function Dashboard({
                             />
                         </div>
                     ))}
-                    <div onClick={() => openModal({ title: "Total Laptop Pentium to 7th Gen", value: totalLaptopPentiumto7thGen })}>
+                    <div onClick={() => openModal({ title: "Total Laptop Pentium to 7th Gen", value: laptopPentiumto7thGenTotal })}>
                         <Card title="Total Laptop (Pentium - 7th Generation)" value={totalLaptopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Desktop Pentium to 7th Gen", value: totalDesktopPentiumto7thGen })}>
+                    <div onClick={() => openModal({ title: "Total Desktop Pentium to 7th Gen", value: desktopPentiumto7thGenTotal })}>
                         <Card title="Total Desktop (Pentium - 7th Generation)" value={totalDesktopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Disposed/Disposal", value: totalDisposedOrDisposal })}>
+                    <div onClick={() => openModal({ title: "Total Disposed/Disposal", value: disposedOrDisposalTotal })}>
                         <Card title="DISPOSED / DISPOSAL" value={totalDisposedOrDisposal} color="border-red-600" textColor="text-red-600" />
                     </div>
                 </div>
@@ -134,7 +137,6 @@ export default function Dashboard({
                 onClose={closeModal} 
                 title={selectedCard.title} 
                 value={selectedCard.value} 
-                valueType={selectedCard.valueType}  
             />
         </AuthenticatedLayout>
     );

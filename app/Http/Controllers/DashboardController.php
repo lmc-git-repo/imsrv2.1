@@ -45,11 +45,34 @@ class DashboardController extends Controller
             + ServerUPS::query()->count()
             + Phones::query()->count();
 
+        $totalUsersModels = [
+            Computers::class,
+            Tablets::class,
+            ServerUps::class,
+            Phones::class,
+        ];
+        
+        $usersTotal = collect();
+        
+        foreach ($totalUsersModels as $model) {
+            $usersTotal = $usersTotal->merge($model::all());
+        }
+
+
         $totalSpareUnits = Computers::query()->where('comp_status', 'Spare')->count();
+        $spareUnitsTotal = Computers::query()->where('comp_status', 'Spare')->get();
+        
         $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Borrow'])->count();
+        $desktopsTotal = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Borrow'])->get();
+
         $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->count();
+        $laptopsTotal = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->get();
+
         $totalTablets = Tablets::query()->count();
+        $tabletsTotal = Tablets::query()->get();
+
         $totalPhones = Phones::query()->count();
+        $phonesTotal = Phones::query()->get();
         
         $totalsByGen = [];
         foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
@@ -80,11 +103,25 @@ class DashboardController extends Controller
             ->whereIn('comp_status', $statuses)
             ->count();
 
+            $desktopPentiumto7thGenTotal = Computers::query()
+            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->where('comp_type', 'Desktop')
+            ->whereIn('comp_status', $statuses)
+            ->get();
+                   
+
         $totalLaptopPentiumto7thGen = Computers::query()
             ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
             ->where('comp_type', 'Laptop')
             ->whereIn('comp_status', $statuses)
             ->count();
+
+            $laptopPentiumto7thGenTotal = Computers::query()
+            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->where('comp_type', 'Laptop')
+            ->whereIn('comp_status', $statuses)
+            ->get();
+
 
         $totalDisposedOrDisposal = Computers::query()
             ->whereIn('comp_status', ['For Disposal', 'Already Disposed'])
@@ -99,12 +136,23 @@ class DashboardController extends Controller
                 ->whereIn('S_UStatus', ['For Disposal', 'Already Disposed'])
                 ->count();
             
+            
+            $disposalStatuses = ['For Disposal', 'Already Disposed'];
+
+            $disposedOrDisposalTotal = collect();
+
+            foreach ($models as $model => $statusField) {
+                $disposedOrDisposalTotal = $disposedOrDisposalTotal->merge($model::query()->whereIn($statusField, $disposalStatuses)->get());
+            }
+
         return inertia(
             'Dashboard', 
             array_merge(
                 compact(
-                    'totalOperationals', 'operationalsTotal', 'totalUsers', 'totalSpareUnits', 'totalDesktops', 'totalLaptops', 'totalTablets', 'totalPhones',
-                    'totalDesktopPentiumto7thGen', 'totalLaptopPentiumto7thGen', 'totalDisposedOrDisposal'
+                    'totalOperationals', 'operationalsTotal', 'totalUsers', 'usersTotal', 'totalSpareUnits', 'spareUnitsTotal',
+                    'totalDesktops', 'desktopsTotal', 'totalLaptops', 'laptopsTotal', 'totalTablets', 'tabletsTotal', 'totalPhones', 'phonesTotal',
+                    'totalDesktopPentiumto7thGen', 'desktopPentiumto7thGenTotal', 'totalLaptopPentiumto7thGen', 'laptopPentiumto7thGenTotal',
+                    'totalDisposedOrDisposal', 'disposedOrDisposalTotal'
                 ),
                 [
                     'totalNACeleron' => $totalNACeleron,

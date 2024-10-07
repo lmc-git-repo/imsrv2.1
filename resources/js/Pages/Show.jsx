@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal as FlowbiteModal, Button } from 'flowbite-react';
 
-const Modal = ({ isOpen, onClose, title, value, valueType }) => {
+const Modal = ({ isOpen, onClose, title, value }) => {
   if (!isOpen) return null;
 
   return (
@@ -43,8 +43,19 @@ const Modal = ({ isOpen, onClose, title, value, valueType }) => {
                                     let name, user, department, type, model, os, storage, assetTag; 
 
                                     // Using switch to handle different totals
-                                    switch (valueType) { // Assuming valueType is passed to the Modal to distinguish between totals
-                                        case 'operationalsTotal':
+                                    switch (title) {
+                                        case 'Operationals':
+                                        name = item.comp_name || item.S_UName || item.tablet_name || item.phone_name || 'N/A';
+                                        user = item.fullName || item.S_UUser || item.fullName || item.fullName || 'N/A';
+                                        department = item.department_comp || item.department_S_U || item.department_tablet || item.department_phone || 'N/A';
+                                        type = item.comp_type || item.S_UType || (item.tablet_name ? 'Tablet' : (item.phone_name ? 'Phone' : 'N/A'));
+                                        model = item.comp_model || item.S_UModel || item.tablet_model || item.phone_model || 'N/A';
+                                        os = item.comp_os || item.S_UOs || item.tablet_os || item.phone_os || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || item.tablet_storage || item.phone_ram || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || item.tablet_asset || item.phone_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Users':
                                         name = item.comp_name || item.S_UName || item.tablet_name || item.phone_name || 'N/A';
                                         user = item.comp_user || item.S_UUser || item.tablet_user || item.phone_user || 'N/A';
                                         department = item.department_comp || item.department_S_U || item.department_tablet || item.department_phone || 'N/A';
@@ -55,48 +66,92 @@ const Modal = ({ isOpen, onClose, title, value, valueType }) => {
                                         assetTag = item.comp_asset || item.S_UAsset || item.tablet_asset || item.phone_asset || 'N/A';
                                         break;
 
-                                        case 'usersTotal':
-                                        name = item.user_name || 'N/A';
-                                        user = item.user || 'N/A';
-                                        department = item.user_department || 'N/A';
-                                        type = 'User';
-                                        model = 'N/A';
-                                        os = 'N/A';
-                                        storage = 'N/A';
-                                        assetTag = 'N/A';
-                                        break;
-
-                                        case 'spareUnitsTotal':
+                                        case 'Total Spare Units':
                                         name = item.comp_name || 'Spare Unit Name';
                                         user = item.comp_user || 'N/A';
                                         department = item.department_comp || 'N/A';
-                                        type = 'Spare Unit';
+                                        type = item.comp_type || 'Spare Unit';
                                         model = item.comp_model || 'N/A';
                                         os = item.comp_os || 'N/A';
                                         storage = item.comp_storage || 'N/A';
                                         assetTag = item.comp_asset || 'N/A';
                                         break;
 
-                                        case 'desktopsTotal':
+                                        case 'Total Desktops':
                                         name = item.comp_name || 'Desktop Name';
                                         user = item.comp_user || 'N/A';
                                         department = item.department_comp || 'N/A';
-                                        type = 'Desktop';
+                                        type = item.comp_type || 'N/A';
                                         model = item.comp_model || 'N/A';
                                         os = item.comp_os || 'N/A';
                                         storage = item.comp_storage || 'N/A';
                                         assetTag = item.comp_asset || 'N/A';
                                         break;
 
-                                        case 'laptopsTotal':
+                                        case 'Total Laptops':
                                         name = item.comp_name || 'Laptop Name';
                                         user = item.comp_user || 'N/A';
                                         department = item.department_comp || 'N/A';
-                                        type = 'Laptop';
+                                        type = item.comp_type || 'N/A';;
                                         model = item.comp_model || 'N/A';
                                         os = item.comp_os || 'N/A';
                                         storage = item.comp_storage || 'N/A';
                                         assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Tablets':
+                                        name = item.tablet_name || 'Tablet Name';
+                                        user = item.fullName || 'N/A';
+                                        department = item.department_tablet || 'N/A';
+                                        type = 'Tablet';
+                                        model = item.tablet_model || 'N/A';
+                                        os = item.talbet_os || 'N/A';
+                                        storage = item.tablet_storage || 'N/A';
+                                        assetTag = item.tablet_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Phones':
+                                        name = item.phone_name || 'Phone Name';
+                                        user = item.fullName || 'N/A';
+                                        department = item.department_phone || 'N/A';
+                                        type = 'Phone';
+                                        model = item.phone_model || 'N/A';
+                                        os = 'N/A';
+                                        storage = item.phone_ram || 'N/A';
+                                        assetTag = item.phone_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Laptop Pentium to 7th Gen':
+                                        name = item.comp_name || 'Laptop Name';
+                                        user = item.fullName || 'N/A';
+                                        department = item.department_comp || 'N/A';
+                                        type = item.comp_type || 'N/A';;
+                                        model = item.comp_model || 'N/A';
+                                        os = item.comp_os || 'N/A';
+                                        storage = item.comp_storage || 'N/A';
+                                        assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Desktop Pentium to 7th Gen':
+                                        name = item.comp_name || 'Desktop Name';
+                                        user = item.fullName || 'N/A';
+                                        department = item.department_comp || 'N/A';
+                                        type = item.comp_type || 'N/A';
+                                        model = item.comp_model || 'N/A';
+                                        os = item.comp_os || 'N/A';
+                                        storage = item.comp_storage || 'N/A';
+                                        assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        case 'Total Disposed/Disposal':
+                                        name = item.comp_name || item.S_UName || item.tablet_name || item.phone_name || 'N/A';
+                                        user = item.fullName || item.S_UUser || item.fullName || item.fullName || 'N/A';
+                                        department = item.department_comp || item.department_S_U || item.department_tablet || item.department_phone || 'N/A';
+                                        type = item.comp_type || item.S_UType || (item.tablet_name ? 'Tablet' : (item.phone_name ? 'Phone' : 'N/A'));
+                                        model = item.comp_model || item.S_UModel || item.tablet_model || item.phone_model || 'N/A';
+                                        os = item.comp_os || item.S_UOs || item.tablet_os || item.phone_os || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || item.tablet_storage || item.phone_ram || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || item.tablet_asset || item.phone_asset || 'N/A';
                                         break;
 
                                         default:
