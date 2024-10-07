@@ -22,24 +22,21 @@ class DashboardController extends Controller
             + Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->count();
         
         // Fetch records for each model where status matches 'Deployed', 'Borrow', or 'Spare'
-        $computers = Computers::query()
-        ->whereIn('comp_status', $statuses)
-        ->get();
-
-        $tablets = Tablets::query()
-            ->whereIn('tablet_status', $statuses)
-            ->get();
-
-        $serverUPS = ServerUPS::query()
-            ->whereIn('S_UStatus', $statuses)
-            ->get();
-
-        $phones = Phones::query()
-            ->whereIn('phone_status', $statuses)
-            ->get();
-
             // Merge all records into one collection
-        $operationalsTotal = $computers->merge($tablets)->merge($serverUPS)->merge($phones);
+        $models = [
+            Computers::class => 'comp_status',
+            Tablets::class => 'tablet_status',
+            ServerUPS::class => 'S_UStatus',
+            Phones::class => 'phone_status',
+        ];
+        
+        // $statuses = ['Deployed', 'Borrow', 'Spare'];
+        
+        $operationalsTotal = collect();
+        
+        foreach ($models as $model => $statusField) {
+            $operationalsTotal = $operationalsTotal->merge($model::query()->whereIn($statusField, $statuses)->get());
+        }
         //end
         
         

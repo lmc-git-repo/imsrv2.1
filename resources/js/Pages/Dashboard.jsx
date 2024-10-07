@@ -24,10 +24,14 @@ export default function Dashboard({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState({});
 
-    const openModal = (card) => {
-        setSelectedCard(card);
+    const openModal = (cardData) => {
+        setSelectedCard({
+            title: cardData.title,
+            value: cardData.value,
+        });
         setIsModalOpen(true);
     };
+    
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -49,6 +53,26 @@ export default function Dashboard({
         { title: '13th Gen', value: total13thGen, color: 'border-green-400', textColor: 'text-green-400' }
     ];
 
+    // console.log(totalOperationals); // ==ALL TOTAL BY COUNT
+    // console.log(operationalsTotal); // === ALL TOTAL BY GET
+
+    // console.log(totalUsers); // ==ALL TOTAL BY COUNT
+    // console.log(usersTotal); // === ALL TOTAL BY GET
+
+    // console.log(totalSpareUnits); // ==ALL TOTAL BY COUNT
+    // console.log(spareUnitsTotal); // === ALL TOTAL BY GET
+
+    // console.log(totalDesktops); // ==ALL TOTAL BY COUNT
+    // console.log(desktopsTotal); // === ALL TOTAL BY GET
+
+    // console.log(totalLaptops); // ==ALL TOTAL BY COUNT
+    // console.log(laptopsTotal); // === ALL TOTAL BY GET
+
+    //operationalsTotal
+    //usersTotal
+    //spareUnitsTotal
+    //desktopsTotal
+    //laptopsTotal
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -59,19 +83,19 @@ export default function Dashboard({
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {/* General Metrics */}
-                    <div onClick={() => openModal({ title: "Operationals", value: operationalsTotal.length })}>
+                    <div onClick={() => openModal({ title: "Operationals", value: operationalsTotal })}>
                         <Card title="Operationals" value={totalOperationals} color="border-green-400" textColor="text-green-600"/>
                     </div>
-                    <div onClick={() => openModal({ title: "Total Users", value: totalUsers })}>
+                    <div onClick={() => openModal({ title: "Total Users", value: usersTotal })}>
                         <Card title="Users" value={totalUsers} color="border-amber-400" textColor="text-amber-600" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Spare Units", value: totalSpareUnits })}>
+                    <div onClick={() => openModal({ title: "Total Spare Units", value: spareUnitsTotal })}>
                         <Card title="Spare Computers" value={totalSpareUnits} color="border-gray-400" textColor="text-gray-400" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Desktops", value: totalDesktops })}>
+                    <div onClick={() => openModal({ title: "Total Desktops", value: desktopsTotal })}>
                         <Card title="Desktop" value={totalDesktops} color="border-sky-400" textColor="text-sky-600" />
                     </div>
-                    <div onClick={() => openModal({ title: "Total Laptops", value: totalLaptops })}>
+                    <div onClick={() => openModal({ title: "Total Laptops", value: laptopsTotal })}>
                         <Card title="Laptop" value={totalLaptops} color="border-sky-400" textColor="text-sky-600" />
                     </div>
                     <div onClick={() => openModal({ title: "Total Tablets", value: totalTablets })}>
@@ -110,6 +134,7 @@ export default function Dashboard({
                 onClose={closeModal} 
                 title={selectedCard.title} 
                 value={selectedCard.value} 
+                valueType={selectedCard.valueType}  
             />
         </AuthenticatedLayout>
     );

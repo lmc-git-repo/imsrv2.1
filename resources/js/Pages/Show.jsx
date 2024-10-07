@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal as FlowbiteModal, Button } from 'flowbite-react';
 
-const Modal = ({ isOpen, onClose, title, value }) => {
+const Modal = ({ isOpen, onClose, title, value, valueType }) => {
   if (!isOpen) return null;
 
   return (
@@ -17,7 +17,8 @@ const Modal = ({ isOpen, onClose, title, value }) => {
             <div className="space-y-6">
             <div className="text-center">
                 <p className="text-base leading-relaxed text-white">
-                <strong>{typeof value === 'object' ? JSON.stringify(value) : value}</strong>
+                    {/* <strong>{typeof value === 'object' ? JSON.stringify(value.length) : value}</strong> */}
+                    <strong>{Array.isArray(value) ? value.length : value}</strong> items found.
                 </p>
             </div>
             <div className="flex justify-around p-1">
@@ -35,17 +36,100 @@ const Modal = ({ isOpen, onClose, title, value }) => {
                                 <th className="px-3 py-3">Asset Tag</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700">
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                                <td className="px-3 py-2"></td>
-                            </tr>
+                            {Array.isArray(value) && value.length > 0 ? (
+                                value.map((item, index) => {
+                                    let name, user, department, type, model, os, storage, assetTag; 
+
+                                    // Using switch to handle different totals
+                                    switch (valueType) { // Assuming valueType is passed to the Modal to distinguish between totals
+                                        case 'operationalsTotal':
+                                        name = item.comp_name || item.S_UName || item.tablet_name || item.phone_name || 'N/A';
+                                        user = item.comp_user || item.S_UUser || item.tablet_user || item.phone_user || 'N/A';
+                                        department = item.department_comp || item.department_S_U || item.department_tablet || item.department_phone || 'N/A';
+                                        type = item.comp_type || item.S_UType || (item.tablet_name ? 'Tablet' : (item.phone_name ? 'Phone' : 'N/A'));
+                                        model = item.comp_model || item.S_UModel || item.tablet_model || item.phone_model || 'N/A';
+                                        os = item.comp_os || item.S_UOs || item.tablet_os || item.phone_os || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || item.tablet_storage || item.phone_ram || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || item.tablet_asset || item.phone_asset || 'N/A';
+                                        break;
+
+                                        case 'usersTotal':
+                                        name = item.user_name || 'N/A';
+                                        user = item.user || 'N/A';
+                                        department = item.user_department || 'N/A';
+                                        type = 'User';
+                                        model = 'N/A';
+                                        os = 'N/A';
+                                        storage = 'N/A';
+                                        assetTag = 'N/A';
+                                        break;
+
+                                        case 'spareUnitsTotal':
+                                        name = item.comp_name || 'Spare Unit Name';
+                                        user = item.comp_user || 'N/A';
+                                        department = item.department_comp || 'N/A';
+                                        type = 'Spare Unit';
+                                        model = item.comp_model || 'N/A';
+                                        os = item.comp_os || 'N/A';
+                                        storage = item.comp_storage || 'N/A';
+                                        assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        case 'desktopsTotal':
+                                        name = item.comp_name || 'Desktop Name';
+                                        user = item.comp_user || 'N/A';
+                                        department = item.department_comp || 'N/A';
+                                        type = 'Desktop';
+                                        model = item.comp_model || 'N/A';
+                                        os = item.comp_os || 'N/A';
+                                        storage = item.comp_storage || 'N/A';
+                                        assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        case 'laptopsTotal':
+                                        name = item.comp_name || 'Laptop Name';
+                                        user = item.comp_user || 'N/A';
+                                        department = item.department_comp || 'N/A';
+                                        type = 'Laptop';
+                                        model = item.comp_model || 'N/A';
+                                        os = item.comp_os || 'N/A';
+                                        storage = item.comp_storage || 'N/A';
+                                        assetTag = item.comp_asset || 'N/A';
+                                        break;
+
+                                        default:
+                                        name = 'N/A';
+                                        user = 'N/A';
+                                        department = 'N/A';
+                                        type = 'Unknown';
+                                        model = 'N/A';
+                                        os = 'N/A';
+                                        storage = 'N/A';
+                                        assetTag = 'N/A';
+                                    }
+
+                                    return (
+                                    <tr key={index} className="bg-white border-b dark:bg-slate-800 dark:border-gray-700">
+                                        <td className="px-3 py-2">{name}</td>
+                                        <td className="px-3 py-2">{user}</td>
+                                        <td className="px-3 py-2">{department}</td>
+                                        <td className="px-3 py-2">{type}</td>
+                                        <td className="px-3 py-2">{model}</td>
+                                        <td className="px-3 py-2">{os}</td>
+                                        <td className="px-3 py-2">{storage}</td>
+                                        <td className="px-3 py-2">{assetTag}</td>
+                                    </tr>
+                                    );
+                                })
+                                ) : (
+                                <tr>
+                                    <td colSpan="8" className="text-center px-3 py-2">
+                                    No data available
+                                    </td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
