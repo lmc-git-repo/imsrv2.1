@@ -30,7 +30,7 @@ export default function Dashboard({
         // console.log(cardData.title);
         setSelectedCard({
             title: cardData.title,
-            value: cardData.value,
+            value: cardData.value,  // Default to 0 if count is undefined
         });
         setIsModalOpen(true);
     };
@@ -40,26 +40,37 @@ export default function Dashboard({
         setIsModalOpen(false);
     };
 
-    // console.log(totalPentium);
-    console.log(total3rdGen);
-    console.log(total7thGen);
-    console.log(total9thGen);
+    // console.log(naCeleronTotal);
+    // console.log('Pentium', totalPentium);
+    // console.log('3rd Gen', total3rdGen);
+    // console.log('4th Gen', total4thGen);
+    // console.log('5th Gen', total5thGen);
+    // console.log('6th Gen', total6thGen);
+    // console.log('7th Gen', total7thGen);
+    // console.log('8th Gen', total8thGen);
+    // console.log('9th Gen', total9thGen);
+    // console.log('10th Gen', total10thGen);
+    // console.log('11th Gen', total11thGen);
+    // console.log('12th Gen', total12thGen);
+    // console.log('13th Gen', total13thGen);
+
 
     const generations = [
         { title: 'N/A and Celeron', value: naCeleronTotal, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: 'Pentium', value: totalPentium, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '3rd Gen', value: total3rdGen, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '4th Gen', value: total4thGen, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '5th Gen', value: total5thGen, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '6th Gen', value: total6thGen, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '7th Gen', value: total7thGen, color: 'border-red-600', textColor: 'text-red-600' },
-        { title: '8th Gen', value: total8thGen, color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '9th Gen', value: total9thGen, color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '10th Gen', value: total10thGen, color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '11th Gen', value: total11thGen, color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '12th Gen', value: total12thGen, color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '13th Gen', value: total13thGen, color: 'border-green-400', textColor: 'text-green-400' }
+        { title: 'Pentium', value: [...totalPentium.computers, ...totalPentium.serverUPS], color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '3rd Gen', value: [...total3rdGen.computers, ...total3rdGen.serverUPS], color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '4th Gen', value: [...total4thGen.computers, ...total4thGen.serverUPS], color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '5th Gen', value: [...total5thGen.computers, ...total5thGen.serverUPS], color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '6th Gen', value: [...total6thGen.computers, ...total6thGen.serverUPS] , color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '7th Gen', value: [...total7thGen.computers, ...total7thGen.serverUPS], color: 'border-red-600', textColor: 'text-red-600' },
+        { title: '8th Gen', value: [...total8thGen.computers, ...total8thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
+        { title: '9th Gen', value: [...total9thGen.computers, ...total9thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
+        { title: '10th Gen', value: [...total10thGen.computers, ...total10thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
+        { title: '11th Gen', value: [...total11thGen.computers, ...total11thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
+        { title: '12th Gen', value: [...total12thGen.computers, ...total12thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
+        { title: '13th Gen', value: [...total13thGen.computers, ...total13thGen.serverUPS], color: 'border-green-400', textColor: 'text-green-400' }
     ];
+    
 
     return (
         <AuthenticatedLayout
@@ -95,11 +106,10 @@ export default function Dashboard({
                     
                     {/* Generations */}
                     {generations.map((gen) => (
-                        <div key={gen.title} onClick={() => openModal(gen, [])}>
+                        <div key={gen.title} onClick={() => openModal({ title: gen.title, value: gen.value })}>
                             <Card 
-                                key={gen.title}
                                 title={gen.title} 
-                                value={gen.value.length} 
+                                value={gen.value.length}
                                 color={gen.color} 
                                 textColor={gen.textColor} 
                             />

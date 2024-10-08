@@ -123,13 +123,145 @@ const Modal = ({ isOpen, onClose, title, value }) => {
 
                                         case 'N/A and Celeron':
                                         name = item.comp_name || item.tablet_name || 'Device Name';
-                                        user = item.fullName || item.fullName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
                                         department = item.department_comp || item.department_tablet || 'N/A';
                                         type = item.comp_type || 'Tablet' || 'N/A';;
                                         model = item.comp_model || item.tablet_model || 'N/A';
                                         os = item.comp_os || item.tablet_os || 'N/A';
                                         storage = item.comp_storage || item.tablet_storage || 'N/A';
                                         assetTag = item.comp_asset || item.tablet_asset || 'N/A';
+                                        break;
+
+                                        case 'Pentium':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '3rd Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '4th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '5th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '6th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '7th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '8th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '9th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '10th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '11th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '12th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        break;
+
+                                        case '13th Gen':
+                                        name = item.comp_name || item.S_UName || 'N/A';
+                                        user = item.fullName || item.S_UUser || 'N/A';
+                                        department = item.department_comp || item.department_S_U || 'N/A';
+                                        type = item.comp_type || item.S_UType || 'N/A';
+                                        model = item.comp_model || item.S_UModel || 'N/A';
+                                        os = item.comp_os || item.S_UOs || 'N/A';
+                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
                                         break;
 
                                         case 'Total Laptop Pentium to 7th Gen':

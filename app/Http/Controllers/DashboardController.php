@@ -206,19 +206,6 @@ class DashboardController extends Controller
                     'total12thGen' => $byGenTotal['12th'],
                     'total13thGen' => $byGenTotal['13th'],
 
-                    // // Keeping the dynamic generation totals with matching variable names
-                    // 'pentiumTotal' => $byGenTotal['Pentium'],
-                    // '3rdGenTotal' => $byGenTotal['3rd'],
-                    // '4thGenTotal' => $byGenTotal['4th'],
-                    // '5thGenTotal' => $byGenTotal['5th'],
-                    // '6thGenTotal' => $byGenTotal['6th'],
-                    // '7thGenTotal' => $byGenTotal['7th'],
-                    // '8thGenTotal' => $byGenTotal['8th'],
-                    // '9thGenTotal' => $byGenTotal['9th'],
-                    // '10thGenTotal' => $byGenTotal['10th'],
-                    // '11thGenTotal' => $byGenTotal['11th'],
-                    // '12thGenTotal' => $byGenTotal['12th'],
-                    // '13thGenTotal' => $byGenTotal['13th'],
                 ]
             )
         );
