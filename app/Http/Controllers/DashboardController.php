@@ -86,7 +86,25 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        // Special handling for 'N/A'
+        $byGenTotal = []; // Hold results by generation
+        foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
+            $computers = Computers::query()
+                ->where('comp_gen', $gen)
+                ->whereIn('comp_status', $statuses)
+                ->get();  // Fetch the matching records instead of counting
+        
+            $serverUPS = ServerUPS::query()
+                ->where('S_UGen', $gen)
+                ->whereIn('S_UStatus', $statuses)
+                ->get();  // Fetch the matching records instead of counting
+        
+            $byGenTotal[$gen] = [
+                'computers' => $computers,
+                'serverUPS' => $serverUPS
+            ];
+        }
+
+        // Special handling for 'N/A' - COUNT
         $totalNACeleron = Computers::query()
         ->where(function ($query) {
             $query->where('comp_gen', 'N/A')
@@ -96,6 +114,24 @@ class DashboardController extends Controller
         + Tablets::query()
         ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
         ->where('tablet_cpu', 'like', '%celeron%')->count();
+
+        //GET For TOTALNACELERON
+
+        $totalNACeleronComputers = Computers::query()
+            ->where(function ($query) {
+                $query->where('comp_gen', 'N/A')
+                    ->whereIn('comp_status', ['Deployed', 'Spare', 'Borrow'])
+                    ->orWhere('comp_cpu', 'like', '%celeron%');
+            })->get();
+
+        $totalNACeleronTablets = Tablets::query()
+            ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
+            ->where('tablet_cpu', 'like', '%celeron%')
+            ->get();
+
+        // Combine the collections
+        $naCeleronTotal = $totalNACeleronComputers->merge($totalNACeleronTablets);
+        //END
 
         $totalDesktopPentiumto7thGen = Computers::query()
             ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
@@ -156,18 +192,33 @@ class DashboardController extends Controller
                 ),
                 [
                     'totalNACeleron' => $totalNACeleron,
-                    'totalPentium' => $totalsByGen['Pentium'],
-                    'total3rdGen' => $totalsByGen['3rd'],
-                    'total4thGen' => $totalsByGen['4th'],
-                    'total5thGen' => $totalsByGen['5th'],
-                    'total6thGen' => $totalsByGen['6th'],
-                    'total7thGen' => $totalsByGen['7th'],
-                    'total8thGen' => $totalsByGen['8th'],
-                    'total9thGen' => $totalsByGen['9th'],
-                    'total10thGen' => $totalsByGen['10th'],
-                    'total11thGen' => $totalsByGen['11th'],
-                    'total12thGen' => $totalsByGen['12th'],
-                    'total13thGen' => $totalsByGen['13th'],
+                    'naCeleronTotal' => $naCeleronTotal,
+                    'totalPentium' => $byGenTotal['Pentium'],
+                    'total3rdGen' => $byGenTotal['3rd'],
+                    'total4thGen' => $byGenTotal['4th'],
+                    'total5thGen' => $byGenTotal['5th'],
+                    'total6thGen' => $byGenTotal['6th'],
+                    'total7thGen' => $byGenTotal['7th'],
+                    'total8thGen' => $byGenTotal['8th'],
+                    'total9thGen' => $byGenTotal['9th'],
+                    'total10thGen' => $byGenTotal['10th'],
+                    'total11thGen' => $byGenTotal['11th'],
+                    'total12thGen' => $byGenTotal['12th'],
+                    'total13thGen' => $byGenTotal['13th'],
+
+                    // // Keeping the dynamic generation totals with matching variable names
+                    // 'pentiumTotal' => $byGenTotal['Pentium'],
+                    // '3rdGenTotal' => $byGenTotal['3rd'],
+                    // '4thGenTotal' => $byGenTotal['4th'],
+                    // '5thGenTotal' => $byGenTotal['5th'],
+                    // '6thGenTotal' => $byGenTotal['6th'],
+                    // '7thGenTotal' => $byGenTotal['7th'],
+                    // '8thGenTotal' => $byGenTotal['8th'],
+                    // '9thGenTotal' => $byGenTotal['9th'],
+                    // '10thGenTotal' => $byGenTotal['10th'],
+                    // '11thGenTotal' => $byGenTotal['11th'],
+                    // '12thGenTotal' => $byGenTotal['12th'],
+                    // '13thGenTotal' => $byGenTotal['13th'],
                 ]
             )
         );

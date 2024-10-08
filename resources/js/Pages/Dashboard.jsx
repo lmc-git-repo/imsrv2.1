@@ -17,7 +17,7 @@ export default function Dashboard({
     auth, 
     totalOperationals, operationalsTotal, totalUsers, usersTotal, totalSpareUnits, spareUnitsTotal, totalDesktops, desktopsTotal, totalLaptops, laptopsTotal, 
     totalTablets, tabletsTotal, totalPhones, phonesTotal,
-    totalNACeleron, totalPentium, total3rdGen, total4thGen, total5thGen, total6thGen, total7thGen, total8thGen,
+    totalNACeleron,naCeleronTotal, totalPentium, pentiumTotal, total3rdGen, total4thGen, total5thGen, total6thGen, total7thGen, total8thGen,
     total9thGen, total10thGen, total11thGen, total12thGen, total13thGen, totalDesktopPentiumto7thGen, desktopPentiumto7thGenTotal,
     totalLaptopPentiumto7thGen, laptopPentiumto7thGenTotal, totalDisposedOrDisposal, disposedOrDisposalTotal
  }) {
@@ -40,8 +40,13 @@ export default function Dashboard({
         setIsModalOpen(false);
     };
 
+    // console.log(totalPentium);
+    console.log(total3rdGen);
+    console.log(total7thGen);
+    console.log(total9thGen);
+
     const generations = [
-        { title: 'N/A and Celeron', value: totalNACeleron, color: 'border-red-600', textColor: 'text-red-600' },
+        { title: 'N/A and Celeron', value: naCeleronTotal, color: 'border-red-600', textColor: 'text-red-600' },
         { title: 'Pentium', value: totalPentium, color: 'border-red-600', textColor: 'text-red-600' },
         { title: '3rd Gen', value: total3rdGen, color: 'border-red-600', textColor: 'text-red-600' },
         { title: '4th Gen', value: total4thGen, color: 'border-red-600', textColor: 'text-red-600' },
@@ -56,26 +61,6 @@ export default function Dashboard({
         { title: '13th Gen', value: total13thGen, color: 'border-green-400', textColor: 'text-green-400' }
     ];
 
-    // console.log(totalOperationals); // ==ALL TOTAL BY COUNT
-    // console.log(operationalsTotal); // === ALL TOTAL BY GET
-
-    // console.log(totalUsers); // ==ALL TOTAL BY COUNT
-    // console.log(usersTotal); // === ALL TOTAL BY GET
-
-    // console.log(totalSpareUnits); // ==ALL TOTAL BY COUNT
-    // console.log(spareUnitsTotal); // === ALL TOTAL BY GET
-
-    // console.log(totalDesktops); // ==ALL TOTAL BY COUNT
-    // console.log(desktopsTotal); // === ALL TOTAL BY GET
-
-    // console.log(totalLaptops); // ==ALL TOTAL BY COUNT
-    // console.log(laptopsTotal); // === ALL TOTAL BY GET
-
-    //operationalsTotal
-    //usersTotal
-    //spareUnitsTotal
-    //desktopsTotal
-    //laptopsTotal
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -114,7 +99,7 @@ export default function Dashboard({
                             <Card 
                                 key={gen.title}
                                 title={gen.title} 
-                                value={gen.value} 
+                                value={gen.value.length} 
                                 color={gen.color} 
                                 textColor={gen.textColor} 
                             />

@@ -121,6 +121,17 @@ const Modal = ({ isOpen, onClose, title, value }) => {
                                         assetTag = item.phone_asset || 'N/A';
                                         break;
 
+                                        case 'N/A and Celeron':
+                                        name = item.comp_name || item.tablet_name || 'Device Name';
+                                        user = item.fullName || item.fullName || 'N/A';
+                                        department = item.department_comp || item.department_tablet || 'N/A';
+                                        type = item.comp_type || 'Tablet' || 'N/A';;
+                                        model = item.comp_model || item.tablet_model || 'N/A';
+                                        os = item.comp_os || item.tablet_os || 'N/A';
+                                        storage = item.comp_storage || item.tablet_storage || 'N/A';
+                                        assetTag = item.comp_asset || item.tablet_asset || 'N/A';
+                                        break;
+
                                         case 'Total Laptop Pentium to 7th Gen':
                                         name = item.comp_name || 'Laptop Name';
                                         user = item.fullName || 'N/A';
