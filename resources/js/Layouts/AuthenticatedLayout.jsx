@@ -24,7 +24,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member' || user.role === 'hr') && (
+                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member') && (
                                     <div className='flex justify-center items-center'>
                                         <Dropdown>
                                             <Dropdown.Trigger>
@@ -62,13 +62,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     </div>
                                                 </Dropdown.Link>
 
-                                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member' || user.role === 'hr') && (
-                                                    <Dropdown.Link href={route('phones.index')}>
-                                                        <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                            Phones
-                                                        </div>
-                                                    </Dropdown.Link>
-                                                )}
+                                                <Dropdown.Link href={route('phones.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Phones
+                                                    </div>
+                                                </Dropdown.Link>
                                                 
                                                 <Dropdown.Link href={route('consumables.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
@@ -85,6 +83,27 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
+                                {(user.role === 'hr') && (
+                                    <div className='flex justify-center items-center'>
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
+                                                    Inventory
+                                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                </NavLink>
+                                            </Dropdown.Trigger>
+                                            <Dropdown.Content>
+                                                <Dropdown.Link href={route('phones.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Phones
+                                                    </div>
+                                                </Dropdown.Link>
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                )}
 
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
                                     Departments{/* List of Departments */}
@@ -128,7 +147,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        {(user.role === 'super admin' || user.role === 'admin') && (
+                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        )}
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -186,7 +207,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            {(user.role === 'super admin' || user.role === 'admin') && (
+                                <ResponsiveNavLink  esponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            )}
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>

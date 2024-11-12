@@ -79,53 +79,65 @@ export default function Dashboard({
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {/* General Metrics */}
-                    <div onClick={() => openModal({ title: "Operationals", value: operationalsTotal })}>
-                        <Card title="Operationals" value={totalOperationals} color="border-green-400" textColor="text-green-600"/>
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Users", value: usersTotal })}>
-                        <Card title="Users" value={totalUsers} color="border-amber-400" textColor="text-amber-600" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Spare Units", value: spareUnitsTotal })}>
-                        <Card title="Spare Computers" value={totalSpareUnits} color="border-gray-400" textColor="text-gray-400" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Desktops", value: desktopsTotal })}>
-                        <Card title="Desktop" value={totalDesktops} color="border-sky-400" textColor="text-sky-600" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Laptops", value: laptopsTotal })}>
-                        <Card title="Laptop" value={totalLaptops} color="border-sky-400" textColor="text-sky-600" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Tablets", value: tabletsTotal })}>
-                        <Card title="Tablets" value={totalTablets} color="border-sky-400" textColor="text-sky-600" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Phones", value: phonesTotal })}>
-                        <Card title="Phones" value={totalPhones} color="border-sky-400" textColor="text-sky-600" />
-                    </div>
-                    
-                    {/* Generations */}
-                    {generations.map((gen) => (
-                        <div key={gen.title} onClick={() => openModal({ title: gen.title, value: gen.value })}>
-                            <Card 
-                                title={gen.title} 
-                                value={gen.value.length}
-                                color={gen.color} 
-                                textColor={gen.textColor} 
-                            />
+            {(auth.user.role === 'super admin' || auth.user.role === 'admin' || auth.user.role === 'member') && (
+                <div className="py-12">
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {/* General Metrics */}
+                        <div onClick={() => openModal({ title: "Operationals", value: operationalsTotal })}>
+                            <Card title="Operationals" value={totalOperationals} color="border-green-400" textColor="text-green-600"/>
                         </div>
-                    ))}
-                    <div onClick={() => openModal({ title: "Total Laptop Pentium to 7th Gen", value: laptopPentiumto7thGenTotal })}>
-                        <Card title="Total Laptop (Pentium - 7th Generation)" value={totalLaptopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Desktop Pentium to 7th Gen", value: desktopPentiumto7thGenTotal })}>
-                        <Card title="Total Desktop (Pentium - 7th Generation)" value={totalDesktopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
-                    </div>
-                    <div onClick={() => openModal({ title: "Total Disposed/Disposal", value: disposedOrDisposalTotal })}>
-                        <Card title="DISPOSED / DISPOSAL" value={totalDisposedOrDisposal} color="border-red-600" textColor="text-red-600" />
+                        <div onClick={() => openModal({ title: "Total Users", value: usersTotal })}>
+                            <Card title="Users" value={totalUsers} color="border-amber-400" textColor="text-amber-600" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Spare Units", value: spareUnitsTotal })}>
+                            <Card title="Spare Computers" value={totalSpareUnits} color="border-gray-400" textColor="text-gray-400" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Desktops", value: desktopsTotal })}>
+                            <Card title="Desktop" value={totalDesktops} color="border-sky-400" textColor="text-sky-600" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Laptops", value: laptopsTotal })}>
+                            <Card title="Laptop" value={totalLaptops} color="border-sky-400" textColor="text-sky-600" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Tablets", value: tabletsTotal })}>
+                            <Card title="Tablets" value={totalTablets} color="border-sky-400" textColor="text-sky-600" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Phones", value: phonesTotal })}>
+                            <Card title="Phones" value={totalPhones} color="border-sky-400" textColor="text-sky-600" />
+                        </div>
+                        
+                        {/* Generations */}
+                        {generations.map((gen) => (
+                            <div key={gen.title} onClick={() => openModal({ title: gen.title, value: gen.value })}>
+                                <Card 
+                                    title={gen.title} 
+                                    value={gen.value.length}
+                                    color={gen.color} 
+                                    textColor={gen.textColor} 
+                                />
+                            </div>
+                        ))}
+                        <div onClick={() => openModal({ title: "Total Laptop Pentium to 7th Gen", value: laptopPentiumto7thGenTotal })}>
+                            <Card title="Total Laptop (Pentium - 7th Generation)" value={totalLaptopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Desktop Pentium to 7th Gen", value: desktopPentiumto7thGenTotal })}>
+                            <Card title="Total Desktop (Pentium - 7th Generation)" value={totalDesktopPentiumto7thGen} color="border-gray-400" textColor="text-gray-400" />
+                        </div>
+                        <div onClick={() => openModal({ title: "Total Disposed/Disposal", value: disposedOrDisposalTotal })}>
+                            <Card title="DISPOSED / DISPOSAL" value={totalDisposedOrDisposal} color="border-red-600" textColor="text-red-600" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
+            {(auth.user.role === 'hr') && (
+                <div className='py-12'>
+                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div onClick={() => openModal({ title: "Total Phones", value: phonesTotal })}>
+                            <Card title="Phones" value={totalPhones} color="border-sky-400" textColor="text-sky-600" />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Modal */}
             <Modal 
                 isOpen={isModalOpen} 

@@ -36,8 +36,8 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('phones', PhonesController::class)->middleware(CheckRole::class.':super admin,admin,member,hr');
     Route::resource('consumables', ConsumablesController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('purchase_requisitions', PurchaseRequisitionsController::class)->middleware(CheckRole::class.':super admin,admin');
-    Route::resource('departments', DepartmentsController::class)->middleware(CheckRole::class.':super admin,admin,user,member');
-    Route::resource('accountUsers', AccountUsersController::class)->middleware(CheckRole::class.':super admin,admin,user,member');
+    Route::resource('departments', DepartmentsController::class)->middleware(CheckRole::class.':super admin,admin,user,member,hr');
+    Route::resource('accountUsers', AccountUsersController::class)->middleware(CheckRole::class.':super admin,admin,user,member,hr');
     // Route::resource('user', UserController::class);
 
     // Restrict 'user' resource to admins only
