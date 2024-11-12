@@ -122,6 +122,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                                 <option value="super admin">Super Admin</option>
                                 <option value="admin">Admin</option>
                                 <option value="member">Member</option>
+                                <option value="hr">HR</option>
                                 <option value="user">User</option>
                             </SelectInput>
                             <InputError message={errors.role} className='mt-2' />

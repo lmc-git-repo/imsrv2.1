@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('monitors', MonitorsController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('printers', PrintersController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('tablets', TabletsController::class)->middleware(CheckRole::class.':super admin,admin,member');
-    Route::resource('phones', PhonesController::class)->middleware(CheckRole::class.':super admin,admin,member');
+    Route::resource('phones', PhonesController::class)->middleware(CheckRole::class.':super admin,admin,member,hr');
     Route::resource('consumables', ConsumablesController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('purchase_requisitions', PurchaseRequisitionsController::class)->middleware(CheckRole::class.':super admin,admin');
     Route::resource('departments', DepartmentsController::class)->middleware(CheckRole::class.':super admin,admin,user,member');

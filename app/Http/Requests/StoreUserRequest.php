@@ -32,7 +32,7 @@ class StoreUserRequest extends FormRequest
                 'confirmed', 
                 Password::min(8)->letters()->symbols(),
             ],
-            "role" => ['required', Rule::in(['super admin', 'admin', 'member', 'user'])],
+            "role" => ['required', Rule::in(['super admin', 'admin', 'member', 'hr', 'user'])],
         ];
     }
 }

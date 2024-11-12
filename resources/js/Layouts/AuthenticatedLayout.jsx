@@ -24,7 +24,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member') && (
+                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member' || user.role === 'hr') && (
                                     <div className='flex justify-center items-center'>
                                         <Dropdown>
                                             <Dropdown.Trigger>
@@ -61,11 +61,15 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         Tablets
                                                     </div>
                                                 </Dropdown.Link>
-                                                <Dropdown.Link href={route('phones.index')}>
-                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                        Phones
-                                                    </div>
-                                                </Dropdown.Link>
+
+                                                {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member' || user.role === 'hr') && (
+                                                    <Dropdown.Link href={route('phones.index')}>
+                                                        <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                            Phones
+                                                        </div>
+                                                    </Dropdown.Link>
+                                                )}
+                                                
                                                 <Dropdown.Link href={route('consumables.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Consumables
