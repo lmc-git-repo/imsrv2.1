@@ -350,7 +350,14 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={accountUsers.meta.links} />
+                            <Pagination 
+                                links={accountUsers.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    status: accUserStatus,
+                                    department_users: deptUsers
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

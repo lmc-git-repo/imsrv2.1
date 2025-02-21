@@ -508,7 +508,15 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                 </table>
                             </div>
                             <Pagination  
-                                links={computers.meta.links} 
+                                links={computers.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    comp_status: compStatus,
+                                    asset_class: assetClass,
+                                    comp_type: compType,
+                                    comp_gen: compGen,
+                                    department_comp: departmentComp
+                                }} 
                             />
                         </div>
                     </div>

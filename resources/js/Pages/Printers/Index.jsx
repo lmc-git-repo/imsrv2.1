@@ -432,7 +432,14 @@ export default function Index({auth, printers, departmentsList, prntrUsersList, 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={printers.meta.links} />
+                            <Pagination 
+                                links={printers.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    asset_class: assetClass,
+                                    printer_department: departmentPrinter
+                                }} 
+                            />
                         </div>
                     </div>
                 </div>

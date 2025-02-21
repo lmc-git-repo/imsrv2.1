@@ -558,7 +558,16 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={tablets.meta.links} />
+                            <Pagination 
+                                links={tablets.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    tablet_status: tabletStatus,
+                                    asset_class: assetClass,
+                                    tablet_gen: tabletGen,
+                                    department_tablet: departmentTablet
+                                }} 
+                            />
                         </div>
                     </div>
                 </div>

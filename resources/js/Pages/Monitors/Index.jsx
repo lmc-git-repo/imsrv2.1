@@ -442,7 +442,14 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={monitors.meta.links} />
+                            <Pagination 
+                                links={monitors.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    asset_class: assetClass,
+                                    mntr_department: mntrComp,
+                                }} 
+                            />
                         </div>
                     </div>
                 </div>

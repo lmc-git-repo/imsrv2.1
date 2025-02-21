@@ -405,7 +405,12 @@ export default function Index({auth, consumables, departmentsList, consumablesUs
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={consumables.meta.links} />
+                            <Pagination 
+                                links={consumables.meta.links}
+                                queryParams={{
+                                    search: searchQuery,                                    
+                                }} 
+                            />
                         </div>
                     </div>
                 </div>

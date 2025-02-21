@@ -505,7 +505,17 @@ export default function Index({auth, serverUps, departmentsList, serverUpsUsersL
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={serverUps.meta.links} />
+                            <Pagination 
+                                links={serverUps.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    S_UStatus: serverUpsStatus,
+                                    asset_class: assetClass,
+                                    S_UType: serverUpsType,
+                                    S_UGen: serverUpsGen,
+                                    department_S_U: departmentSU
+                                }}  
+                            />
                         </div>
                     </div>
                 </div>

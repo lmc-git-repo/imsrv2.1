@@ -194,7 +194,12 @@ export default function Index({employees, queryParams = null}) {
                                 </tbody>
                             </table>
                         </div>
-                        <Pagination links={employees?.meta?.links || []} />
+                        <Pagination 
+                            links={employees?.meta?.links || []}
+                            queryParams={{
+                                search: searchQuery,
+                            }}
+                        />
                     </div>
                 </div>
             </div>

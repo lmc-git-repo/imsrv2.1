@@ -255,7 +255,12 @@ export default function Index({auth, departments, queryParams = null, success}) 
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={departments.meta.links} />
+                            <Pagination 
+                                links={departments.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

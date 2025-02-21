@@ -535,7 +535,15 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={phones.meta.links} />
+                            <Pagination 
+                                links={phones.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    phone_status: phoneStatus,
+                                    asset_class: assetClass,
+                                    department_phone: departmentPhone
+                                }} 
+                            />
                         </div>
                     </div>
                 </div>

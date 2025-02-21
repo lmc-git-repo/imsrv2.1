@@ -413,7 +413,14 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination links={purchase_requisitions.meta.links} />
+                            <Pagination 
+                                links={purchase_requisitions.meta.links}
+                                queryParams={{
+                                    search: searchQuery,
+                                    item_category: itemCategory,
+                                    department_pr: departmentPR
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
