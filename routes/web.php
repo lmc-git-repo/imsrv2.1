@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountManagementController;
 use App\Http\Controllers\AccountUsersController;
 use App\Http\Controllers\ComputersController;
 use App\Http\Controllers\ConsumablesController;
@@ -42,7 +43,8 @@ Route::middleware(['auth', 'verified']) ->group(function(){
 
     // Restrict 'user' resource to admins only
     Route::resource('user', UserController::class)->middleware(CheckRole::class.':admin,super admin');
-
+    Route::resource('accountManagement', AccountManagementController::class)->middleware(CheckRole::class.':super admin,admin');
+    
     // Add routes for printing asset tags
     Route::get('/computers/{id}/print', [ComputersController::class, 'printAssetTag'])->name('computers.printAssetTag');
     Route::get('/computers/bulk-print', [ComputersController::class, 'bulkPrintAssetTags'])->name('computers.bulkPrintAssetTags');

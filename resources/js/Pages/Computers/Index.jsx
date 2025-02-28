@@ -31,6 +31,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const [compType, setCompType] = useState(queryParams.comp_type || '');
     const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
     const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
+    const [selectedItems, setSelectedItems] = useState([]);
 
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
@@ -142,8 +143,6 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     const handlePrint = (computer) => {
         printAssetTag(computer, 'computer'); // Adjusted to use Excel-based printing
     };
-
-    const [selectedItems, setSelectedItems] = useState([]);
 
     const handleSelectItem = (CID) => {
         setSelectedItems((prevSelected) =>

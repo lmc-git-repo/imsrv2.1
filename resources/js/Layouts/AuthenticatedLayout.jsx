@@ -105,6 +105,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
+                                <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
+                                    Account Management{/* List of Accounts */}
+                                </NavLink>
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
                                     Departments{/* List of Departments */}
                                 </NavLink>
@@ -188,6 +191,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
+                            Account Management
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('departments.index')} active={route().current('departments.index')}>
                             Deparments
