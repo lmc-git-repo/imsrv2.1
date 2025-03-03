@@ -9,7 +9,7 @@ const Modal = ({ isOpen, onClose, title, value }) => {
         <div
             className="absolute inset-0 bg-black opacity-50"
         ></div> {/* Backdrop */}
-        <FlowbiteModal show={isOpen} onClose={onClose} className="relative mx-auto" style={{ maxWidth: '60vw' }}>
+        <FlowbiteModal show={isOpen} onClose={onClose} className="relative mx-auto !overflow-hidden" style={{ maxWidth: '60vw' }}>
         <FlowbiteModal.Header className="p-4">
             {title}
         </FlowbiteModal.Header>
@@ -22,7 +22,7 @@ const Modal = ({ isOpen, onClose, title, value }) => {
                 </p>
             </div>
             <div className="flex justify-around p-1">
-                <div className="rounded p-3 w-full">
+                <div className="rounded p-3 w-full" style={{maxHeight: '400px', overflowY: 'auto'}}>
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                             <tr className="text-nowrap">
