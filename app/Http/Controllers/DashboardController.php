@@ -68,11 +68,11 @@ class DashboardController extends Controller
         $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->count();
         $laptopsTotal = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->get();
 
-        $totalTablets = Tablets::query()->count();
-        $tabletsTotal = Tablets::query()->get();
+        $totalTablets = Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->count();
+        $tabletsTotal = Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->get();
 
-        $totalPhones = Phones::query()->count();
-        $phonesTotal = Phones::query()->get();
+        $totalPhones = Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->count();
+        $phonesTotal = Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->get();
         
         $totalsByGen = [];
         foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
