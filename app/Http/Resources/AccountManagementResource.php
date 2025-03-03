@@ -22,6 +22,12 @@ class AccountManagementResource extends JsonResource
             'managementIp' => $this->managementIp,
             'username' => $this->username,
             'password' => $this->password,
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return new UserResource($this->createdBy);
+            }),
+            'updatedBy' => $this->whenLoaded('updatedBy', function () {
+                return new UserResource($this->updatedBy);
+            }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
             // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];

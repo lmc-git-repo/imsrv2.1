@@ -22,8 +22,10 @@ class AccountManagementFactory extends Factory
             'managementIp' => fake()->word(),
             'username' => fake()->word(),
             'password' => fake()->name(),
-            // 'created_at'=> time(),
-            // 'updated_at'=> time()
+            'created_by'=> 1,
+            'updated_by'=> 1,
+            'created_at'=> time(),
+            'updated_at'=> time()
         ];
     }
 }

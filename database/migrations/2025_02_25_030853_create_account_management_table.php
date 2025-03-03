@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('managementIp');
             $table->string('username');
             $table->string('password');
+            $table->foreignId('created_by')->constrained('users');
+            $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
         });
     }

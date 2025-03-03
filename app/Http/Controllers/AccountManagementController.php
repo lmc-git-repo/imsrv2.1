@@ -66,6 +66,8 @@ class AccountManagementController extends Controller
     {
         //
         $data = $request->validated();
+        $data['created_by'] = Auth::id(); 
+        $data['updated_by'] = Auth::id();
 
         //?Checking if there's a data is posted after submission 
         // dd($data);
@@ -95,9 +97,9 @@ class AccountManagementController extends Controller
     public function edit(AccountManagement $accountManagement)
     {
         //
-        return inertia('AccountManagement/Edit', [
-            'accountManagement' => new AccountManagementResource($accountManagement),
-        ]);
+        // return inertia('AccountManagement/Edit', [
+        //     'accountManagement' => new AccountManagementResource($accountManagement),
+        // ]);
     }
 
     /**
@@ -122,10 +124,10 @@ class AccountManagementController extends Controller
         //     unset($data['profile_path']);
         // }
 
-        // $data['updated_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
         $accountManagement->update($data);
         // \Log::info('Updated account user: ', $accountManagement->toArray());
-        return to_route('accountManagement.index')->with('success', "Account \" $accountManagement->name\" was updated");
+        return to_route('accountManagement.index')->with('success', "Account \" $accountManagement->equipmentName\" was updated");
     }
 
     /**
@@ -138,6 +140,6 @@ class AccountManagementController extends Controller
         // if($accountManagement->profile_path){
         //     Storage::disk('public')->deleteDirectory(dirname($accountManagement->profile_path));
         // }
-        return to_route('accountManagement.index')->with('success', "Account - \" $accountManagement->name\" successfully deleted!");
+        return to_route('accountManagement.index')->with('success', "Account - \" $accountManagement->equipmentName\" successfully deleted!");
     }
 }

@@ -17,7 +17,7 @@ export default function Index({auth, accountManagement, queryParams = null, succ
     
     const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditItem, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
@@ -143,14 +143,14 @@ export default function Index({auth, accountManagement, queryParams = null, succ
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            <TableHeading
+                                            {/* <TableHeading
                                                 name="id"
                                                 sort_field={queryParams.sort_field} 
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
                                                 ID
-                                            </TableHeading>
+                                            </TableHeading> */}
                                             <TableHeading
                                                 name="equipmentName"
                                                 sort_field={queryParams.sort_field} 
@@ -187,7 +187,7 @@ export default function Index({auth, accountManagement, queryParams = null, succ
                                                 Password
                                             </TableHeading>
 
-                                            {/* <th className="px-3 py-3">Created By</th> */}
+                                            <th className="px-3 py-3">Created By</th>
                                             <TableHeading
                                                 name="created_at"
                                                 sort_field={queryParams.sort_field} 
@@ -222,7 +222,7 @@ export default function Index({auth, accountManagement, queryParams = null, succ
                                         ) : accountManagement.data && accountManagement.data.length > 0 ? (
                                                 accountManagement.data.map(accountmanagement => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={accountmanagement.id}>
-                                                        <td className="px-3 py-2">{accountmanagement.id}</td>
+                                                        {/* <td className="px-3 py-2">{accountmanagement.id}</td> */}
                                                         <th className="px-3 py-2 hover:underline hover:text-white">
                                                             <Link href="#" onClick={(e) => openModal(accountmanagement, e)}>
                                                                 {accountmanagement.equipmentName}
@@ -231,6 +231,7 @@ export default function Index({auth, accountManagement, queryParams = null, succ
                                                         <td className="px-3 py-2">{accountmanagement.managementIp}</td>
                                                         <td className="px-3 py-2">{accountmanagement.username}</td>
                                                         <td className="px-3 py-2">{accountmanagement.password}</td>
+                                                        <td className="px-3 py-2">{accountmanagement.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{accountmanagement.created_at}</td>
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <td className="px-3 py-2 text-right text-nowrap">
@@ -283,7 +284,7 @@ export default function Index({auth, accountManagement, queryParams = null, succ
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
-                selectedEditItem={selectedEditItem}
+                selectedEdit={selectedEdit}
             />
 
     </AuthenticatedLayout>

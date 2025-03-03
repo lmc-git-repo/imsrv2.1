@@ -11,7 +11,7 @@ class UpdateAccountManagementRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,6 @@ class UpdateAccountManagementRequest extends FormRequest
         return [
             //
             "equipmentName" => ['required', 'max:255'],
-            // "department_users" => ['required', Rule::in($departments)],
             "managementIp" => ['required', 'max:255'],
             "username" => ['required', 'max:255'],
             "password" => ['required', 'max:255'],
