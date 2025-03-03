@@ -24,6 +24,7 @@ class AccountUsersResource extends JsonResource
             'department_users' => $this->department_users,
             'initial' => $this->initial,
             'outlookEmail' => $this->outlookEmail,
+            'password' => $this->password,
             'status' => $this->status,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);

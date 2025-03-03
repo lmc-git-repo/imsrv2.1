@@ -30,6 +30,7 @@ class UpdateAccountUsersRequest extends FormRequest
             "department_users" => ['required', Rule::in($departments)],
             "initial" => ['required', 'max:255', Rule::exists('account_users', 'initial')],
             "outlookEmail" => ['nullable', 'email', 'max:255'],
+            "password" => ['nullable', 'max:255'],
             "status" => ['required', Rule::in(['Employed','Resigned','Terminated'])],
             'profile_path' => 'nullable|image|mimes:jpeg,png,jpg,gif', // Adjust max size as needed
         ];

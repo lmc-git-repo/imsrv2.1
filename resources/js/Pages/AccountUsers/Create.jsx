@@ -15,6 +15,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList }) => {
         department_users: '',
         initial: '',
         outlookEmail: '',
+        password: '',
         satus: '',
         profile_path: '',
     })
@@ -121,6 +122,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList }) => {
                                 required 
                             />
                             <InputError message={errors.outlookEmail} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="password" value="Enter Password" />
+                            </div>
+                            <TextInput 
+                                id="password" 
+                                type="text"
+                                name='password' 
+                                value={data.password}
+                                onChange={(e) => setData("password", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.password} className='mt-2' />
                         </div>
 
                         <div>

@@ -14,6 +14,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
         department_users: selectedEditUser.department_users || "",
         initial: selectedEditUser.initial || "",
         outlookEmail: selectedEditUser.outlookEmail || "",
+        password: selectedEditUser.password || "",
         status: selectedEditUser.status || "",
         // profile_path: selectedEditUser.profile_path || "",
         profile_path: null,
@@ -138,6 +139,21 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                 required 
                             />
                             <InputError message={errors.outlookEmail} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="password" value="Enter Password" />
+                            </div>
+                            <TextInput 
+                                id="password" 
+                                type="text"
+                                name='password' 
+                                value={data.password}
+                                onChange={(e) => setData("password", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.password} className='mt-2' />
                         </div>
 
                         <div>

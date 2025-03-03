@@ -24,6 +24,7 @@ class AccountUsersFactory extends Factory
             'department_users' => fake()->word(),
             'initial' => fake()->unique()->lexify('?.????'),
             'outlookEmail' => fake()->email(),
+            'password' => fake()->password(),
             'status' => fake()->word(),
             'created_by'=> 1,
             'updated_by'=> 1,
