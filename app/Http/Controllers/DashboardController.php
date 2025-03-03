@@ -112,7 +112,8 @@ class DashboardController extends Controller
                 ->orWhere('comp_cpu', 'like', '%celeron%');
         })->count()
         + Tablets::query()
-        ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
+        // ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
+        ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow'])
         ->where('tablet_cpu', 'like', '%celeron%')->count();
 
         //GET For TOTALNACELERON
@@ -125,7 +126,8 @@ class DashboardController extends Controller
             })->get();
 
         $totalNACeleronTablets = Tablets::query()
-            ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
+            // ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow', 'For Disposal', 'Already Disposed'])
+            ->whereIn('tablet_status', ['Deployed', 'Spare', 'Borrow'])
             ->where('tablet_cpu', 'like', '%celeron%')
             ->get();
 
