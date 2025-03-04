@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsumablesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\MonitorsController;
+use App\Http\Controllers\MSAccountController;
 use App\Http\Controllers\PhonesController;
 use App\Http\Controllers\PrintersController;
 use App\Http\Controllers\ProfileController;
@@ -44,6 +45,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     // Restrict 'user' resource to admins only
     Route::resource('user', UserController::class)->middleware(CheckRole::class.':admin,super admin');
     Route::resource('accountManagement', AccountManagementController::class)->middleware(CheckRole::class.':super admin,admin');
+    Route::resource('msAccount', MSAccountController::class)->middleware(CheckRole::class.':super admin,admin');
     
     // Add routes for printing asset tags
     Route::get('/computers/{id}/print', [ComputersController::class, 'printAssetTag'])->name('computers.printAssetTag');

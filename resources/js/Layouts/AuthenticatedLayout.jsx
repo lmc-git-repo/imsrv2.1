@@ -108,6 +108,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
                                     Account Management{/* List of Accounts */}
                                 </NavLink>
+                                <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
+                                    MS Account{/* List of Accounts */}
+                                </NavLink>
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
                                     Departments{/* List of Departments */}
                                 </NavLink>
@@ -194,6 +197,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
                             Account Management
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
+                            MS Account
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('departments.index')} active={route().current('departments.index')}>
                             Deparments
