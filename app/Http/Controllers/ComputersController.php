@@ -37,8 +37,11 @@ class ComputersController extends Controller
             ->when(request('search'), function (Builder $query, $search) {
                 $search = (string)$search;
                 $query->where('comp_name', 'like', "%{$search}%")
+                    ->orWhere('comp_model', 'like', "%{$search}%")
                     ->orWhere('fullName', 'like', "%{$search}%")
                     ->orWhere('comp_asset', 'like', "%{$search}%")
+                    ->orWhere('comp_address', 'like', "%{$search}%")
+                    ->orWhere('comp_serial', 'like', "%{$search}%")
                     ->orWhere('comp_user', 'like', "%{$search}%");
             })
             ->when(request('comp_status'), function (Builder $query, $compStatus) {

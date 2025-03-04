@@ -41,6 +41,8 @@ class TabletsController extends Controller
                     ->orWhere('fullName', 'like', "%{$search}%")
                     ->orWhere('tablet_model', 'like', "%{$search}%")
                     ->orWhere('tablet_asset', 'like', "%{$search}%")
+                    ->orWhere('tablet_serial', 'like', "%{$search}%")
+                    ->orWhere('tablet_address', 'like', "%{$search}%")
                     ->orWhere('tablet_user', 'like', "%{$search}%");
             })
             ->when(request('tablet_status'), function (Builder $query, $tabletStatus) {

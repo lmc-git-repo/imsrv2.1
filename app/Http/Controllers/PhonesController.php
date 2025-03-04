@@ -37,6 +37,9 @@ class PhonesController extends Controller
             ->when(request('search'), function (Builder $query, $search) {
                 $search = (string)$search;
                 $query->where('phone_name', 'like', "%{$search}%")
+                    ->orWhere('phone_serial', 'like', "%{$search}%")
+                    ->orWhere('phone_address', 'like', "%{$search}%")
+                    ->orWhere('phone_num', 'like', "%{$search}%")
                     ->orWhere('fullName', 'like', "%{$search}%")
                     ->orWhere('phone_asset', 'like', "%{$search}%")
                     ->orWhere('phone_model', 'like', "%{$search}%");
