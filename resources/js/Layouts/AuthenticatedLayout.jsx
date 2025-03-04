@@ -111,6 +111,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
                                     MS Account{/* List of Accounts */}
                                 </NavLink>
+                                <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
+                                    Printer Password{/* List of Accounts */}
+                                </NavLink>
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
                                     Departments{/* List of Departments */}
                                 </NavLink>
@@ -200,6 +203,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
                             MS Account
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
+                            Printer Password
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('departments.index')} active={route().current('departments.index')}>
                             Deparments
