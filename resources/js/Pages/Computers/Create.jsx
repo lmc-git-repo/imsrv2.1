@@ -213,7 +213,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, c
                                             onChange={(e) => setData("comp_storage", e.target.value)}
                                             required 
                                         >
-                                            <option value="">Select Operating System: </option>
+                                            <option value="">Select Ram Capacity: </option>
                                             <option value="1.5GB">1.5GB</option>
                                             <option value="2GB">2GB</option>
                                             <option value="4GB">4GB</option>

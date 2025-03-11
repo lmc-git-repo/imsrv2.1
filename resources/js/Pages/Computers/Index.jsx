@@ -27,6 +27,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
     const [compStatus, setCompStatus] = useState(queryParams.comp_status || '');
+    const [compStorage, setCompStorage] = useState(queryParams.comp_storage || ['1.5GB', '2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB', 'N/A'].includes(queryParams.comp_storage) ? queryParams.comp_storage : '');
     const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [compType, setCompType] = useState(queryParams.comp_type || '');
     const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
@@ -47,6 +48,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
               
               // This time add other filters 
               comp_status: compStatus,
+              comp_storage: compStorage,
               asset_class: assetClass,
               comp_type: compType,
               comp_gen: compGen,
@@ -55,7 +57,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, compStatus, assetClass, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -91,13 +93,16 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
             setLoading(false);
         }, 800); // Simulate a delay, adjust based on actual data processing
         return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [compStatus, assetClass, compType, compGen, departmentComp, searchQuery]);
+    }, [compStatus, compStorage, assetClass, compType, compGen, departmentComp, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
         switch (name) {
           case 'comp_status':
             setCompStatus(value);
+            break;
+          case 'comp_storage':
+            setCompStorage(['1.5GB', '2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB', 'N/A'].includes(value) ? value : '');
             break;
           case 'asset_class':
             setAssetClass(value);
@@ -253,6 +258,25 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                             <option value="For Disposal">For Disposal</option>
                                             <option value="Already Disposed">Already Disposed</option>
                                             <option value="Borrow">Borrow</option>
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
+                                            defaultValue={compStorage}
+                                            onChange={(e) => handleSelectChange('comp_storage', e.target.value)}
+                                        >
+                                            <option value="">Select Ram Capacity: </option>
+                                            <option value="1.5GB">1.5GB</option>
+                                            <option value="2GB">2GB</option>
+                                            <option value="4GB">4GB</option>
+                                            <option value="6GB">6GB</option>
+                                            <option value="8GB">8GB</option>
+                                            <option value="12GB">12GB</option>
+                                            <option value="16GB">16GB</option>
+                                            <option value="32GB">32GB</option>
+                                            <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
 
@@ -511,6 +535,7 @@ export default function Index({auth, computers, departmentsList, compUsersList, 
                                 queryParams={{
                                     search: searchQuery,
                                     comp_status: compStatus,
+                                    comp_storage: compStorage,
                                     asset_class: assetClass,
                                     comp_type: compType,
                                     comp_gen: compGen,

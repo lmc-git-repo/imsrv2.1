@@ -42,10 +42,14 @@ class ComputersController extends Controller
                     ->orWhere('comp_asset', 'like', "%{$search}%")
                     ->orWhere('comp_address', 'like', "%{$search}%")
                     ->orWhere('comp_serial', 'like', "%{$search}%")
+                    ->orWhere('comp_storage', 'like', "%{$search}%")
                     ->orWhere('comp_user', 'like', "%{$search}%");
             })
             ->when(request('comp_status'), function (Builder $query, $compStatus) {
                 $query->where('comp_status', $compStatus);
+            })
+            ->when(request('comp_storage'), function (Builder $query, $compStorage) {
+                $query->where('comp_storage', $compStorage);
             })
             ->when(request('asset_class'), function (Builder $query, $assetClass) {
                 $query->where('asset_class', $assetClass);
