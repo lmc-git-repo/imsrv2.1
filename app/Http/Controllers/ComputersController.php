@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GenerationHelper;
 use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\ComputersResource;
 use App\Http\Resources\DepartmentsResource;
@@ -70,6 +71,7 @@ class ComputersController extends Controller
         $compUsersList = AccountUsers::orderBy('initial')->get();
         $compUsersFnameList = AccountUsers::orderBy('name')->get();
         $computersAllData = Computers::orderBy('CID')->get();
+        $generations = GenerationHelper::getGenerations();
 
         // echo $computersAllData;
         // dd($computersAllData);
@@ -77,6 +79,7 @@ class ComputersController extends Controller
         return inertia("Computers/Index", [
             'computers' => ComputersResource::collection($computers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'generations' => $generations,
             'compUsersList' => AccountUsersResource::collection($compUsersList),
             'compUsersFnameList' => AccountUsersResource::collection($compUsersFnameList),
             'computersAllData' => ComputersResource::collection($computersAllData),
