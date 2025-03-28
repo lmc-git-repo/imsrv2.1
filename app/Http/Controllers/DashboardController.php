@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GenerationHelper;
 use App\Models\AccountUsers;
 use App\Models\Computers;
 use App\Models\Phones;
@@ -14,7 +15,9 @@ class DashboardController extends Controller
     public function index()
     {
         $statuses = ['Deployed', 'Spare', 'Borrow'];
-        $generations = ['N/A', 'Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
+        $generations = GenerationHelper::getGenerations(); // Updated generations from GenerationHelper
+        // dd($generations);
+        // $generations = ['N/A', 'Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
         
         $totalOperationals = Computers::query()->whereIn('comp_status', ['Deployed','Borrow','Spare'])->count()
             + Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->count()
@@ -74,9 +77,12 @@ class DashboardController extends Controller
         $totalPhones = Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->count();
         $phonesTotal = Phones::query()->whereIn('phone_status', ['Deployed','Borrow','Spare'])->get();
         
-        $totalsByGen = [];
-        foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
-            $totalsByGen[$gen] = Computers::query()
+        $totalsByGenCount = [];
+        foreach ($generations as $gen) { // Skip 'N/A' for this loop
+            if ($gen === 'N/A') {
+                continue; // Skip 'N/A'
+            }
+            $totalsByGenCount[$gen] = Computers::query()
                 ->where('comp_gen', $gen)
                 ->whereIn('comp_status', $statuses)
                 ->count()
@@ -87,7 +93,10 @@ class DashboardController extends Controller
         }
 
         $byGenTotal = []; // Hold results by generation
-        foreach (array_slice($generations, 1) as $gen) { // Skip 'N/A' for this loop
+        foreach ($generations as $gen) { // Skip 'N/A' for this loop
+            if ($gen === 'N/A') {
+                continue; // Skip 'N/A'
+            }
             $computers = Computers::query()
                 ->where('comp_gen', $gen)
                 ->whereIn('comp_status', $statuses)
@@ -135,27 +144,31 @@ class DashboardController extends Controller
         $naCeleronTotal = $totalNACeleronComputers->merge($totalNACeleronTablets);
         //END
 
+
+        $filteredGenerations = array_filter($generations, function ($gen) {
+            return in_array($gen, ['Pentium', '3rd', '4th', '5th', '6th', '7th']);
+        });
         $totalDesktopPentiumto7thGen = Computers::query()
-            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->whereIn('comp_gen', $filteredGenerations)
             ->where('comp_type', 'Desktop')
             ->whereIn('comp_status', $statuses)
             ->count();
 
             $desktopPentiumto7thGenTotal = Computers::query()
-            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->whereIn('comp_gen', $filteredGenerations)
             ->where('comp_type', 'Desktop')
             ->whereIn('comp_status', $statuses)
             ->get();
                    
 
         $totalLaptopPentiumto7thGen = Computers::query()
-            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->whereIn('comp_gen', $filteredGenerations)
             ->where('comp_type', 'Laptop')
             ->whereIn('comp_status', $statuses)
             ->count();
 
             $laptopPentiumto7thGenTotal = Computers::query()
-            ->whereIn('comp_gen', ['Pentium', '3rd', '4th', '5th', '6th', '7th'])
+            ->whereIn('comp_gen', $filteredGenerations)
             ->where('comp_type', 'Laptop')
             ->whereIn('comp_status', $statuses)
             ->get();
@@ -183,6 +196,15 @@ class DashboardController extends Controller
                 $disposedOrDisposalTotal = $disposedOrDisposalTotal->merge($model::query()->whereIn($statusField, $disposalStatuses)->get());
             }
 
+        $total13thAbovefilteredGenerations = array_filter($generations, function ($gen) {
+            return preg_match('/^\d+(th|st|nd|rd)$/', $gen) && (int)$gen >= 13; // Filter 13th gen and above
+        });
+        
+        $total13thGenAbove = [];
+        foreach ($total13thAbovefilteredGenerations as $gen) {
+            $total13thGenAbove[$gen] = $byGenTotal[$gen] ?? 0; // Add generation dynamically
+        }
+
         return inertia(
             'Dashboard', 
             array_merge(
@@ -206,9 +228,9 @@ class DashboardController extends Controller
                     'total10thGen' => $byGenTotal['10th'],
                     'total11thGen' => $byGenTotal['11th'],
                     'total12thGen' => $byGenTotal['12th'],
-                    'total13thGen' => $byGenTotal['13th'],
-
-                ]
+                    // 'total13thGen' => $byGenTotal['13th'],
+                    'total13thGenAbove' => $total13thGenAbove // Add dynamically generated generations
+                ],
             )
         );
     }

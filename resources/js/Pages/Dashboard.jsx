@@ -18,7 +18,7 @@ export default function Dashboard({
     totalOperationals, operationalsTotal, totalUsers, usersTotal, totalSpareUnits, spareUnitsTotal, totalDesktops, desktopsTotal, totalLaptops, laptopsTotal, 
     totalTablets, tabletsTotal, totalPhones, phonesTotal,
     totalNACeleron,naCeleronTotal, totalPentium, pentiumTotal, total3rdGen, total4thGen, total5thGen, total6thGen, total7thGen, total8thGen,
-    total9thGen, total10thGen, total11thGen, total12thGen, total13thGen, totalDesktopPentiumto7thGen, desktopPentiumto7thGenTotal,
+    total9thGen, total10thGen, total11thGen, total12thGen, total13thGenAbove, totalDesktopPentiumto7thGen, desktopPentiumto7thGenTotal,
     totalLaptopPentiumto7thGen, laptopPentiumto7thGenTotal, totalDisposedOrDisposal, disposedOrDisposalTotal
  }) {
 
@@ -52,7 +52,7 @@ export default function Dashboard({
     // console.log('10th Gen', total10thGen);
     // console.log('11th Gen', total11thGen);
     // console.log('12th Gen', total12thGen);
-    // console.log('13th Gen', total13thGen);
+    // console.log('13th Gen', total13thGenAbove);
 
 
     const generations = [
@@ -68,7 +68,18 @@ export default function Dashboard({
         { title: '10th Gen', value: [...total10thGen.computers, ...total10thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
         { title: '11th Gen', value: [...total11thGen.computers, ...total11thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
         { title: '12th Gen', value: [...total12thGen.computers, ...total12thGen.serverUPS], color: 'border-yellow-400', textColor: 'text-yellow-400' },
-        { title: '13th Gen', value: [...total13thGen.computers, ...total13thGen.serverUPS], color: 'border-green-400', textColor: 'text-green-400' }
+        // { title: '13th Gen', value: [...total13thGenAbove.computers, ...total13thGenAbove.serverUPS], color: 'border-green-400', textColor: 'text-green-400' }
+        ...Object.keys(total13thGenAbove)
+        .filter((gen) => 
+            (total13thGenAbove[gen]?.computers?.length || 0) > 0 || 
+            (total13thGenAbove[gen]?.serverUPS?.length || 0) > 0
+        )
+        .map((gen) => ({
+            title: `${gen} Gen`,
+            value: [...total13thGenAbove[gen].computers, ...total13thGenAbove[gen].serverUPS],
+            color: 'border-green-400',
+            textColor: 'text-green-400',
+        })),
     ];
     
 

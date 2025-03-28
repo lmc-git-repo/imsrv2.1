@@ -253,16 +253,16 @@ const Modal = ({ isOpen, onClose, title, value }) => {
                                         assetTag = item.comp_asset || item.S_UAsset || 'N/A';
                                         break;
 
-                                        case '13th Gen':
-                                        name = item.comp_name || item.S_UName || 'N/A';
-                                        user = item.fullName || item.S_UUser || 'N/A';
-                                        department = item.department_comp || item.department_S_U || 'N/A';
-                                        type = item.comp_type || item.S_UType || 'N/A';
-                                        model = item.comp_model || item.S_UModel || 'N/A';
-                                        os = item.comp_os || item.S_UOs || 'N/A';
-                                        storage = item.comp_storage || item.S_UStorage || 'N/A';
-                                        assetTag = item.comp_asset || item.S_UAsset || 'N/A';
-                                        break;
+                                        // case '13th Gen':
+                                        // name = item.comp_name || item.S_UName || 'N/A';
+                                        // user = item.fullName || item.S_UUser || 'N/A';
+                                        // department = item.department_comp || item.department_S_U || 'N/A';
+                                        // type = item.comp_type || item.S_UType || 'N/A';
+                                        // model = item.comp_model || item.S_UModel || 'N/A';
+                                        // os = item.comp_os || item.S_UOs || 'N/A';
+                                        // storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                        // assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        // break;
 
                                         case 'Total Laptop Pentium to 7th Gen':
                                         name = item.comp_name || 'Laptop Name';
@@ -298,14 +298,26 @@ const Modal = ({ isOpen, onClose, title, value }) => {
                                         break;
 
                                         default:
-                                        name = 'N/A';
-                                        user = 'N/A';
-                                        department = 'N/A';
-                                        type = 'Unknown';
-                                        model = 'N/A';
-                                        os = 'N/A';
-                                        storage = 'N/A';
-                                        assetTag = 'N/A';
+                                        if (/^\d+(th|st|nd|rd) Gen$/.test(title)) {
+                                            name = item.comp_name || item.S_UName || 'N/A';
+                                            user = item.fullName || item.S_UUser || 'N/A';
+                                            department = item.department_comp || item.department_S_U || 'N/A';
+                                            type = item.comp_type || item.S_UType || 'N/A';
+                                            model = item.comp_model || item.S_UModel || 'N/A';
+                                            os = item.comp_os || item.S_UOs || 'N/A';
+                                            storage = item.comp_storage || item.S_UStorage || 'N/A';
+                                            assetTag = item.comp_asset || item.S_UAsset || 'N/A';
+                                        } else {
+                                            // Default case for unknown titles
+                                            name = 'N/A';
+                                            user = 'N/A';
+                                            department = 'N/A';
+                                            type = 'Unknown';
+                                            model = 'N/A';
+                                            os = 'N/A';
+                                            storage = 'N/A';
+                                            assetTag = 'N/A';
+                                        }
                                     }
 
                                     return (
