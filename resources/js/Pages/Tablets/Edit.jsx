@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 
 
-const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, listTabletUsersFname, selectedEditTablet }) => {
+const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, listTabletUsersFname, selectedEditTablet, generations }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
@@ -323,23 +323,9 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
                                 required 
                             >
                                 <option value="">Select Generation: </option>
-                                <option value="3rd">3rd</option>
-                                <option value="4th">4th</option>
-                                <option value="5th">5th</option>
-                                <option value="6th">6th</option>
-                                <option value="7th">7th</option>
-                                <option value="8th">8th</option>
-                                <option value="9th">9th</option>
-                                <option value="10th">10th</option>
-                                <option value="11th">11th</option>
-                                <option value="12th">12th</option>
-                                <option value="13th">13th</option>
-                                <option value="14th">14th</option>
-                                <option value="15th">15th</option>
-                                <option value="16th">16th</option>
-                                <option value="17th">17th</option>
-                                <option value="Pentium">Pentium</option>
-                                <option value="N/A">N/A</option>
+                                {generations.map((gen, index) => (
+                                    <option key={index} value={gen}>{gen}</option>
+                                ))}
                             </SelectInput>
                             <InputError message={errors.tablet_gen} className='mt-2' />
                         </div>

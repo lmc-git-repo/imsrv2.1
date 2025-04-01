@@ -18,7 +18,7 @@ import { debounce } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
 import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
-export default function Index({auth, tablets, departmentsList, tabletUsersList, tabletUsersFnameList, queryParams = null, success}) {
+export default function Index({auth, tablets, departmentsList, generations, tabletUsersList, tabletUsersFnameList, queryParams = null, success}) {
     
     const { showModal, selectedTablet, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
@@ -262,23 +262,9 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                                             onChange={(e) => handleSelectChange('tablet_gen', e.target.value)}
                                         >
                                             <option value="">Select Generation: </option>
-                                            <option value="3rd">3rd</option>
-                                            <option value="4th">4th</option>
-                                            <option value="5th">5th</option>
-                                            <option value="6th">6th</option>
-                                            <option value="7th">7th</option>
-                                            <option value="8th">8th</option>
-                                            <option value="9th">9th</option>
-                                            <option value="10th">10th</option>
-                                            <option value="11th">11th</option>
-                                            <option value="12th">12th</option>
-                                            <option value="13th">13th</option>
-                                            <option value="14th">14th</option>
-                                            <option value="15th">15th</option>
-                                            <option value="16th">16th</option>
-                                            <option value="17th">17th</option>
-                                            <option value="Pentium">Pentium</option>
-                                            <option value="N/A">N/A</option>
+                                            {generations.map((gen, index) => (
+                                                <option key={index} value={gen}>{gen}</option>
+                                            ))}
                                         </SelectInput>
                                     </div>
                                 </div>
@@ -573,11 +559,19 @@ export default function Index({auth, tablets, departmentsList, tabletUsersList, 
                 </div>
             </div>
             <Show show={showModal} onClose={closeModal} user={selectedTablet} />
-            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} tabletUsersList={tabletUsersList.data} tabletUsersFnameList={tabletUsersFnameList.data}  />
+            <CreateModalComponent 
+                show={showCreateModal} 
+                onClose={closeCreateModal} 
+                departmentsList={departmentsList.data}
+                generations={generations} 
+                tabletUsersList={tabletUsersList.data} 
+                tabletUsersFnameList={tabletUsersFnameList.data}  
+            />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
+                generations={generations}
                 listTabletUsers={tabletUsersList.data}
                 listTabletUsersFname={tabletUsersFnameList.data}
                 selectedEditTablet={selectedEditTablet}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GenerationHelper;
 use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\DepartmentsResource;
 use App\Http\Resources\ServerUPSResource;
@@ -63,12 +64,14 @@ class ServerUPSController extends Controller
         $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
         $serverUpsUsersList = AccountUsers::orderBy('initial')->get();
         $serverUpsAllData = ServerUPS::orderBy('S_UID')->get();
+        $generations = GenerationHelper::getGenerations();
 
         // echo $serverUpsAllData;
 
         return inertia("ServerUps/Index", [
             'serverUps' => ServerUPSResource::collection($serverUps),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'generations' => $generations,
             'serverUpsUsersList' => AccountUsersResource::collection($serverUpsUsersList),
             'serverUpsAllData' => ServerUPSResource::collection($serverUpsAllData),
             'queryParams' => request()->query() ?: null,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GenerationHelper;
 use App\Http\Resources\AccountUsersResource;
 use App\Http\Resources\DepartmentsResource;
 use App\Http\Resources\TabletsResource;
@@ -64,12 +65,14 @@ class TabletsController extends Controller
         $tabletUsersList = AccountUsers::orderBy('initial')->get();
         $tabletUsersFnameList = AccountUsers::orderBy('name')->get();
         $tabletsAllData = Tablets::orderBy('tablet_id')->get();
+        $generations = GenerationHelper::getGenerations();
 
         // echo $tabletsAllData;
 
         return inertia("Tablets/Index", [
             'tablets' => TabletsResource::collection($tablets),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
+            'generations' => $generations,
             'tabletUsersList' => AccountUsersResource::collection($tabletUsersList),
             'tabletUsersFnameList' => AccountUsersResource::collection($tabletUsersFnameList),
             'tabletsAllData' => TabletsResource::collection($tabletsAllData),
