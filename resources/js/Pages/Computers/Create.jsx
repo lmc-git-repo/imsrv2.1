@@ -65,7 +65,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, c
             <div
                 className="absolute inset-0 bg-black opacity-50"
             ></div> {/* Backdrop */}
-            <Modal show={show} onClose={onClose} className="relative mx-auto" style={{ maxWidth: '50vw', overflowY: 'scroll', scrollbarWidth: 'none'}}>
+            <Modal show={show} onClose={onClose} className="" style={{ overflowY: 'scroll', scrollbarWidth: 'none'}}>
                 <Modal.Header className="p-4">
                     Add New Computer
                 </Modal.Header>

@@ -158,7 +158,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
         header={
             <div className='flex justify-between items-center'>
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Monitors</h2>
-                <div className='flex justify-between w-1/4'>
+                <div className='flex justify-between w-auto lg:w-1/4 gap-auto gap-2'>
                     {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                         <Button 
                             onClick={() => openCreateModal()} 
