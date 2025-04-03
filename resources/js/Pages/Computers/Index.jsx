@@ -166,19 +166,12 @@ export default function Index({auth, computers, departmentsList, generations, co
         }
     };
 
-    // const handleBulkPrint = () => {
-    //     const selectedItemDetails = computers.data.filter((comp) =>
-    //         selectedItems.includes(comp.CID)
-    //     );
-    //      // Call the bulk print function
-    //     bulkPrintAssetTags(selectedItemDetails, 'computer');
-    // };
     // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
         const selectedItemDetails = computers.data.filter((comp) =>
             selectedItems.includes(comp.CID)
         );
-        bulkPrintAssetTags(selectedItemDetails, 'computer'); // Adjusted to use Excel-based printing
+        bulkPrintAssetTags(selectedItemDetails, 'computer');
     };
 
   return (

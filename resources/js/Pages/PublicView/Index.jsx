@@ -88,7 +88,7 @@ export default function Index({employees, queryParams = null}) {
     <PublicLayout>   
         <div className='flex justify-between items-center'>
             <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Employees </h2>
-            <Link>
+            <Link href='/'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-6 hover:scale-110">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                 </svg>
