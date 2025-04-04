@@ -14,7 +14,7 @@ import useEditModal from './hooks/useEditModal'
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
-import { debounce } from 'lodash'
+import { debounce, set } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
 import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
@@ -33,6 +33,17 @@ export default function Index({auth, computers, departmentsList, generations, co
     const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
     const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
     const [selectedItems, setSelectedItems] = useState([]);
+
+    // Load selectedItems from localStorage on component mount
+    useEffect(() => {
+        const savedSelectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        setSelectedItems(savedSelectedItems);
+    }, []);
+
+    // Save selectedItems to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    }, [selectedItems]);
 
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
@@ -149,6 +160,30 @@ export default function Index({auth, computers, departmentsList, generations, co
         printAssetTag(computer, 'computer'); // Adjusted to use Excel-based printing
     };
 
+    // const handleSelectAll = (e) => {
+    //     if (e.target.checked) {
+    //         const allIDs = computers.data.map((comp) => comp.CID);
+    //         setSelectedItems(allIDs);
+    //     } else {
+    //         setSelectedItems([]);
+    //     }
+    // };
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIDsOnPage = computers.data.map((comp) => comp.CID);
+            setSelectedItems((prevSelected) => [
+                ...new Set([...prevSelected, ...allIDsOnPage]),
+            ]);
+        } else if (selectedItems.length > 0) {
+            const allIDsOnPage = computers.data.map((comp) => comp.CID);
+            setSelectedItems((prevSelected) =>
+                prevSelected.filter((id) => !allIDsOnPage.includes(id))
+            );
+        } else{
+            setSelectedItems([]);
+        }
+    };
+
     const handleSelectItem = (CID) => {
         setSelectedItems((prevSelected) =>
             prevSelected.includes(CID)
@@ -157,14 +192,7 @@ export default function Index({auth, computers, departmentsList, generations, co
         );
     };
 
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allIDs = computers.data.map((comp) => comp.CID);
-            setSelectedItems(allIDs);
-        } else {
-            setSelectedItems([]);
-        }
-    };
+    console.log('Selected Items:', selectedItems);
 
     // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
