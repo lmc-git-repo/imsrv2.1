@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     
     // Add routes for printing asset tags
     Route::get('/computers/{id}/print', [ComputersController::class, 'printAssetTag'])->name('computers.printAssetTag');
-    Route::get('/computers/bulk-print', [ComputersController::class, 'bulkPrintAssetTags'])->name('computers.bulkPrintAssetTags');
+    Route::post('/computers/bulk-fetch', [ComputersController::class, 'bulkFetch'])->name('computers.bulkFetch');
 
     Route::get('/serverups/{id}/print', [ServerUPSController::class, 'printAssetTag'])->name('serverups.printAssetTag');
     Route::get('/serverups/bulk-print', [ServerUPSController::class, 'bulkPrintAssetTags'])->name('serverups.bulkPrintAssetTags');

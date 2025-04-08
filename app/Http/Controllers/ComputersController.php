@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateComputersRequest;
 use App\Models\Departments;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -212,5 +213,11 @@ class ComputersController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($computer->img_path));
         }
         return to_route('computers.index')->with('success', "Computer - \" $computer->comp_name\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $computers = Computers::whereIn('CID', $ids)->get();
+        return response()->json($computers);
     }
 }

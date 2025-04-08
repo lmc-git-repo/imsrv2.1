@@ -169,18 +169,16 @@ export default function Index({auth, computers, departmentsList, generations, co
     //     }
     // };
     const handleSelectAll = (e) => {
+        const allIDsOnPage = computers.data.map((comp) => comp.CID);
+    
         if (e.target.checked) {
-            const allIDsOnPage = computers.data.map((comp) => comp.CID);
             setSelectedItems((prevSelected) => [
                 ...new Set([...prevSelected, ...allIDsOnPage]),
             ]);
-        } else if (selectedItems.length > 0) {
-            const allIDsOnPage = computers.data.map((comp) => comp.CID);
+        } else {
             setSelectedItems((prevSelected) =>
                 prevSelected.filter((id) => !allIDsOnPage.includes(id))
             );
-        } else{
-            setSelectedItems([]);
         }
     };
 
@@ -192,14 +190,50 @@ export default function Index({auth, computers, departmentsList, generations, co
         );
     };
 
-    console.log('Selected Items:', selectedItems);
 
     // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        console.log('CSRF Token:', csrfToken);
+        if (!csrfToken) {
+            console.error('CSRF token not found in the document.');
+            return;
+        }
+    
         const selectedItemDetails = computers.data.filter((comp) =>
             selectedItems.includes(comp.CID)
         );
-        bulkPrintAssetTags(selectedItemDetails, 'computer');
+    
+        const missingItemIDs = selectedItems.filter(
+            (id) => !computers.data.some((comp) => comp.CID === id)
+        );
+    
+        if (missingItemIDs.length > 0) {
+            fetch(route('computers.bulkFetch'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ ids: missingItemIDs }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((missingItems) => {
+                const allItemsToPrint = [...selectedItemDetails, ...missingItems];
+                bulkPrintAssetTags(allItemsToPrint, 'computer');
+            })
+            .catch((error) => {
+                console.error('Error fetching missing items:', error);
+            });
+        } else {
+            console.log('All Selected Items:', selectedItemDetails);
+            bulkPrintAssetTags(selectedItemDetails, 'computer');            
+        }
     };
 
   return (
