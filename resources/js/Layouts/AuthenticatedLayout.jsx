@@ -287,7 +287,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
 
                         <div className="mt-3 space-y-1">
                             {(user.role === 'super admin' || user.role === 'admin') && (
-                                <ResponsiveNavLink  esponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
                             )}
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out

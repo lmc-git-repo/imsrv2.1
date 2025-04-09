@@ -18,6 +18,7 @@ use App\Http\Controllers\ServerUPSController;
 use App\Http\Controllers\TabletsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,7 +53,12 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     
     // Add routes for printing asset tags
     Route::get('/computers/{id}/print', [ComputersController::class, 'printAssetTag'])->name('computers.printAssetTag');
-    Route::post('/computers/bulk-fetch', [ComputersController::class, 'bulkFetch'])->name('computers.bulkFetch');
+    // Route::post('/computers/bulk-fetch', [ComputersController::class, 'bulkFetch'])->name('computers.bulkFetch')->middleware(['auth','verified']);
+    // Add the bulk-fetch route without CSRF protection
+    Route::post('/computers/bulk-fetch', [ComputersController::class, 'bulkFetch'])
+        ->name('computers.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 
     Route::get('/serverups/{id}/print', [ServerUPSController::class, 'printAssetTag'])->name('serverups.printAssetTag');
     Route::get('/serverups/bulk-print', [ServerUPSController::class, 'bulkPrintAssetTags'])->name('serverups.bulkPrintAssetTags');

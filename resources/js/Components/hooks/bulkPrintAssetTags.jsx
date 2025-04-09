@@ -406,16 +406,16 @@ const bulkPrintAssetTags = (assets, assetType) => {
     printWindow.document.close();
 
     // Attach the onafterprint event to clear localStorage
-    printWindow.onafterprint = () => {
-        const userConfirmed = confirm('Did you successfully print the asset tags?');
-        if (userConfirmed) {
-            localStorage.removeItem('selectedItems'); // Clear localStorage
-            console.log('LocalStorage cleared after printing.');
-        } else {
-            console.log('LocalStorage was not cleared because the user canceled.');
-        }
-        printWindow.close(); // Close the print window
-    };
+    // printWindow.onafterprint = () => {
+    //     const userConfirmed = confirm('Did you successfully print the asset tags?');
+    //     if (userConfirmed) {
+    //         localStorage.removeItem('selectedItems'); // Clear localStorage
+    //         console.log('LocalStorage cleared after printing.');
+    //     } else {
+    //         console.log('LocalStorage was not cleared because the user canceled.');
+    //     }
+    //     printWindow.close(); // Close the print window
+    // };
 
     printWindow.focus();
     printWindow.print();

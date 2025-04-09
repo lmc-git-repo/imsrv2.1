@@ -194,7 +194,7 @@ export default function Index({auth, computers, departmentsList, generations, co
     // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        console.log('CSRF Token:', csrfToken);
+        // console.log('CSRF Token:', csrfToken);
         if (!csrfToken) {
             console.error('CSRF token not found in the document.');
             return;
@@ -226,13 +226,21 @@ export default function Index({auth, computers, departmentsList, generations, co
             .then((missingItems) => {
                 const allItemsToPrint = [...selectedItemDetails, ...missingItems];
                 bulkPrintAssetTags(allItemsToPrint, 'computer');
+
+                // Clear selected items and remove from localStorage
+                setSelectedItems([]);
+                localStorage.removeItem('selectedItems');
             })
             .catch((error) => {
                 console.error('Error fetching missing items:', error);
             });
         } else {
-            console.log('All Selected Items:', selectedItemDetails);
-            bulkPrintAssetTags(selectedItemDetails, 'computer');            
+            // console.log('All Selected Items:', selectedItemDetails);
+            bulkPrintAssetTags(selectedItemDetails, 'computer'); 
+            
+            // Clear selected items and remove from localStorage
+            setSelectedItems([]);
+            localStorage.removeItem('selectedItems');
         }
     };
 
