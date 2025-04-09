@@ -30,6 +30,18 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
     const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [tabletGen, setTabletGen] = useState(queryParams.tablet_gen || '');
     const [departmentTablet, setDepartmentTablet] = useState(queryParams.department_tablet || '');
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    // Load selectedItems from localStorage on component mount
+    useEffect(() => {
+        const savedSelectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        setSelectedItems(savedSelectedItems);
+    }, []);
+
+    // Save selectedItems to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    }, [selectedItems]);
 
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
@@ -133,7 +145,28 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
         printAssetTag(tablet, 'tablet');
     };
 
-    const [selectedItems, setSelectedItems] = useState([]);
+    // const handleSelectAll = (e) => {
+    //     if (e.target.checked) {
+    //         const allIDs = tablets.data.map((item) => item.tablet_id);
+    //         setSelectedItems(allIDs);
+    //     } else {
+    //         setSelectedItems([]);
+    //     }
+    // };
+
+    const handleSelectAll = (e) => {
+        const allIDsOnPage = tablets.data.map((item) => item.tablet_id);
+    
+        if (e.target.checked) {
+            setSelectedItems((prevSelected) => [
+                ...new Set([...prevSelected, ...allIDsOnPage]),
+            ]);
+        } else {
+            setSelectedItems((prevSelected) =>
+                prevSelected.filter((id) => !allIDsOnPage.includes(id))
+            );
+        }
+    };
 
     const handleSelectItem = (tablet_id) => {
         setSelectedItems((prevSelected) =>
@@ -143,21 +176,56 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
         );
     };
 
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allIDs = tablets.data.map((item) => item.tablet_id);
-            setSelectedItems(allIDs);
-        } else {
-            setSelectedItems([]);
-        }
-    };
-
     const handleBulkPrint = () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // console.log('CSRF Token:', csrfToken);
+        if (!csrfToken) {
+            console.error('CSRF token not found in the document.');
+            return;
+        }
+    
         const selectedItemDetails = tablets.data.filter((item) =>
             selectedItems.includes(item.tablet_id)
         );
-         // Call the bulk print function
-        bulkPrintAssetTags(selectedItemDetails, 'tablet');
+    
+        const missingItemIDs = selectedItems.filter(
+            (id) => !tablets.data.some((item) => item.tablet_id === id)
+        );
+    
+        if (missingItemIDs.length > 0) {
+            fetch(route('tablets.bulkFetch'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ ids: missingItemIDs }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((missingItems) => {
+                const allItemsToPrint = [...selectedItemDetails, ...missingItems];
+                bulkPrintAssetTags(allItemsToPrint, 'tablet');
+
+                // Clear selected items and remove from localStorage
+                setSelectedItems([]);
+                localStorage.removeItem('selectedItems');
+            })
+            .catch((error) => {
+                console.error('Error fetching missing items:', error);
+            });
+        } else {
+            // console.log('All Selected Items:', selectedItemDetails);
+            bulkPrintAssetTags(selectedItemDetails, 'tablet'); 
+            
+            // Clear selected items and remove from localStorage
+            setSelectedItems([]);
+            localStorage.removeItem('selectedItems');
+        }
     };
     
   return (

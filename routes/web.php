@@ -61,19 +61,34 @@ Route::middleware(['auth', 'verified']) ->group(function(){
         ->middleware(['auth', 'verified']);
 
     Route::get('/serverups/{id}/print', [ServerUPSController::class, 'printAssetTag'])->name('serverups.printAssetTag');
-    Route::get('/serverups/bulk-print', [ServerUPSController::class, 'bulkPrintAssetTags'])->name('serverups.bulkPrintAssetTags');
+    Route::post('/serverups/bulk-fetch', [ServerUPSController::class, 'bulkFetch'])
+        ->name('serverups.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 
     Route::get('/monitors/{id}/print', [MonitorsController::class, 'printAssetTag'])->name('monitors.printAssetTag');
-    Route::get('/monitors/bulk-print', [MonitorsController::class, 'bulkPrintAssetTags'])->name('monitors.bulkPrintAssetTags');
+    Route::post('/monitors/bulk-fetch', [MonitorsController::class, 'bulkFetch'])
+        ->name('monitors.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 
     Route::get('/printers/{id}/print', [PrintersController::class, 'printAssetTag'])->name('printers.printAssetTag');
-    Route::get('/printers/bulk-print', [PrintersController::class, 'bulkPrintAssetTags'])->name('printers.bulkPrintAssetTags');
+    Route::post('/printers/bulk-fetch', [PrintersController::class, 'bulkFetch'])
+        ->name('printers.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 
     Route::get('/tablets/{id}/print', [TabletsController::class, 'printAssetTag'])->name('tablets.printAssetTag');
-    Route::get('/tablets/bulk-print', [TabletsController::class, 'bulkPrintAssetTags'])->name('tablets.bulkPrintAssetTags');
+    Route::post('/tablets/bulk-fetch', [TabletsController::class, 'bulkFetch'])
+        ->name('tablets.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 
     Route::get('/phones/{id}/print', [PhonesController::class, 'printAssetTag'])->name('phones.printAssetTag');
-    Route::get('/phones/bulk-print', [PhonesController::class, 'bulkPrintAssetTags'])->name('phones.bulkPrintAssetTags');
+    Route::post('/phones/bulk-fetch', [PhonesController::class, 'bulkFetch'])
+        ->name('phones.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
 });
 
 // Route::get('/test-role', function () {

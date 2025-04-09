@@ -29,6 +29,18 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
     const [phoneStatus, setPhoneStatus] = useState(queryParams.phone_status || '');
     const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
     const [departmentPhone, setDepartmentPhone] = useState(queryParams.department_phone || '');
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    // Load selectedItems from localStorage on component mount
+    useEffect(() => {
+        const savedSelectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        setSelectedItems(savedSelectedItems);
+    }, []);
+
+    // Save selectedItems to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    }, [selectedItems]);
 
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
@@ -128,7 +140,27 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
         printAssetTag(phone, 'phone');
     };
     
-    const [selectedItems, setSelectedItems] = useState([]);
+    // const handleSelectAll = (e) => {
+    //     if (e.target.checked) {
+    //         const allIDs = phones.data.map((item) => item.phone_id);
+    //         setSelectedItems(allIDs);
+    //     } else {
+    //         setSelectedItems([]);
+    //     }
+    // };
+    const handleSelectAll = (e) => {
+        const allIDsOnPage = phones.data.map((item) => item.phone_id);
+    
+        if (e.target.checked) {
+            setSelectedItems((prevSelected) => [
+                ...new Set([...prevSelected, ...allIDsOnPage]),
+            ]);
+        } else {
+            setSelectedItems((prevSelected) =>
+                prevSelected.filter((id) => !allIDsOnPage.includes(id))
+            );
+        }
+    };
 
     const handleSelectItem = (phone_id) => {
         setSelectedItems((prevSelected) =>
@@ -138,21 +170,56 @@ export default function Index({auth, phones, departmentsList, phoneUsersFnameLis
         );
     };
 
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allIDs = phones.data.map((item) => item.phone_id);
-            setSelectedItems(allIDs);
-        } else {
-            setSelectedItems([]);
-        }
-    };
-
     const handleBulkPrint = () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // console.log('CSRF Token:', csrfToken);
+        if (!csrfToken) {
+            console.error('CSRF token not found in the document.');
+            return;
+        }
+    
         const selectedItemDetails = phones.data.filter((item) =>
             selectedItems.includes(item.phone_id)
         );
-         // Call the bulk print function
-        bulkPrintAssetTags(selectedItemDetails, 'phone');
+    
+        const missingItemIDs = selectedItems.filter(
+            (id) => !phones.data.some((item) => item.phone_id === id)
+        );
+    
+        if (missingItemIDs.length > 0) {
+            fetch(route('phones.bulkFetch'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ ids: missingItemIDs }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((missingItems) => {
+                const allItemsToPrint = [...selectedItemDetails, ...missingItems];
+                bulkPrintAssetTags(allItemsToPrint, 'phone');
+
+                // Clear selected items and remove from localStorage
+                setSelectedItems([]);
+                localStorage.removeItem('selectedItems');
+            })
+            .catch((error) => {
+                console.error('Error fetching missing items:', error);
+            });
+        } else {
+            // console.log('All Selected Items:', selectedItemDetails);
+            bulkPrintAssetTags(selectedItemDetails, 'phone'); 
+            
+            // Clear selected items and remove from localStorage
+            setSelectedItems([]);
+            localStorage.removeItem('selectedItems');
+        }
     };
   return (
     <AuthenticatedLayout

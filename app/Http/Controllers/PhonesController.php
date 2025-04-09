@@ -12,6 +12,7 @@ use App\Http\Requests\StorePhonesRequest;
 use App\Http\Requests\UpdatePhonesRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -195,5 +196,11 @@ class PhonesController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($phone->img_path));
         }
         return to_route('phones.index')->with('success', "Phone - \" $phone->phone_name\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $phone = Phones::whereIn('phone_id', $ids)->get();
+        return response()->json($phone);
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Requests\StoreServerUPSRequest;
 use App\Http\Requests\UpdateServerUPSRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -202,5 +203,11 @@ class ServerUPSController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($serverUp->img_path));
         }
         return to_route('serverUps.index')->with('success', "Server / UPS - \" $serverUp->S_UName\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $serverUp = ServerUPS::whereIn('S_UID', $ids)->get();
+        return response()->json($serverUp);
     }
 }

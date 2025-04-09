@@ -31,6 +31,18 @@ export default function Index({auth, serverUps, departmentsList, generations, se
     const [serverUpsType, setServerUpsType] = useState(queryParams.S_UType || '');
     const [serverUpsGen, setServerUpsGen] = useState(queryParams.S_UGen || '');
     const [departmentSU, setdepartmentSU] = useState(queryParams.department_S_U || '');
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    // Load selectedItems from localStorage on component mount
+    useEffect(() => {
+        const savedSelectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+        setSelectedItems(savedSelectedItems);
+    }, []);
+
+    // Save selectedItems to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    }, [selectedItems]);
 
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
@@ -139,7 +151,27 @@ export default function Index({auth, serverUps, departmentsList, generations, se
         printAssetTag(serverups, 'serverups'); // Adjusted to use Excel-based printing
     };
 
-    const [selectedItems, setSelectedItems] = useState([]);
+    // const handleSelectAll = (e) => {
+    //     if (e.target.checked) {
+    //         const allIDs = serverUps.data.map((item) => item.S_UID);
+    //         setSelectedItems(allIDs);
+    //     } else {
+    //         setSelectedItems([]);
+    //     }
+    // };
+    const handleSelectAll = (e) => {
+        const allIDsOnPage = serverUps.data.map((item) => item.S_UID);
+    
+        if (e.target.checked) {
+            setSelectedItems((prevSelected) => [
+                ...new Set([...prevSelected, ...allIDsOnPage]),
+            ]);
+        } else {
+            setSelectedItems((prevSelected) =>
+                prevSelected.filter((id) => !allIDsOnPage.includes(id))
+            );
+        }
+    };
 
     const handleSelectItem = (S_UID) => {
         setSelectedItems((prevSelected) =>
@@ -148,28 +180,57 @@ export default function Index({auth, serverUps, departmentsList, generations, se
             : [...prevSelected, S_UID]
         );
     };
-
-    const handleSelectAll = (e) => {
-        if (e.target.checked) {
-            const allIDs = serverUps.data.map((item) => item.S_UID);
-            setSelectedItems(allIDs);
-        } else {
-            setSelectedItems([]);
-        }
-    };
-
-    // const handleBulkPrint = () => {
-    //     const selectedItemDetails = serverUps.data.filter((item) =>
-    //         selectedItems.includes(item.S_UID)
-    //     );
-    //      // Call the bulk print function
-    //     bulkPrintAssetTags(selectedItemDetails, 'serverups');
-    // };
+    
     const handleBulkPrint = () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        // console.log('CSRF Token:', csrfToken);
+        if (!csrfToken) {
+            console.error('CSRF token not found in the document.');
+            return;
+        }
+    
         const selectedItemDetails = serverUps.data.filter((item) =>
             selectedItems.includes(item.S_UID)
         );
-        bulkPrintAssetTags(selectedItemDetails, 'serverups'); // Adjusted to use Excel-based printing
+    
+        const missingItemIDs = selectedItems.filter(
+            (id) => !serverUps.data.some((item) => item.S_UID === id)
+        );
+    
+        if (missingItemIDs.length > 0) {
+            fetch(route('serverups.bulkFetch'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ ids: missingItemIDs }),
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((missingItems) => {
+                const allItemsToPrint = [...selectedItemDetails, ...missingItems];
+                bulkPrintAssetTags(allItemsToPrint, 'serverups');
+
+                // Clear selected items and remove from localStorage
+                setSelectedItems([]);
+                localStorage.removeItem('selectedItems');
+            })
+            .catch((error) => {
+                console.error('Error fetching missing items:', error);
+            });
+        } else {
+            // console.log('All Selected Items:', selectedItemDetails);
+            bulkPrintAssetTags(selectedItemDetails, 'serverups'); 
+            
+            // Clear selected items and remove from localStorage
+            setSelectedItems([]);
+            localStorage.removeItem('selectedItems');
+        }
     };
     
   return (

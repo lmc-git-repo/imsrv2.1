@@ -12,6 +12,7 @@ use App\Http\Requests\StorePrintersRequest;
 use App\Http\Requests\UpdatePrintersRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -191,5 +192,11 @@ class PrintersController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($printer->img_path));
         }
         return to_route('printers.index')->with('success', "Printer - \" $printer->printer_user\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $printer = Printers::whereIn('printer_id', $ids)->get();
+        return response()->json($printer);
     }
 }

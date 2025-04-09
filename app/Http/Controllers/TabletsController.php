@@ -14,6 +14,7 @@ use App\Http\Requests\StoreTabletsRequest;
 use App\Http\Requests\UpdateTabletsRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -204,5 +205,11 @@ class TabletsController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($tablet->img_path));
         }
         return to_route('tablets.index')->with('success', "Tablet - \" $tablet->tablet_name\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $tablet = Tablets::whereIn('tablet_id', $ids)->get();
+        return response()->json($tablet);
     }
 }

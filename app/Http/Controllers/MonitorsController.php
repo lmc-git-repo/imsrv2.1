@@ -14,6 +14,7 @@ use App\Http\Requests\StoreMonitorsRequest;
 use App\Http\Requests\UpdateMonitorsRequest;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -194,5 +195,11 @@ class MonitorsController extends Controller
             Storage::disk('public')->deleteDirectory(dirname($monitor->img_path));
         }
         return to_route('monitors.index')->with('success', "Monitor - \" $monitor->compName\" successfully deleted!");
+    }
+    public function bulkFetch(Request $request)
+    {
+        $ids = $request->input('ids');
+        $monitor = Monitors::whereIn('monitor_id', $ids)->get();
+        return response()->json($monitor);
     }
 }
