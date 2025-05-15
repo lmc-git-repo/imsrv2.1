@@ -8,9 +8,12 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import useModal from './hooks/useModal'
-import useCreateModal from './hooks/useCreateModal'
-import useEditModal from './hooks/useEditModal'
+// import useModal from './hooks/useModal'
+// import useCreateModal from './hooks/useCreateModal'
+// import useEditModal from './hooks/useEditModal'
+import useModal from '@/Components/hooks/useModal'
+import useCreateModal from '@/Components/hooks/useCreateModal'
+import useEditModal from '@/Components/hooks/useEditModal'
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
@@ -20,9 +23,9 @@ import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, computers, departmentsList, generations, compUsersList, compUsersFnameList, queryParams = null, success}) {
     
-    const { showModal, selectedComp, openModal, closeModal } = useModal();
+    const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditComp, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
     
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
@@ -595,7 +598,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedComp} />
+            <Show show={showModal} onClose={closeModal} user={selected} />
             <CreateModalComponent 
                 show={showCreateModal} 
                 onClose={closeCreateModal} 
@@ -610,7 +613,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                 listDepartments={departmentsList.data}
                 listCompUsers={compUsersList.data}
                 listCompUsersFname={compUsersFnameList.data}
-                selectedEditComp={selectedEditComp}
+                selectedEditComp={selectedEdit}
                 generations={generations}
             />
     </AuthenticatedLayout>

@@ -8,9 +8,13 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 // import { useState } from 'react'
 
-import useModal from './hooks/useModal'
-import useCreateModal from './hooks/useCreateModal'
-import useEditModal from './hooks/useEditModal'
+// import useModal from './hooks/useModal'
+// import useCreateModal from './hooks/useCreateModal'
+// import useEditModal from './hooks/useEditModal'
+import useModal from '@/Components/hooks/useModal'
+import useCreateModal from '@/Components/hooks/useCreateModal'
+import useEditModal from '@/Components/hooks/useEditModal'
+
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
@@ -22,9 +26,9 @@ import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({auth, monitors, departmentsList, mntrUsersList, compNameList, queryParams = null, success}) {
     
-    const { showModal, selectedMntr, openModal, closeModal } = useModal();
+    const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditMntr, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
@@ -522,7 +526,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedMntr} />
+            <Show show={showModal} onClose={closeModal} user={selected} />
             <CreateModalComponent 
                 show={showCreateModal} 
                 onClose={closeCreateModal} 
@@ -537,7 +541,7 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                 listMntrUsers={mntrUsersList.data}
                 listCompName={compNameList.data}
                 // accountUsersEdit={monitors}
-                selectedEditMntr={selectedEditMntr}
+                selectedEditMntr={selectedEdit}
             />
     </AuthenticatedLayout>
   )

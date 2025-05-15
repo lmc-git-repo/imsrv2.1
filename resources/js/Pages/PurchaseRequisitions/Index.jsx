@@ -8,9 +8,10 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import useModal from './hooks/useModal'
-import useCreateModal from './hooks/useCreateModal'
-import useEditModal from './hooks/useEditModal'
+import useModal from '@/Components/hooks/useModal'
+import useCreateModal from '@/Components/hooks/useCreateModal'
+import useEditModal from '@/Components/hooks/useEditModal'
+
 import Show from './Show'
 import CreateModalComponent from './Create'
 import EditModalComponent from './Edit'
@@ -18,9 +19,9 @@ import { debounce } from 'lodash'
 
 export default function Index({auth, purchase_requisitions, departmentsList, queryParams = null, success}) {
     
-    const { showModal, selectedPR, openModal, closeModal } = useModal();
+    const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEditPR, openEditModal, closeEditModal } = useEditModal();
+    const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
@@ -425,13 +426,13 @@ export default function Index({auth, purchase_requisitions, departmentsList, que
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} user={selectedPR} />
+            <Show show={showModal} onClose={closeModal} user={selected} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} departmentsList={departmentsList.data} />
             <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 listDepartments={departmentsList.data}
-                selectedEditPR={selectedEditPR}
+                selectedEditPR={selectedEdit}
             />
     </AuthenticatedLayout>
   )
