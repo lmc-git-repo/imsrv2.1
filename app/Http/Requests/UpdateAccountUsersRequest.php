@@ -29,6 +29,7 @@ class UpdateAccountUsersRequest extends FormRequest
             "name" => ['required', 'max:255'],
             "department_users" => ['required', Rule::in($departments)],
             "initial" => ['required', 'max:255', Rule::exists('account_users', 'initial')],
+            // "initial" => ['required', 'max:255', 'unique:account_users,initial'],
             "outlookEmail" => ['nullable', 'email', 'max:255'],
             "password" => ['nullable', 'max:255'],
             "status" => ['required', Rule::in(['Employed','Resigned','Terminated'])],
