@@ -25,7 +25,7 @@ export default function Index({auth, departments, queryParams = null, success}) 
     queryParams = queryParams || {}
     const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
-    const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
+    // const { showEditModal, selectedEdit, openEditModal, closeEditModal } = useEditModal();
 
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
@@ -287,11 +287,11 @@ export default function Index({auth, departments, queryParams = null, success}) 
             </div>
             <Show show={showModal} onClose={closeModal} user={selected} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal}  />
-            <EditModalComponent 
+            {/* <EditModalComponent 
                 show={showEditModal} 
                 onClose={closeEditModal} 
                 user={selectedEdit} 
-            />
+            /> */}
     </AuthenticatedLayout>
   )
 }
