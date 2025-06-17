@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import BackupDBForm from './Partials/BackupDBForm';
 import { Head } from '@inertiajs/react';
 
 export default function Edit({ auth, mustVerifyEmail, status }) {
@@ -26,9 +27,14 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                    {(auth.user.role === 'super admin') && (
                         <div className="p-4 sm:p-8 bg-white dark:bg-slate-800 shadow sm:rounded-lg">
                             <DeleteUserForm className="max-w-xl" />
+                        </div>
+                    )}
+                    {(auth.user.role === 'super admin') && (
+                        <div className="p-4 sm:p-8 bg-white dark:bg-slate-800 shadow sm:rounded-lg">
+                            <BackupDBForm className="max-w-xl" status={status} />
                         </div>
                     )}
                 </div>
