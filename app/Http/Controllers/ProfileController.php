@@ -77,8 +77,8 @@ class ProfileController extends Controller
         $dbPass = config('database.connections.mysql.password');
         $dbName = config('database.connections.mysql.database');
         $dbPort = config('database.connections.mysql.port', 3306);
-        // $backupPath = storage_path('app/backups');
-        $backupPath = '/volume1/web/backups';
+        $backupPath = storage_path('app/backups');
+        // $backupPath = '/volume1/web/backups';
         if (!is_dir($backupPath)) {
             mkdir($backupPath, 0755, true);
         }
