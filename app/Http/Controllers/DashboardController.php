@@ -18,7 +18,8 @@ class DashboardController extends Controller
         $generations = GenerationHelper::getGenerations(); // Updated generations from GenerationHelper
         // dd($generations);
         // $generations = ['N/A', 'Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
-        
+        $serverGen = ['Pentium', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th', '13th'];
+
         $totalOperationals = Computers::query()->whereIn('comp_status', ['Deployed','Borrow','Spare'])->count()
             + Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->count()
             + ServerUPS::query()->whereIn('S_UStatus', ['Deployed','Borrow','Spare'])->count()
@@ -65,11 +66,10 @@ class DashboardController extends Controller
         $totalSpareUnits = Computers::query()->where('comp_status', 'Spare')->count();
         $spareUnitsTotal = Computers::query()->where('comp_status', 'Spare')->get();
         
-        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Borrow'])->count();
-        $desktopsTotal = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status',['Deployed','Borrow'])->get();
-
-        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->count();
-        $laptopsTotal = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status',['Deployed','Borrow'])->get();
+        $totalDesktops = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status', $statuses)->count();
+        $desktopsTotal = Computers::query()->where('comp_type', 'Desktop')->whereIn('comp_status', $statuses)->get();
+        $totalLaptops = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status', $statuses)->count();
+        $laptopsTotal = Computers::query()->where('comp_type', 'Laptop')->whereIn('comp_status', $statuses)->get();
 
         $totalTablets = Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->count();
         $tabletsTotal = Tablets::query()->whereIn('tablet_status', ['Deployed','Borrow','Spare'])->get();
