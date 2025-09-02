@@ -105,6 +105,44 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
+                                {/* Network Dropdown */}
+                                <Dropdown>
+                                    <Dropdown.Trigger>
+                                        <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
+                                            Network
+                                            <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            </svg>
+                                            </NavLink>
+                                            </Dropdown.Trigger>
+                                            <Dropdown.Content>
+                                                <Dropdown.Link href={route('firewall.index')}>
+                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                        Firewall
+                                                    </div>
+                                                        </Dropdown.Link>
+                                                        <Dropdown.Link href={route('l2sw.index')}>
+                                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                                L2 Switch
+                                                            </div>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link href={route('l3sw.index')}>
+                                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                                    L3 Switch
+                                                                </div>
+                                                                </Dropdown.Link>
+                                                                <Dropdown.Link href={route('wap.index')}>
+                                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                                        WAP
+                                                                    </div>
+                                                                    </Dropdown.Link>
+                                                                    </Dropdown.Content>
+                                                                    </Dropdown>
+
+                                {/* CCTV Link */}
+                                <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>
+                                    CCTV
+                                </NavLink>
                                 <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
                                     Account Management{/* List of Accounts */}
                                 </NavLink>
@@ -258,7 +296,46 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 </div>
                             </Dropdown.Content>
                         </Dropdown>
-                        
+
+                        {/* Network (Mobile Dropdown) */}
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <ResponsiveNavLink onClick={(e) => e.preventDefault()}>
+                                    Network
+                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    </svg>
+                                </ResponsiveNavLink>
+                            </Dropdown.Trigger>
+
+                            <Dropdown.Content>
+                                <Dropdown.Link href={route('firewall.index')}>
+                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                        Firewall
+                                    </div>
+                                </Dropdown.Link>
+                                <Dropdown.Link href={route('l2sw.index')}>
+                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                        L2 Switch
+                                    </div>
+                                </Dropdown.Link>
+                                <Dropdown.Link href={route('l3sw.index')}>
+                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                        L3 Switch
+                                    </div>
+                                </Dropdown.Link>
+                                <Dropdown.Link href={route('wap.index')}>
+                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                        WAP
+                                    </div>
+                                </Dropdown.Link>
+                            </Dropdown.Content>
+                        </Dropdown>
+
+                        {/* CCTV (Mobile Link) */}
+                        <ResponsiveNavLink href={route('cctv.index')} active={route().current('cctv.index')}>
+                            CCTV
+                        </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
                             Account Management
                         </ResponsiveNavLink>
