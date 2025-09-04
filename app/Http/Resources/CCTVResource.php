@@ -5,8 +5,9 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
-class FirewallResource extends JsonResource
+class CCTVResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -18,21 +19,16 @@ class FirewallResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'firewall_id' => $this->id,
-            'device_name' => $this->device_name,
-            'model' => $this->model,
+            'hikvision_model' => $this->hikvision_model,
+            'cctv_name' => $this->cctv_name,
             'ip_address' => $this->ip_address,
             'username' => $this->username,
             'password' => $this->password,
-            'createdBy' => $this->whenLoaded('createdBy', function () {
-                return [
-                    'id' => $this->createdBy->id,
-                    'name' => $this->createdBy->name,
-                    'email' => $this->createdBy->email,
-                    'role' => $this->createdBy->role,
-                ];
-            }),
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'installer_supplier' => $this->installer_supplier,
+            'createdBy' => [
+                'name' => Auth::user()->name
+            ],
+            'created_at' => (new Carbon($this->created_at))->setTimezone('Asia/Singapore')->format('Y-m-d'),
         ];
     }
 }
