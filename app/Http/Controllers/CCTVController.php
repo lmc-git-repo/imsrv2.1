@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CCTV;
+use App\Http\Resources\CCTVResource;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class CCTVController extends Controller
             ->paginate(10)->onEachSide(1);
 
         return Inertia::render('CCTV/Index', [
-            'cctvs' => $cctvs,
+            'cctvs' => CCTVResource::collection($cctvs),
             'queryParams' => $request->query() ?: null,
             'success' => session('success')
         ]);
@@ -63,7 +64,7 @@ class CCTVController extends Controller
     public function show(CCTV $cctv)
     {
         return Inertia::render('CCTV/Show', [
-            'cctv' => $cctv->load('createdBy')
+            'cctv' => new CCTVResource($cctv->load('createdBy'))
         ]);
     }
 
