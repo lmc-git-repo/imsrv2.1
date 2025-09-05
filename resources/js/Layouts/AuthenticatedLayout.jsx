@@ -121,11 +121,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         Firewall
                                                     </div>
                                                         </Dropdown.Link>
-                                                        <Dropdown.Link href={route('l2sw.index')}>
-                                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                                L2 Switch
+                                                        <Dropdown.Link href={route('server.index')}>
+                                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                                Server
                                                             </div>
                                                             </Dropdown.Link>
+                                                            <Dropdown.Link href={route('l2sw.index')}>
+                                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                                    L2 Switch
+                                                                </div>
+                                                                </Dropdown.Link>
                                                             <Dropdown.Link href={route('l3sw.index')}>
                                                                 <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                                     L3 Switch
@@ -312,6 +317,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <Dropdown.Link href={route('firewall.index')}>
                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                         Firewall
+                                    </div>
+                                </Dropdown.Link>
+                                <Dropdown.Link href={route('server.index')}>
+                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                        Server
                                     </div>
                                 </Dropdown.Link>
                                 <Dropdown.Link href={route('l2sw.index')}>
