@@ -1,7 +1,7 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 // import Logo from '../../imgs/LMC-Full-Logo.png'
-import Logo from '../../imgs/LMC-Full-Logo-White.png'
+// import Logo from '../../imgs/LMC-Full-Logo-White.png'
 
 export default function Guest({ children }) {
     return (
@@ -12,7 +12,7 @@ export default function Guest({ children }) {
                         <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
                     </Link> */}
                     {/* <img src={Logo} alt="LMC-full Logo" style={{width: '400px'}} /> */}
-                    <img src={Logo} alt="LMC-full Logo White" style={{width: '400px'}} />
+                    <img src="/imgs/LMC-Full-Logo-White.png" alt="LMC-full Logo White" style={{width: '400px'}} loading="lazy" />
                 </div>
 
                 <div className='flex justify-center'>
