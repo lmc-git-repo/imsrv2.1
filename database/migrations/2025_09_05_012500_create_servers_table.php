@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('ip_address');
             $table->string('username')->nullable();
             $table->string('password')->nullable();
+            $table->string('asset_tag')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
