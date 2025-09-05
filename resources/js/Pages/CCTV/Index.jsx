@@ -229,7 +229,7 @@ export default function Index({
                                                     <td className="px-3 py-2">{cctv.password || 'N/A'}</td>
                                                     <td className="px-3 py-2">{cctv.createdBy?.name}</td>
                                                     <td className="px-3 py-2 text-nowrap">{cctv.created_at}</td>
-                                                    <td className="px-3 py-2 text-right text-nowrap">
+                                                    <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <button
                                                                 className="inline-block py-1 px-2  text-blue-500 hover:text-white hover:underline hover:scale-110 hover:animate-spin mx-1"
