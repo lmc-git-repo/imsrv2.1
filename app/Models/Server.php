@@ -15,7 +15,6 @@ class Server extends Model
         'ip_address',
         'username',
         'password',
-        'asset_tag',
         'created_by',
     ];
 
