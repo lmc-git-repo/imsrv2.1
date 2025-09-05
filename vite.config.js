@@ -10,6 +10,16 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-dom', '@inertiajs/react'],
+                    ui: ['@headlessui/react', 'flowbite', 'flowbite-react'],
+                },
+            },
+        },
+    },
     // server: {
     //     // host: '192.168.18.30', //home Ip
     //     host: '10.208.10.201', // This allows access from any IP on your network
