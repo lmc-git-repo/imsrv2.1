@@ -20,6 +20,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicViewController;
 use App\Http\Controllers\PurchaseRequisitionsController;
 use App\Http\Controllers\ServerUPSController;
+use App\Http\Controllers\ServerController;
 use App\Http\Controllers\TabletsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
@@ -50,6 +51,11 @@ Route::middleware(['auth', 'verified']) ->group(function(){
     Route::resource('firewall', FirewallController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('l2sw', L2SwitchController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('l3sw', L3SwitchController::class)->middleware(CheckRole::class.':super admin,admin,member');
+    Route::get('server', [ServerController::class, 'index'])->name('server.index')->middleware(CheckRole::class.':super admin,admin,member');
+    Route::post('server', [ServerController::class, 'store'])->name('server.store')->middleware(CheckRole::class.':super admin,admin,member');
+    Route::get('server/{server}', [ServerController::class, 'show'])->name('server.show')->middleware(CheckRole::class.':super admin,admin,member');
+    Route::put('server/{server}', [ServerController::class, 'update'])->name('server.update')->middleware(CheckRole::class.':super admin,admin,member');
+    Route::delete('server/{server}', [ServerController::class, 'destroy'])->name('server.destroy')->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('wap', WAPController::class)->middleware(CheckRole::class.':super admin,admin,member');
     Route::resource('cctv', CCTVController::class)->middleware(CheckRole::class.':super admin,admin,member');
 
@@ -103,6 +109,11 @@ Route::middleware(['auth', 'verified']) ->group(function(){
 
     Route::post('/firewall/bulk-fetch', [FirewallController::class, 'bulkFetch'])
         ->name('firewall.bulkFetch')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->middleware(['auth', 'verified']);
+
+    Route::post('/server/bulk-fetch', [ServerController::class, 'bulkFetch'])
+        ->name('server.bulkFetch')
         ->withoutMiddleware([VerifyCsrfToken::class])
         ->middleware(['auth', 'verified']);
 });
