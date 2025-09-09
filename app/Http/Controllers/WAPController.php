@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Http\Resources\WAPResource;
 
 class WAPController extends Controller
 {
@@ -30,7 +31,7 @@ class WAPController extends Controller
             ->paginate(10)->onEachSide(1);
 
         return Inertia::render('Wap/Index', [
-            'waps' => $waps,
+            'waps' => WAPResource::collection($waps),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
