@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use App\Http\Resources\L3SwitchResource;
 
 class L3SwitchController extends Controller
 {
@@ -30,7 +31,7 @@ class L3SwitchController extends Controller
             ->paginate(10)->onEachSide(1);
 
         return Inertia::render('L3Switch/Index', [
-            'l3switches' => $l3switches,
+            'l3switches' => L3SwitchResource::collection($l3switches),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

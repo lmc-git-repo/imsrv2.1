@@ -227,7 +227,7 @@ export default function Index({
                                                     <td className="px-3 py-2">{wap.ip_address}</td>
                                                     <td className="px-3 py-2">{wap.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{wap.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{wap.created_by?.name || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{wap.createdBy?.name || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-nowrap">{wap.created_at ? new Date(wap.created_at).toISOString().split('T')[0] : 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
