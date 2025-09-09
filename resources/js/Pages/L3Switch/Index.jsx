@@ -227,7 +227,7 @@ export default function Index({
                                                     <td className="px-3 py-2">{l3switch.ip_address}</td>
                                                     <td className="px-3 py-2">{l3switch.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{l3switch.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{l3switch.created_by?.name || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{l3switch.createdBy?.name || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-nowrap">{l3switch.created_at ? new Date(l3switch.created_at).toISOString().split('T')[0] : 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
