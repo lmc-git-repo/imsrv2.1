@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class L3SwitchResource extends JsonResource
+class L2SwitchResource extends JsonResource
 {
     public static $wrap = false;
     /**

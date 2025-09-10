@@ -24,6 +24,7 @@ class ServerResource extends JsonResource
             'ip_address' => $this->ip_address,
             'username' => $this->username,
             'password' => $this->password,
+            'serial_number' => $this->serial_number,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,
