@@ -280,7 +280,7 @@ export default function Index({
                     </div>
                 </div>
             </div>
-            <Show show={showModal} onClose={closeModal} l2switch={selected} />
+            <Show show={showModal} onClose={closeModal} l2switch={selected} auth={auth} />
             <CreateModalComponent
                 show={showCreateModal}
                 onClose={closeCreateModal}

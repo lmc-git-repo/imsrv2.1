@@ -10,23 +10,44 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
     ip_address: '',
     username: '',
     password: '',
+    serial_number: '',
   });
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   // Update form data when selectedWAP changes
   useEffect(() => {
     if (selectedWAP) {
-      setData({
+      const newData = {
         device_name: selectedWAP.device_name || '',
         model: selectedWAP.model || '',
         ip_address: selectedWAP.ip_address || '',
         username: selectedWAP.username || '',
         password: selectedWAP.password || '',
-      });
+        serial_number: selectedWAP.serial_number || '',
+      };
+      setData(newData);
+      setHasChanges(false);
     }
   }, [selectedWAP]);
+
+  // Check for changes
+  useEffect(() => {
+    if (selectedWAP) {
+      const original = {
+        device_name: selectedWAP.device_name || '',
+        model: selectedWAP.model || '',
+        ip_address: selectedWAP.ip_address || '',
+        username: selectedWAP.username || '',
+        password: selectedWAP.password || '',
+        serial_number: selectedWAP.serial_number || '',
+      };
+      const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+      setHasChanges(isChanged);
+    }
+  }, [data, selectedWAP]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -122,6 +143,22 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
             </div>
 
             <div>
+              <label htmlFor="serial_number" className="block text-sm font-medium text-gray-300 mb-2">
+                Enter Serial Number
+              </label>
+              <input
+                id="serial_number"
+                name="serial_number"
+                type="text"
+                value={data.serial_number}
+                onChange={(e) => setData('serial_number', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                autoComplete="serial-number"
+              />
+              <InputError message={errors.serial_number} className="mt-1 text-red-400" />
+            </div>
+
+            <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Username
               </label>
@@ -165,9 +202,9 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
               </button>
               <button
                 type="submit"
-                disabled={loading || submitted}
+                disabled={!hasChanges || loading || submitted}
                 className={`px-4 py-2 bg-green-600 text-white rounded-md transition-colors ${
-                  loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
+                  !hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
                 }`}
               >
                 {loading ? 'Updating...' : submitted ? 'Updated' : 'Update'}

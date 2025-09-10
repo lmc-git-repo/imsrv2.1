@@ -5,27 +5,48 @@ import { useState, forwardRef, useEffect } from 'react';
 
 const EditServer = forwardRef(function EditServer({ show, onClose, selectedServer }, ref) {
     const { data, setData, put, errors, reset } = useForm({
-        device_name: selectedServer?.device_name || '',
-        model: selectedServer?.model || '',
-        ip_address: selectedServer?.ip_address || '',
-        username: selectedServer?.username || '',
-        password: selectedServer?.password || '',
+        device_name: '',
+        model: '',
+        ip_address: '',
+        username: '',
+        password: '',
+        serial_number: '',
     });
+
+    const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
 
     // Update form data when selectedServer changes
     useEffect(() => {
         if (selectedServer) {
-            setData({
+            const newData = {
                 device_name: selectedServer.device_name || '',
                 model: selectedServer.model || '',
                 ip_address: selectedServer.ip_address || '',
                 username: selectedServer.username || '',
                 password: selectedServer.password || '',
-            });
+                serial_number: selectedServer.serial_number || '',
+            };
+            setData(newData);
+            setHasChanges(false);
         }
-    }, [selectedServer, setData]);
+    }, [selectedServer]);
 
-    const [loading, setLoading] = useState(false);
+    // Check for changes
+    useEffect(() => {
+        if (selectedServer) {
+            const original = {
+                device_name: selectedServer.device_name || '',
+                model: selectedServer.model || '',
+                ip_address: selectedServer.ip_address || '',
+                username: selectedServer.username || '',
+                password: selectedServer.password || '',
+                serial_number: selectedServer.serial_number || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedServer]);
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -121,6 +142,22 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                         </div>
 
                         <div>
+                            <label htmlFor="serial_number" className="block text-sm font-medium text-gray-300 mb-2">
+                                Serial Number
+                            </label>
+                            <input
+                                id="serial_number"
+                                name="serial_number"
+                                type="text"
+                                value={data.serial_number}
+                                onChange={(e) => setData("serial_number", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                autoComplete="serial-number"
+                            />
+                            <InputError message={errors.serial_number} className="mt-1 text-red-400" />
+                        </div>
+
+                        <div>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                                 Username
                             </label>
@@ -167,9 +204,9 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                             </button>
                             <button
                                 type="submit"
-                                disabled={loading}
+                                disabled={!hasChanges || loading}
                                 className={`px-4 py-2 bg-green-600 text-white rounded-md transition-colors ${
-                                    loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
+                                    !hasChanges || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
                                 }`}
                                 id="submit-button"
                                 name="submit"

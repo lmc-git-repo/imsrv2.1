@@ -15,16 +15,44 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
         _method: 'PUT',
     });
 
+    const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEdit changes
+    useEffect(() => {
+        if (selectedEdit) {
+            setData({
+                dept_list: selectedEdit.dept_list || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEdit]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEdit) {
+            const original = {
+                dept_list: selectedEdit.dept_list || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEdit]);
+
     const onSubmit =(e) =>{
         e.preventDefault();
+        setLoading(true);
         // console.log("Form Data:", data); // Add this line to log form data
         post(route("departments.update", selectedEdit && selectedEdit.dept_id), {
             onSuccess: () => {
-                // console.log("Update Successful"); 
+                setLoading(false);
+                // console.log("Update Successful");
                 onClose();
                 reset();
             },
             onError: (errors) => {
+                setLoading(false);
                 // Handle errors if needed
                 console.error(errors);
             }
@@ -61,8 +89,12 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                             <Link href={route('departments.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
-                                Submit
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading}
+                            >
+                                {loading ? 'Updating...' : 'Update'}
                             </button>
                         </div>
                     </div>

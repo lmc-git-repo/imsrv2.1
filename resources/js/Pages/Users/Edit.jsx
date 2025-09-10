@@ -20,21 +20,58 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEdit changes
+    useEffect(() => {
+        if (selectedEdit) {
+            setData({
+                name: selectedEdit.name || '',
+                email: selectedEdit.email || '',
+                password: selectedEdit.password || '',
+                password_confirmation: selectedEdit.password_confirmation || '',
+                role: selectedEdit.role || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEdit]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEdit) {
+            const original = {
+                name: selectedEdit.name || '',
+                email: selectedEdit.email || '',
+                password: selectedEdit.password || '',
+                password_confirmation: selectedEdit.password_confirmation || '',
+                role: selectedEdit.role || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEdit]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
+        if (!selectedEdit?.id || loading || submitted) return;
+
         setLoading(true);
+        setSubmitted(true);
 
         // console.log("Form Data:", data); // Add this line to log form data
         post(route("user.update", selectedEdit && selectedEdit.id), {
             onSuccess: () => {
                 setLoading(false);
-                // console.log("Update Successful"); 
+                setSubmitted(false);
+                // console.log("Update Successful");
                 onClose();
                 reset();
             },
             onError: () => {
                 setLoading(false);
+                setSubmitted(false);
                 // Handle errors if needed
                 // console.error(errors);
             }
@@ -132,10 +169,10 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                             <Link href={route('user.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading || submitted}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -145,9 +182,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                                         </svg>
                                         Processing...
                                     </span>
-                                ) : (
-                                    'Submit'
-                                )}
+                                ) : submitted ? 'Updated' : 'Update'}
                             </button>
                         </div>
                     </div>
