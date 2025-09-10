@@ -16,6 +16,7 @@ class L3Switch extends Model
         'ip_address',
         'username',
         'password',
+        'serial_number',
         'created_by',
     ];
 
