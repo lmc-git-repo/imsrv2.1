@@ -60,6 +60,56 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
     }, [selectedEditConsumables]);
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditConsumables changes
+    useEffect(() => {
+        if (selectedEditConsumables) {
+            setData({
+                po_num: selectedEditConsumables.po_num || '',
+                serial_no: selectedEditConsumables.serial_no || '',
+                img_path: null,
+                si_code: selectedEditConsumables.si_code || '',
+                brand: selectedEditConsumables.brand || '',
+                model: selectedEditConsumables.model || '',
+                storage_capacity: selectedEditConsumables.storage_capacity || '',
+                qty: selectedEditConsumables.qty || '',
+                price: selectedEditConsumables.price || '',
+                total: selectedEditConsumables.total || '',
+                dateIssued: selectedEditConsumables.dateIssued || '',
+                installedTo: selectedEditConsumables.installedTo || '',
+                deliveryRecieptDate: selectedEditConsumables.deliveryRecieptDate || '',
+                department_consumables: selectedEditConsumables.department_consumables || '',
+                remarks: selectedEditConsumables.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditConsumables]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditConsumables) {
+            const original = {
+                po_num: selectedEditConsumables.po_num || '',
+                serial_no: selectedEditConsumables.serial_no || '',
+                si_code: selectedEditConsumables.si_code || '',
+                brand: selectedEditConsumables.brand || '',
+                model: selectedEditConsumables.model || '',
+                storage_capacity: selectedEditConsumables.storage_capacity || '',
+                qty: selectedEditConsumables.qty || '',
+                price: selectedEditConsumables.price || '',
+                total: selectedEditConsumables.total || '',
+                dateIssued: selectedEditConsumables.dateIssued || '',
+                installedTo: selectedEditConsumables.installedTo || '',
+                deliveryRecieptDate: selectedEditConsumables.deliveryRecieptDate || '',
+                department_consumables: selectedEditConsumables.department_consumables || '',
+                remarks: selectedEditConsumables.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditConsumables]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
@@ -378,10 +428,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                             <Link href={route('consumables.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -392,7 +442,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listConsumablesUse
                                         Processing...
                                     </span>
                                 ) : (
-                                    'Submit'
+                                    'Update'
                                 )}
                             </button>
                         </div>

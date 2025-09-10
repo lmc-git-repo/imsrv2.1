@@ -44,22 +44,84 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
     }, [selectedEditServerUps]);
 
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditServerUps changes
+    useEffect(() => {
+        if (selectedEditServerUps) {
+            setData({
+                S_UName: selectedEditServerUps.S_UName || '',
+                img_path: null,
+                S_UModel: selectedEditServerUps.S_UModel || '',
+                S_UType: selectedEditServerUps.S_UType || '',
+                S_UUser: selectedEditServerUps.S_UUser || '',
+                department_S_U: selectedEditServerUps.department_S_U || '',
+                S_UOs: selectedEditServerUps.S_UOs || '',
+                S_UStorage: selectedEditServerUps.S_UStorage || '',
+                S_USerial: selectedEditServerUps.S_USerial || '',
+                S_UAsset: selectedEditServerUps.S_UAsset || '',
+                asset_class: selectedEditServerUps.asset_class || '',
+                S_UCpu: selectedEditServerUps.S_UCpu || '',
+                S_UGen: selectedEditServerUps.S_UGen || '',
+                S_UAddress: selectedEditServerUps.S_UAddress || '',
+                S_UPrdctkey: selectedEditServerUps.S_UPrdctkey || '',
+                S_UStatus: selectedEditServerUps.S_UStatus || '',
+                datePurchased: selectedEditServerUps.datePurchased || '',
+                S_URemarks: selectedEditServerUps.S_URemarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditServerUps]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditServerUps) {
+            const original = {
+                S_UName: selectedEditServerUps.S_UName || '',
+                S_UModel: selectedEditServerUps.S_UModel || '',
+                S_UType: selectedEditServerUps.S_UType || '',
+                S_UUser: selectedEditServerUps.S_UUser || '',
+                department_S_U: selectedEditServerUps.department_S_U || '',
+                S_UOs: selectedEditServerUps.S_UOs || '',
+                S_UStorage: selectedEditServerUps.S_UStorage || '',
+                S_USerial: selectedEditServerUps.S_USerial || '',
+                S_UAsset: selectedEditServerUps.S_UAsset || '',
+                asset_class: selectedEditServerUps.asset_class || '',
+                S_UCpu: selectedEditServerUps.S_UCpu || '',
+                S_UGen: selectedEditServerUps.S_UGen || '',
+                S_UAddress: selectedEditServerUps.S_UAddress || '',
+                S_UPrdctkey: selectedEditServerUps.S_UPrdctkey || '',
+                S_UStatus: selectedEditServerUps.S_UStatus || '',
+                datePurchased: selectedEditServerUps.datePurchased || '',
+                S_URemarks: selectedEditServerUps.S_URemarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditServerUps]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
+        if (!selectedEditServerUps?.S_UID || loading || submitted) return;
+
         setLoading(true);
+        setSubmitted(true);
 
         // console.log("Form Data:", data); // Add this line to log form data
         post(route("serverUps.update", selectedEditServerUps && selectedEditServerUps.S_UID), {
             onSuccess: () => {
                 setLoading(false);
-                // console.log("Update Successful"); 
+                setSubmitted(false);
+                // console.log("Update Successful");
                 onClose();
                 reset();
             },
             onError: (errors) => {
                 // Handle errors if needed
                 setLoading(false);
+                setSubmitted(false);
                 console.error(errors);
             }
         });
@@ -439,10 +501,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                             <Link href={route('serverUps.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading || submitted}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -452,9 +514,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listServerUPSUsers
                                         </svg>
                                         Processing...
                                     </span>
-                                ) : (
-                                    'Submit'
-                                )}
+                                ) : submitted ? 'Updated' : 'Update'}
                             </button>
                         </div>
                     </div>

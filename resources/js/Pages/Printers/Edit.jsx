@@ -36,20 +36,64 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
     }, [selectedEditPrinter]);
 
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditPrinter changes
+    useEffect(() => {
+        if (selectedEditPrinter) {
+            setData({
+                printer_user: selectedEditPrinter.printer_user || '',
+                img_path: null,
+                printer_department: selectedEditPrinter.printer_department || '',
+                printer_model: selectedEditPrinter.printer_model || '',
+                printer_serial: selectedEditPrinter.printer_serial || '',
+                printer_asset: selectedEditPrinter.printer_asset || '',
+                asset_class: selectedEditPrinter.asset_class || '',
+                datePurchased: selectedEditPrinter.datePurchased || '',
+                remarks: selectedEditPrinter.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditPrinter]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditPrinter) {
+            const original = {
+                printer_user: selectedEditPrinter.printer_user || '',
+                printer_department: selectedEditPrinter.printer_department || '',
+                printer_model: selectedEditPrinter.printer_model || '',
+                printer_serial: selectedEditPrinter.printer_serial || '',
+                printer_asset: selectedEditPrinter.printer_asset || '',
+                asset_class: selectedEditPrinter.asset_class || '',
+                datePurchased: selectedEditPrinter.datePurchased || '',
+                remarks: selectedEditPrinter.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditPrinter]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
+        if (!selectedEditPrinter?.printer_id || loading || submitted) return;
+
         setLoading(true);
+        setSubmitted(true);
         // console.log("Form Data:", data); // Add this line to log form data
         post(route("printers.update", selectedEditPrinter && selectedEditPrinter.printer_id), {
             onSuccess: () => {
-                // console.log("Update Successful"); 
+                // console.log("Update Successful");
                 setLoading(false);
+                setSubmitted(false);
                 onClose();
                 reset();
             },
             onError: () => {
                 setLoading(false);
+                setSubmitted(false);
                 // Handle errors if needed
                 // console.error(errors);
             }
@@ -284,10 +328,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
                             <Link href={route('printers.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading || submitted}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -297,9 +341,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPrinterUsers, 
                                         </svg>
                                         Processing...
                                     </span>
-                                ) : (
-                                    'Submit'
-                                )}
+                                ) : submitted ? 'Updated' : 'Update'}
                             </button>
                         </div>
                     </div>

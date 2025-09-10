@@ -16,6 +16,31 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEdit changes
+    useEffect(() => {
+        if (selectedEdit) {
+            setData({
+                dept: selectedEdit.dept || "",
+                password: selectedEdit.password || "",
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEdit]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEdit) {
+            const original = {
+                dept: selectedEdit.dept || "",
+                password: selectedEdit.password || "",
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEdit]);
 
     const onSubmit = (e) =>{
         e.preventDefault();
@@ -80,10 +105,10 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                             <Link href={route('printerPassword.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -94,7 +119,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                                         Processing...
                                     </span>
                                 ) : (
-                                    'Submit'
+                                    'Update'
                                 )}
                             </button>
                         </div>

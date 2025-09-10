@@ -20,6 +20,7 @@ const ShowServer = forwardRef(function ShowServer({ show, onClose, server }, ref
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>ID:</strong> {server.id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Model:</strong> {server.model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>IP Address:</strong> {server.ip_address}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial Number:</strong> {server.serial_number}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {server.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">

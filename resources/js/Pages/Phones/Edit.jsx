@@ -43,6 +43,60 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
     }, [selectedEditPhone]);
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditPhone changes
+    useEffect(() => {
+        if (selectedEditPhone) {
+            setData({
+                phone_name: selectedEditPhone.phone_name || '',
+                phone_num: selectedEditPhone.phone_num || '',
+                img_path: null,
+                phone_model: selectedEditPhone.phone_model || '',
+                fullName: selectedEditPhone.fullName || '',
+                department_phone: selectedEditPhone.department_phone || '',
+                phone_storage: selectedEditPhone.phone_storage || '',
+                phone_ram: selectedEditPhone.phone_ram || '',
+                phone_serial: selectedEditPhone.phone_serial || '',
+                phone_asset: selectedEditPhone.phone_asset || '',
+                asset_class: selectedEditPhone.asset_class || '',
+                phone_cpu: selectedEditPhone.phone_cpu || '',
+                phone_address: selectedEditPhone.phone_address || '',
+                phone_imei: selectedEditPhone.phone_imei || '',
+                phone_status: selectedEditPhone.phone_status || '',
+                datePurchased: selectedEditPhone.datePurchased || '',
+                remarks: selectedEditPhone.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditPhone]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditPhone) {
+            const original = {
+                phone_name: selectedEditPhone.phone_name || '',
+                phone_num: selectedEditPhone.phone_num || '',
+                phone_model: selectedEditPhone.phone_model || '',
+                fullName: selectedEditPhone.fullName || '',
+                department_phone: selectedEditPhone.department_phone || '',
+                phone_storage: selectedEditPhone.phone_storage || '',
+                phone_ram: selectedEditPhone.phone_ram || '',
+                phone_serial: selectedEditPhone.phone_serial || '',
+                phone_asset: selectedEditPhone.phone_asset || '',
+                asset_class: selectedEditPhone.asset_class || '',
+                phone_cpu: selectedEditPhone.phone_cpu || '',
+                phone_address: selectedEditPhone.phone_address || '',
+                phone_imei: selectedEditPhone.phone_imei || '',
+                phone_status: selectedEditPhone.phone_status || '',
+                datePurchased: selectedEditPhone.datePurchased || '',
+                remarks: selectedEditPhone.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditPhone]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
@@ -429,10 +483,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                             <Link href={route('phones.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -443,7 +497,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listPhoneUsersFnam
                                         Processing...
                                     </span>
                                 ) : (
-                                    'Submit'
+                                    'Update'
                                 )}
                             </button>
                         </div>

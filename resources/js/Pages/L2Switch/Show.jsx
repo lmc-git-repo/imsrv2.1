@@ -2,7 +2,7 @@
 import { Modal, Button } from 'flowbite-react';
 import { forwardRef } from 'react';
 
-const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l2switch }, ref) {
+const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l2switch, auth }, ref) {
   if (!l2switch) return null;
 
   return (
@@ -20,12 +20,13 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l2swi
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>ID:</strong> {l2switch.id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Model:</strong> {l2switch.model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>IP Address:</strong> {l2switch.ip_address}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial Number:</strong> {l2switch.serial_number}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {l2switch.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {l2switch.password}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l2switch.created_by?.name || 'N/A'}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l2switch.createdBy?.name || auth.user.name}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created Date:</strong> {l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</p>
                 </div>
             </div>
         </div>

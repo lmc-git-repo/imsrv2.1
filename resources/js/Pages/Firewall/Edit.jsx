@@ -10,24 +10,45 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
     ip_address: '',
     username: '',
     password: '',
+    serial_number: '',
     _method: 'PUT',
   });
 
   const [loading, setLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   // Update form data when selectedFirewall changes
   useEffect(() => {
     if (selectedFirewall) {
-      setData({
+      const newData = {
         device_name: selectedFirewall.device_name || '',
         model: selectedFirewall.model || '',
         ip_address: selectedFirewall.ip_address || '',
         username: selectedFirewall.username || '',
         password: selectedFirewall.password || '',
+        serial_number: selectedFirewall.serial_number || '',
         _method: 'PUT',
-      });
+      };
+      setData(newData);
+      setHasChanges(false);
     }
   }, [selectedFirewall]);
+
+  // Check for changes
+  useEffect(() => {
+    if (selectedFirewall) {
+      const original = {
+        device_name: selectedFirewall.device_name || '',
+        model: selectedFirewall.model || '',
+        ip_address: selectedFirewall.ip_address || '',
+        username: selectedFirewall.username || '',
+        password: selectedFirewall.password || '',
+        serial_number: selectedFirewall.serial_number || '',
+      };
+      const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+      setHasChanges(isChanged);
+    }
+  }, [data, selectedFirewall]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -118,6 +139,22 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
             </div>
 
             <div>
+              <label htmlFor="serial_number" className="block text-sm font-medium text-gray-300 mb-2">
+                Enter Serial Number
+              </label>
+              <input
+                id="serial_number"
+                name="serial_number"
+                type="text"
+                value={data.serial_number}
+                onChange={(e) => setData('serial_number', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                autoComplete="serial-number"
+              />
+              <InputError message={errors.serial_number} className="mt-1 text-red-400" />
+            </div>
+
+            <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Username
               </label>
@@ -161,9 +198,9 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={!hasChanges || loading}
                 className={`px-4 py-2 bg-green-600 text-white rounded-md transition-colors ${
-                  loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
+                  !hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
                 }`}
               >
                 {loading ? 'Updating...' : 'Update'}

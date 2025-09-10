@@ -20,12 +20,13 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, wap }
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>ID:</strong> {wap.id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Model:</strong> {wap.model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>IP Address:</strong> {wap.ip_address}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial Number:</strong> {wap.serial_number}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {wap.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {wap.password}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {wap.created_by?.name || 'N/A'}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {wap.created_at ? new Date(wap.created_at).toISOString().split('T')[0] : 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {wap.createdBy?.name || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {wap.created_at}</p>
                 </div>
             </div>
         </div>
