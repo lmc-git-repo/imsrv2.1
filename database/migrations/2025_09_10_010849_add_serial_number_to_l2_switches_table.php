@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('l2_switches', function (Blueprint $table) {
-            $table->string('serial_number')->nullable()->after('password')->change();
+            $table->string('serial_number')->nullable()->after('model');
         });
     }
 };
