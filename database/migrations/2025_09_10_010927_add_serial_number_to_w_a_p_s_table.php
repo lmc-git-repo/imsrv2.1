@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('w_a_p_s', function (Blueprint $table) {
-            $table->string('serial_number')->nullable()->after('model')->change();
+            if (!Schema::hasColumn('w_a_p_s', 'serial_number')) {
+                $table->string('serial_number')->nullable()->after('model');
+            }
         });
     }
 
