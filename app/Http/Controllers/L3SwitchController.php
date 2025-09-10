@@ -79,10 +79,10 @@ class L3SwitchController extends Controller
     {
         $validated = $request->validate([
             'device_name' => 'required|string|max:255',
-            'model' => 'nullable|string|max:255',
+            'model' => 'required|string|max:255',
             'ip_address' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255',
-            'password' => 'nullable|string|max:255',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255',
         ]);
 
