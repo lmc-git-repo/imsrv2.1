@@ -32,22 +32,62 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
     }, [selectedEditUser]);
 
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditUser changes
+    useEffect(() => {
+        if (selectedEditUser) {
+            setData({
+                name: selectedEditUser.name || "",
+                department_users: selectedEditUser.department_users || "",
+                initial: selectedEditUser.initial || "",
+                outlookEmail: selectedEditUser.outlookEmail || "",
+                password: selectedEditUser.password || "",
+                status: selectedEditUser.status || "",
+                profile_path: null,
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditUser]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditUser) {
+            const original = {
+                name: selectedEditUser.name || "",
+                department_users: selectedEditUser.department_users || "",
+                initial: selectedEditUser.initial || "",
+                outlookEmail: selectedEditUser.outlookEmail || "",
+                password: selectedEditUser.password || "",
+                status: selectedEditUser.status || "",
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditUser]);
 
     const onSubmit = (e) =>{
         e.preventDefault();
+        if (!selectedEditUser?.account_id || loading || submitted) return;
+
         setLoading(true);
+        setSubmitted(true);
         // console.log("Form Data:", data); // Add this line to log form data
 
         post(route("accountUsers.update", selectedEditUser && selectedEditUser.account_id), {
             onSuccess: () => {
-                // console.log("Update Successful"); 
+                // console.log("Update Successful");
                 setLoading(false);
+                setSubmitted(false);
                 onClose();
                 reset();
             },
             onError: () => {
                 // Handle errors if needed
                 setLoading(false);
+                setSubmitted(false);
                 // console.error(errors);
             }
         });
@@ -224,10 +264,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                             <Link href={route('accountUsers.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading || submitted}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -237,9 +277,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                                         </svg>
                                         Processing...
                                     </span>
-                                ) : (
-                                    'Submit'
-                                )}
+                                ) : submitted ? 'Updated' : 'Update'}
                             </button>
                         </div>
                     </div>

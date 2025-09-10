@@ -15,6 +15,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
   });
 
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   // Update form data when selectedCctv changes
   useEffect(() => {
@@ -28,21 +30,43 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
         installer_supplier: selectedCctv.installer_supplier || '',
         _method: 'PUT',
       });
+      setHasChanges(false);
     }
   }, [selectedCctv]);
 
+  // Check for changes
+  useEffect(() => {
+    if (selectedCctv) {
+      const original = {
+        cctv_name: selectedCctv.cctv_name || '',
+        hikvision_model: selectedCctv.hikvision_model || '',
+        ip_address: selectedCctv.ip_address || '',
+        username: selectedCctv.username || '',
+        password: selectedCctv.password || '',
+        installer_supplier: selectedCctv.installer_supplier || '',
+      };
+      const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+      setHasChanges(isChanged);
+    }
+  }, [data, selectedCctv]);
+
   const onSubmit = (e) => {
     e.preventDefault();
-    if (!selectedCctv?.id) return;
+    if (!selectedCctv?.id || loading || submitted) return;
 
     setLoading(true);
+    setSubmitted(true);
     put(route('cctv.update', selectedCctv.id), {
       onSuccess: () => {
         setLoading(false);
+        setSubmitted(false);
         onClose();
         reset();
       },
-      onError: () => setLoading(false),
+      onError: () => {
+        setLoading(false);
+        setSubmitted(false);
+      },
     });
   };
 
@@ -180,12 +204,12 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={!hasChanges || loading || submitted}
                 className={`px-4 py-2 bg-green-600 text-white rounded-md transition-colors ${
-                  loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
+                  !hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'
                 }`}
               >
-                {loading ? 'Updating...' : 'Update'}
+                {loading ? 'Updating...' : submitted ? 'Updated' : 'Update'}
               </button>
             </div>
           </form>

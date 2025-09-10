@@ -46,20 +46,82 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
     }, [selectedEditTablet]);
 
     const [loading, setLoading] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditTablet changes
+    useEffect(() => {
+        if (selectedEditTablet) {
+            setData({
+                tablet_name: selectedEditTablet.tablet_name || '',
+                img_path: null,
+                tablet_model: selectedEditTablet.tablet_model || '',
+                tablet_user: selectedEditTablet.tablet_user || '',
+                fullName: selectedEditTablet.fullName || '',
+                department_tablet: selectedEditTablet.department_tablet || '',
+                tablet_os: selectedEditTablet.tablet_os || '',
+                tablet_storage: selectedEditTablet.tablet_storage || '',
+                tablet_serial: selectedEditTablet.tablet_serial || '',
+                tablet_asset: selectedEditTablet.tablet_asset || '',
+                asset_class: selectedEditTablet.asset_class || '',
+                tablet_cpu: selectedEditTablet.tablet_cpu || '',
+                tablet_gen: selectedEditTablet.tablet_gen || '',
+                tablet_address: selectedEditTablet.tablet_address || '',
+                tablet_prdctkey: selectedEditTablet.tablet_prdctkey || '',
+                tablet_status: selectedEditTablet.tablet_status || '',
+                datePurchased: selectedEditTablet.datePurchased || '',
+                remarks: selectedEditTablet.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditTablet]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditTablet) {
+            const original = {
+                tablet_name: selectedEditTablet.tablet_name || '',
+                tablet_model: selectedEditTablet.tablet_model || '',
+                tablet_user: selectedEditTablet.tablet_user || '',
+                fullName: selectedEditTablet.fullName || '',
+                department_tablet: selectedEditTablet.department_tablet || '',
+                tablet_os: selectedEditTablet.tablet_os || '',
+                tablet_storage: selectedEditTablet.tablet_storage || '',
+                tablet_serial: selectedEditTablet.tablet_serial || '',
+                tablet_asset: selectedEditTablet.tablet_asset || '',
+                asset_class: selectedEditTablet.asset_class || '',
+                tablet_cpu: selectedEditTablet.tablet_cpu || '',
+                tablet_gen: selectedEditTablet.tablet_gen || '',
+                tablet_address: selectedEditTablet.tablet_address || '',
+                tablet_prdctkey: selectedEditTablet.tablet_prdctkey || '',
+                tablet_status: selectedEditTablet.tablet_status || '',
+                datePurchased: selectedEditTablet.datePurchased || '',
+                remarks: selectedEditTablet.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditTablet]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
+        if (!selectedEditTablet?.tablet_id || loading || submitted) return;
+
         setLoading(true);
+        setSubmitted(true);
         // console.log("Form Data:", data); // Add this line to log form data
         post(route("tablets.update", selectedEditTablet && selectedEditTablet.tablet_id), {
             onSuccess: () => {
                 setLoading(false);
-                // console.log("Update Successful"); 
+                setSubmitted(false);
+                // console.log("Update Successful");
                 onClose();
                 reset();
             },
             onError: () => {
                 setLoading(false);
+                setSubmitted(false);
                 // Handle errors if needed
                 // console.error(errors);
             }
@@ -460,10 +522,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
                             <Link href={route('tablets.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                 Cancel
                             </Link>
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading || submitted ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading || submitted}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -473,9 +535,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listTabletUsers, l
                                         </svg>
                                         Processing...
                                     </span>
-                                ) : (
-                                    'Submit'
-                                )}
+                                ) : submitted ? 'Updated' : 'Update'}
                             </button>
                         </div>
                     </div>

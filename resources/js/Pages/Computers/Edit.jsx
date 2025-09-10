@@ -46,6 +46,64 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
     }, [selectedEditComp]);
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditComp changes
+    useEffect(() => {
+        if (selectedEditComp) {
+            setData({
+                comp_name: selectedEditComp.comp_name || '',
+                img_path: null,
+                comp_model: selectedEditComp.comp_model || '',
+                comp_type: selectedEditComp.comp_type || '',
+                comp_user: selectedEditComp.comp_user || '',
+                fullName: selectedEditComp.fullName || '',
+                department_comp: selectedEditComp.department_comp || '',
+                comp_os: selectedEditComp.comp_os || '',
+                comp_storage: selectedEditComp.comp_storage || '',
+                comp_serial: selectedEditComp.comp_serial || '',
+                comp_asset: selectedEditComp.comp_asset || '',
+                asset_class: selectedEditComp.asset_class || '',
+                comp_cpu: selectedEditComp.comp_cpu || '',
+                comp_gen: selectedEditComp.comp_gen || '',
+                comp_address: selectedEditComp.comp_address || '',
+                comp_prdctkey: selectedEditComp.comp_prdctkey || '',
+                comp_status: selectedEditComp.comp_status || '',
+                datePurchased: selectedEditComp.datePurchased || '',
+                remarks: selectedEditComp.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditComp]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditComp) {
+            const original = {
+                comp_name: selectedEditComp.comp_name || '',
+                comp_model: selectedEditComp.comp_model || '',
+                comp_type: selectedEditComp.comp_type || '',
+                comp_user: selectedEditComp.comp_user || '',
+                fullName: selectedEditComp.fullName || '',
+                department_comp: selectedEditComp.department_comp || '',
+                comp_os: selectedEditComp.comp_os || '',
+                comp_storage: selectedEditComp.comp_storage || '',
+                comp_serial: selectedEditComp.comp_serial || '',
+                comp_asset: selectedEditComp.comp_asset || '',
+                asset_class: selectedEditComp.asset_class || '',
+                comp_cpu: selectedEditComp.comp_cpu || '',
+                comp_gen: selectedEditComp.comp_gen || '',
+                comp_address: selectedEditComp.comp_address || '',
+                comp_prdctkey: selectedEditComp.comp_prdctkey || '',
+                comp_status: selectedEditComp.comp_status || '',
+                datePurchased: selectedEditComp.datePurchased || '',
+                remarks: selectedEditComp.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditComp]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
@@ -474,10 +532,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
                                 {/* <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
                                     Submit
                                 </button> */}
-                                <button 
-                                    type="submit" 
-                                    className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                    disabled={loading}
+                                <button
+                                    type="submit"
+                                    className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                    disabled={!hasChanges || loading}
                                 >
                                     {loading ? (
                                         <span className="flex items-center">
@@ -488,7 +546,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
                                             Processing...
                                         </span>
                                     ) : (
-                                        'Submit'
+                                        'Update'
                                     )}
                                 </button>
                             </div>

@@ -10,6 +10,7 @@ const CreateServer = forwardRef(function CreateServer({ show, onClose }, ref) {
         ip_address: '',
         username: '',
         password: '',
+        serial_number: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -105,6 +106,23 @@ const CreateServer = forwardRef(function CreateServer({ show, onClose }, ref) {
                                 autoComplete="address-line1"
                             />
                             <InputError message={errors.ip_address} className="mt-1 text-red-400" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="serial_number" className="block text-sm font-medium text-gray-300 mb-2">
+                                Serial Number
+                            </label>
+                            <input
+                                id="serial_number"
+                                name="serial_number"
+                                type="text"
+                                value={data.serial_number}
+                                onChange={(e) => setData("serial_number", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                                autoComplete="serial-number"
+                            />
+                            <InputError message={errors.serial_number} className="mt-1 text-red-400" />
                         </div>
 
                         <div>

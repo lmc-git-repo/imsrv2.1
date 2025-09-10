@@ -39,6 +39,46 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
     }, [selectedEditMntr]);
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+
+    // Update form data when selectedEditMntr changes
+    useEffect(() => {
+        if (selectedEditMntr) {
+            setData({
+                compName: selectedEditMntr.compName || '',
+                img_path: null,
+                mntr_user: selectedEditMntr.mntr_user || '',
+                mntr_department: selectedEditMntr.mntr_department || '',
+                mntr_model: selectedEditMntr.mntr_model || '',
+                mntr_asset: selectedEditMntr.mntr_asset || '',
+                asset_class: selectedEditMntr.asset_class || '',
+                mntr_serial: selectedEditMntr.mntr_serial || '',
+                datePurchased: selectedEditMntr.datePurchased || '',
+                remarks: selectedEditMntr.remarks || '',
+                _method: 'PUT',
+            });
+            setHasChanges(false);
+        }
+    }, [selectedEditMntr]);
+
+    // Check for changes
+    useEffect(() => {
+        if (selectedEditMntr) {
+            const original = {
+                compName: selectedEditMntr.compName || '',
+                mntr_user: selectedEditMntr.mntr_user || '',
+                mntr_department: selectedEditMntr.mntr_department || '',
+                mntr_model: selectedEditMntr.mntr_model || '',
+                mntr_asset: selectedEditMntr.mntr_asset || '',
+                asset_class: selectedEditMntr.asset_class || '',
+                mntr_serial: selectedEditMntr.mntr_serial || '',
+                datePurchased: selectedEditMntr.datePurchased || '',
+                remarks: selectedEditMntr.remarks || '',
+            };
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selectedEditMntr]);
 
     const onSubmit =(e) =>{
         e.preventDefault();
@@ -305,10 +345,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
                             {/* <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
                                 Submit
                             </button> */}
-                            <button 
-                                type="submit" 
-                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`} 
-                                disabled={loading}
+                            <button
+                                type="submit"
+                                className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                disabled={!hasChanges || loading}
                             >
                                 {loading ? (
                                     <span className="flex items-center">
@@ -319,7 +359,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, listMntrUsers, lis
                                         Processing...
                                     </span>
                                 ) : (
-                                    'Submit'
+                                    'Update'
                                 )}
                             </button>
                         </div>

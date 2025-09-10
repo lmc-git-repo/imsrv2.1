@@ -20,12 +20,13 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l3swi
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>ID:</strong> {l3switch.id}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Model:</strong> {l3switch.model}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>IP Address:</strong> {l3switch.ip_address}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Serial Number:</strong> {l3switch.serial_number}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {l3switch.username}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {l3switch.password}</p>
                 </div>
                 <div className="rounded p-3 w-full">
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l3switch.created_by?.name || 'N/A'}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {l3switch.created_at ? new Date(l3switch.created_at).toISOString().split('T')[0] : 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {l3switch.password}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l3switch.createdBy?.name || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {l3switch.created_at}</p>
                 </div>
             </div>
         </div>
