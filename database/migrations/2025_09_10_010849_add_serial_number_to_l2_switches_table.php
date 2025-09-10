@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('l2_switches', function (Blueprint $table) {
-            $table->string('serial_number')->nullable()->after('model')->change();
-        });
-    }
+    Schema::table('l2_switches', function (Blueprint $table) {
+        if (!Schema::hasColumn('l2_switches', 'serial_number')) {
+            $table->string('serial_number')->nullable()->after('model');
+        }
+    });
+}
+
 
     /**
      * Reverse the migrations.
