@@ -50,6 +50,7 @@ class L3SwitchController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         // Automatically set created_by
@@ -63,7 +64,7 @@ class L3SwitchController extends Controller
     public function show(L3Switch $l3sw)
     {
         return Inertia::render('L3Switch/Show', [
-            'l3switch' => $l3sw->load('createdBy')
+            'l3switch' => new L3SwitchResource($l3sw->load('createdBy'))
         ]);
     }
 
@@ -82,6 +83,7 @@ class L3SwitchController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'nullable|string|max:255',
             'password' => 'nullable|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         $l3sw->update($validated);

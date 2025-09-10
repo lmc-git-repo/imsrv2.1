@@ -70,6 +70,7 @@ class ServerController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         // Automatically set created_by
@@ -86,7 +87,7 @@ class ServerController extends Controller
     public function show(Server $server)
     {
         return Inertia::render('Server/Show', [
-            'server' => $server->load('createdBy')
+            'server' => new ServerResource($server->load('createdBy'))
         ]);
     }
 
@@ -111,6 +112,7 @@ class ServerController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         $server->update($validated);

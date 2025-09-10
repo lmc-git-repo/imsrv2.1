@@ -92,6 +92,7 @@ class FirewallController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         // Automatically set created_by and created_at
@@ -108,7 +109,7 @@ class FirewallController extends Controller
     public function show(Firewall $firewall)
     {
         return Inertia::render('Firewall/Show', [
-            'firewall' => $firewall
+            'firewall' => new FirewallResource($firewall->load('createdBy'))
         ]);
     }
 
@@ -133,6 +134,7 @@ class FirewallController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         $firewall->update($validated);
