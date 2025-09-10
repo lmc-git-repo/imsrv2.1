@@ -50,6 +50,7 @@ class WAPController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         // Automatically set created_by
@@ -63,7 +64,7 @@ class WAPController extends Controller
     public function show(WAP $wap)
     {
         return Inertia::render('Wap/Show', [
-            'wap' => $wap->load('createdBy')
+            'wap' => new WAPResource($wap->load('createdBy'))
         ]);
     }
 
@@ -82,6 +83,7 @@ class WAPController extends Controller
             'ip_address' => 'required|string|max:255',
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
         ]);
 
         $wap->update($validated);
