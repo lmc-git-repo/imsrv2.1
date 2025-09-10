@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('ip_address');
             $table->string('username')->nullable();
             $table->string('password')->nullable();
+            $table->string('serial_number')->nullable();
 
             // ✅ Correct 'created_by' as foreign key
-            $table->foreignId('created_by')->nullable()->constrained('users')->after('password');
+            $table->foreignId('created_by')->nullable()->constrained('users')->after('serial_number');
 
             $table->timestamps();
         });
