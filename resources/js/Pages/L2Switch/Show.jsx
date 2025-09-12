@@ -25,7 +25,7 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l2swi
                 </div>
                 <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {l2switch.password}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l2switch.createdBy?.name || auth.user.name}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l2switch.created_by?.name || 'N/A'}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created Date:</strong> {l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</p>
                 </div>
             </div>

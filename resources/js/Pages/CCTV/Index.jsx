@@ -227,7 +227,7 @@ export default function Index({
                                                     <td className="px-3 py-2">{cctv.ip_address}</td>
                                                     <td className="px-3 py-2">{cctv.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{cctv.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{cctv.createdBy?.name}</td>
+                                                    <td className="px-3 py-2">{cctv.createdBy?.name || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-nowrap">{cctv.created_at}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
