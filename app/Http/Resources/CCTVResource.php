@@ -25,9 +25,14 @@ class CCTVResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'installer_supplier' => $this->installer_supplier,
-            'createdBy' => [
-                'name' => Auth::user()->name
-            ],
+            'createdBy' => $this->whenLoaded('createdBy', function () {
+                return [
+                    'id' => $this->createdBy->id,
+                    'name' => $this->createdBy->name,
+                    'email' => $this->createdBy->email,
+                    'role' => $this->createdBy->role,
+                ];
+            }),
             'created_at' => (new Carbon($this->created_at))->setTimezone('Asia/Singapore')->format('Y-m-d'),
         ];
     }

@@ -26,8 +26,8 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, cctv 
                 <div className="rounded p-3 w-full">
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {cctv.password}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Installer/Supplier:</strong> {cctv.installer_supplier}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {cctv.createdBy?.name}</p>
-                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created Date:</strong> {cctv.created_at}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {cctv.createdBy?.name || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created Date:</strong> {cctv.created_at ? new Date(cctv.created_at).toISOString().split('T')[0] : 'N/A'}</p>
                 </div>
             </div>
         </div>
