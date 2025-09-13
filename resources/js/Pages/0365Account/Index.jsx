@@ -213,9 +213,9 @@ export default function Index({auth, msAccount, queryParams = null, success}) {
                                                         <td className="px-3 py-2">{msaccount.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{msaccount.created_at}</td>
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                                            <td className="px-3 py-2 text-right text-nowrap">
+                                                            <td className="px-3 py-2 text-center text-nowrap">
                                                                 <button
-                                                                    className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
+                                                                    className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
                                                                     onClick={() => openEditModal(msaccount)}
                                                                 >
                                                                     <span className='flex items-center justify-center'>
@@ -225,7 +225,7 @@ export default function Index({auth, msAccount, queryParams = null, success}) {
                                                                     </span>
                                                                 </button>
                                                             
-                                                                <button 
+                                                                <button
                                                                     onClick={(e) => deleteItem(msaccount)}
                                                                     className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                                 >

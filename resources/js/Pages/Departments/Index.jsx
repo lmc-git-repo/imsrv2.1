@@ -198,7 +198,7 @@ export default function Index({auth, departments, queryParams = null, success}) 
                                             >
                                                 DATE CREATED
                                             </TableHeading>
-                                            <th className="px-3 py-3 text-right">Actions</th>
+                                            <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     
@@ -211,20 +211,14 @@ export default function Index({auth, departments, queryParams = null, success}) 
                                                 departments.data.map(department => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={department.dept_id}>
                                                         <td className="px-3 py-2">{department.dept_id}</td>
-                                                        <td className="px-3 py-2">{department.dept_list}</td>
+                                                        <th className="px-3 py-2 hover:underline hover:text-white text-nowrap">
+                                                            <Link href="#" onClick={(e) => openModal(department, e)}>
+                                                                {department.dept_list}
+                                                            </Link>
+                                                        </th>
                                                         <td className="px-3 py-2">{department.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{department.created_at}</td>
-                                                        <td className="px-3 py-2 text-right">
-                                                            <button
-                                                                className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(department, e)}
-                                                            >
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                                </svg>
-                                                            </button>
-
+                                                        <td className="px-3 py-2 text-center">
                                                             {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                                 <button
                                                                     className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 

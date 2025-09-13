@@ -265,7 +265,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                 Created Date
                                             </TableHeading>
                                             {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                                <th className="px-3 py-3 text-right">Actions</th>
+                                                <th className="px-3 py-3 text-center">Actions</th>
                                             )}
                                         </tr>
                                     </thead>
@@ -315,10 +315,10 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                         <td className="px-3 py-2">{accountusers.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{accountusers.created_at}</td>
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                                            <td className="px-3 py-2 text-right text-nowrap">
+                                                            <td className="px-3 py-2 text-center text-nowrap">
                                                                 {/* <Link href={route('accountUsers.edit', accountusers.account_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                                 <button
-                                                                    className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
+                                                                    className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
                                                                     onClick={() => openEditModal(accountusers)}
                                                                 >
                                                                     <span className='flex items-center justify-center'>
@@ -328,7 +328,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                                     </span>
                                                                 </button>
                                                             
-                                                                <button 
+                                                                <button
                                                                     onClick={(e) => deleteAccountUsers(accountusers)}
                                                                     className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                                 >

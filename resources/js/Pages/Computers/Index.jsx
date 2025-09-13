@@ -8,14 +8,11 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-// import useModal from './hooks/useModal'
-// import useCreateModal from './hooks/useCreateModal'
-// import useEditModal from './hooks/useEditModal'
 import useModal from '@/Components/hooks/useModal'
 import useCreateModal from '@/Components/hooks/useCreateModal'
 import useEditModal from '@/Components/hooks/useEditModal'
-import Show from './Show'
 import CreateModalComponent from './Create'
+import Show from './Show'
 import EditModalComponent from './Edit'
 import { debounce, set } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
@@ -59,8 +56,6 @@ export default function Index({auth, computers, departmentsList, generations, co
             {
               ...queryParams,
               search: query,
-              
-              // This time add other filters 
               comp_status: compStatus,
               comp_storage: compStorage,
               asset_class: assetClass,
@@ -71,7 +66,7 @@ export default function Index({auth, computers, departmentsList, generations, co
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp]); // need to add dependency for queryParams changes
+        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp]);
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -95,18 +90,17 @@ export default function Index({auth, computers, departmentsList, generations, co
     // Key press event handler (specifically for Enter key)
     const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
-        
         searchFieldChanged(e.target.value);
     }
 
     const [loading, setLoading] = useState(false);
     // Update loading state based on filtering
-     useEffect(() => {
+    useEffect(() => {
         setLoading(true);
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 800); // Simulate a delay, adjust based on actual data processing
-        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+        }, 800);
+        return () => clearTimeout(timer);
     }, [compStatus, compStorage, assetClass, compType, compGen, departmentComp, searchQuery]);
 
     const handleSelectChange = (name, value) => {
@@ -154,26 +148,13 @@ export default function Index({auth, computers, departmentsList, generations, co
         router.delete(route('computers.destroy', computer.CID))
     };    
 
-    // const handlePrint = (computer) => {
-    //     printAssetTag(computer, 'computer');
-    // };        
-
     // Function to handle the printing of individual asset tags
     const handlePrint = (computer) => {
-        printAssetTag(computer, 'computer'); // Adjusted to use Excel-based printing
+        printAssetTag(computer, 'computer');
     };
 
-    // const handleSelectAll = (e) => {
-    //     if (e.target.checked) {
-    //         const allIDs = computers.data.map((comp) => comp.CID);
-    //         setSelectedItems(allIDs);
-    //     } else {
-    //         setSelectedItems([]);
-    //     }
-    // };
     const handleSelectAll = (e) => {
         const allIDsOnPage = computers.data.map((comp) => comp.CID);
-    
         if (e.target.checked) {
             setSelectedItems((prevSelected) => [
                 ...new Set([...prevSelected, ...allIDsOnPage]),
@@ -193,11 +174,9 @@ export default function Index({auth, computers, departmentsList, generations, co
         );
     };
 
-
     // Function to handle bulk printing of asset tags
     const handleBulkPrint = () => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        // console.log('CSRF Token:', csrfToken);
         if (!csrfToken) {
             console.error('CSRF token not found in the document.');
             return;
@@ -229,8 +208,6 @@ export default function Index({auth, computers, departmentsList, generations, co
             .then((missingItems) => {
                 const allItemsToPrint = [...selectedItemDetails, ...missingItems];
                 bulkPrintAssetTags(allItemsToPrint, 'computer');
-
-                // Clear selected items and remove from localStorage
                 setSelectedItems([]);
                 localStorage.removeItem('selectedItems');
             })
@@ -238,48 +215,45 @@ export default function Index({auth, computers, departmentsList, generations, co
                 console.error('Error fetching missing items:', error);
             });
         } else {
-            // console.log('All Selected Items:', selectedItemDetails);
             bulkPrintAssetTags(selectedItemDetails, 'computer'); 
-            
-            // Clear selected items and remove from localStorage
             setSelectedItems([]);
             localStorage.removeItem('selectedItems');
         }
     };
 
-  return (
-    <AuthenticatedLayout
-        user={auth.user}
-        header={
-            <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Computers</h2>
-                <div className='flex justify-between w-auto lg:w-1/4 gap-auto gap-2'> 
-                    {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                        <Button 
-                            onClick={() => openCreateModal()} 
-                            className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+    return (
+        <AuthenticatedLayout
+            user={auth.user}
+            header={
+                <div className='flex justify-between items-center'>
+                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Computers</h2>
+                    <div className='flex justify-between w-auto lg:w-1/4 gap-auto gap-2'> 
+                        {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                            <Button 
+                                onClick={() => openCreateModal()} 
+                                className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                            >
+                                <span className='flex items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                                    </svg>
+                                    Add
+                                </span>
+                            </Button>
+                        )}
+                        <button
+                            onClick={handleBulkPrint}
+                            disabled={selectedItems.length === 0}
+                            className="bg-blue-500 text-white rounded shadow p-2"
                         >
-                            <span className='flex items-center'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mx-1">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
-                                </svg>
-                                Add
-                            </span>
-                        </Button>
-                    )}
-                    <button
-                        onClick={handleBulkPrint}
-                        disabled={selectedItems.length === 0}
-                        className="bg-blue-500 text-white rounded shadow p-2"
-                    >
-                        Bulk Print Asset Tags
-                    </button>
+                            Bulk Print Asset Tags
+                        </button>
+                    </div>
                 </div>
-            </div>
-        }
-    >
-        <Head title="Computers" />
-        <div className="py-12">
+            }
+        >
+            <Head title="Computers" />
+            <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
                     {success && (
                         <div id="alert-border-3" className="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-slate-800 dark:border-green-800" role="alert">
@@ -299,7 +273,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                     )}
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            {/* <pre>{JSON.stringify(computers, undefined, 2)}</pre> */}
                             <div className="overflow-auto">
                                 <div className="w-[1000px] md:w-full lg:w-auto flex justify-between items-center py-2">
                                     <div>
@@ -326,7 +299,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             <option value="Borrow">Borrow</option>
                                         </SelectInput>
                                     </div>
-
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
@@ -345,7 +317,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
-
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
@@ -360,7 +331,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             <option value="N/A">N/A</option>
                                         </SelectInput>
                                     </div>
-
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
@@ -372,7 +342,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             <option value="Laptop">Laptop</option>
                                         </SelectInput>
                                     </div>
-
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
@@ -385,7 +354,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             ))}
                                         </SelectInput>
                                     </div>
-
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
@@ -401,7 +369,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </SelectInput>
                                     </div>
                                 </div>
-                                
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
@@ -425,7 +392,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                 Computer Name
                                             </TableHeading>
                                             <th className="px-3 py-3">IMG</th>
-                                            
                                             <TableHeading
                                                 name="comp_type"
                                                 sort_field={queryParams.sort_field} 
@@ -434,8 +400,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Computer Type
                                             </TableHeading>
-                                            
-                                            
                                             <TableHeading
                                                 name="fullName"
                                                 sort_field={queryParams.sort_field} 
@@ -444,7 +408,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Full Name
                                             </TableHeading>
-
                                             <TableHeading
                                                 name="department_comp"
                                                 sort_field={queryParams.sort_field} 
@@ -453,7 +416,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Department
                                             </TableHeading>
-                                            
                                             <TableHeading
                                                 name="comp_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -462,7 +424,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Computer Asset
                                             </TableHeading>
-                                            
                                             <TableHeading
                                                 name="comp_gen"
                                                 sort_field={queryParams.sort_field} 
@@ -479,7 +440,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Mac Address
                                             </TableHeading>
-
                                             <TableHeading
                                                 name="comp_status"
                                                 sort_field={queryParams.sort_field} 
@@ -488,11 +448,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             >
                                                 Status
                                             </TableHeading>
-                                            
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    
                                     <tbody>
                                         {loading ? (
                                             <tr className="text-center">
@@ -527,19 +485,10 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                             <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[computer.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[computer.comp_status]}</span>
                                                         </td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            <button
-                                                                className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={(e) => openModal(computer, e)}
-                                                            >
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                                </svg>
-                                                            </button>
                                                             {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                                 <button
                                                                     className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
-                                                                    onClick={() => openEditModal(computer)}
+                                                                    onClick={(e) => { e.stopPropagation(); openEditModal(computer); }}
                                                                 >
                                                                     <span className='flex items-center justify-center'>
                                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -547,12 +496,10 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                                         </svg>
                                                                     </span>
                                                                 </button>
-                                                                
                                                             )}
-
                                                             {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                                 <button 
-                                                                    onClick={(e) => deleteComputers(computer)}
+                                                                    onClick={(e) => { e.stopPropagation(); deleteComputers(computer); }}
                                                                     className="inline-block py-1 px-2 text-red-500 hover:text-red-700 hover:scale-110 hover:animate-bounce mx-1"
                                                                 >
                                                                     <span className='flex items-center justify-center'>
@@ -564,7 +511,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                             )}
                                                             <button 
                                                                 className="inline-block py-1 px-2 text-green-500 hover:text-green-300 hover:scale-110 mx-1"
-                                                                onClick={() => handlePrint(computer)}
+                                                                onClick={(e) => { e.stopPropagation(); handlePrint(computer); }}
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
@@ -599,7 +546,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                 </div>
             </div>
             <Show show={showModal} onClose={closeModal} user={selected} />
-            <CreateModalComponent 
+            <CreateModalComponent
                 show={showCreateModal} 
                 onClose={closeCreateModal} 
                 departmentsList={departmentsList.data} 
@@ -616,6 +563,6 @@ export default function Index({auth, computers, departmentsList, generations, co
                 selectedEditComp={selectedEdit}
                 generations={generations}
             />
-    </AuthenticatedLayout>
-  )
+        </AuthenticatedLayout>
+    )
 }
