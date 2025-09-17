@@ -333,7 +333,7 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                             defaultValue={tabletGen}
                                             onChange={(e) => handleSelectChange('tablet_gen', e.target.value)}
                                         >
-                                            <option value="">Select Generation: </option>
+                                            <option value="">Select Generation </option>
                                             {generations.map((gen, index) => (
                                                 <option key={index} value={gen}>{gen}</option>
                                             ))}

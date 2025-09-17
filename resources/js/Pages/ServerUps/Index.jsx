@@ -350,7 +350,7 @@ export default function Index({auth, serverUps, departmentsList, generations, se
                                             defaultValue={serverUpsGen}
                                             onChange={(e) => handleSelectChange('S_UGen', e.target.value)}
                                         >
-                                            <option value="">Select Generation: </option>
+                                            <option value="">Select Generation </option>
                                             {generations.map((gen, index) => (
                                                 <option key={index} value={gen}>{gen}</option>
                                             ))}
