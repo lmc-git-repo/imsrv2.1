@@ -27,13 +27,6 @@ export default function Index({auth, computers, departmentsList, generations, co
     
     queryParams = queryParams || {}
     const [searchQuery, setSearchQuery] = useState(queryParams.search || '');
-    const [compStatus, setCompStatus] = useState(queryParams.comp_status || '');
-    const [compStorage, setCompStorage] = useState(queryParams.comp_storage || ['1.5GB', '2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB', 'N/A'].includes(queryParams.comp_storage) ? queryParams.comp_storage : '');
-    const [assetClass, setAssetClass] = useState(queryParams.asset_class || '');
-    const [compType, setCompType] = useState(queryParams.comp_type || '');
-    const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
-    const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
-    const [compOs, setCompOs] = useState(queryParams.comp_os || '');
     const [selectedItems, setSelectedItems] = useState([]);
 
     // Load selectedItems from localStorage on component mount
@@ -50,51 +43,36 @@ export default function Index({auth, computers, departmentsList, generations, co
     // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
         debounce((query) => {
-    
-          setSearchQuery(query);
-    
-          router.get(
-            route('computers.index'),
-            {
-              ...queryParams,
-              search: query,
-              comp_status: compStatus,
-              comp_storage: compStorage,
-              asset_class: assetClass,
-              comp_type: compType,
-              comp_gen: compGen,
-              department_comp: departmentComp,
-              comp_os: compOs,
-              page: 1
-            },
-            {preserveState: true, preserveScroll: true}
-          )
-        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs]);
+            if (query === queryParams.search) return;
+            router.get(
+                route('computers.index'),
+                {
+                    ...queryParams,
+                    search: query,
+                    page: 1
+                },
+                {preserveState: true, preserveScroll: true}
+            )
+        }, 300), [queryParams]);
     //end
 
-    const handleFilterChange = useCallback((name, value) => {
+    const handleFilterChange = (name, value) => {
+        if (queryParams[name] === value) return;
         router.get(
-          route('computers.index'),
+            route('computers.index'),
             {
                 ...queryParams,
-                search: searchQuery,
-                comp_status: compStatus,
-                comp_storage: compStorage,
-                asset_class: assetClass,
-                comp_type: compType,
-                comp_gen: compGen,
-                department_comp: departmentComp,
-                comp_os: name === 'comp_os' ? value : compOs,
+                [name]: value,
                 page: 1
             },
             {preserveScroll: true}
         );
-      }, [queryParams, searchQuery, compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs]);
-    //end
+    };
+    
     
     const searchFieldChanged = (value) => {
         handleSearchChange(value);
-    }; 
+    };
     
     // Key press event handler (specifically for Enter key)
     const onKeyPress = (e) => {
@@ -103,54 +81,25 @@ export default function Index({auth, computers, departmentsList, generations, co
     }
 
     const [loading, setLoading] = useState(false);
-    // Update loading state based on filtering
-    useEffect(() => {
-        setLoading(true);
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 800);
-        return () => clearTimeout(timer);
-    }, [compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs, searchQuery]);
 
     const handleSelectChange = (name, value) => {
-        setLoading(true);
-        switch (name) {
-          case 'comp_status':
-            setCompStatus(value);
-            break;
-          case 'comp_storage':
-            setCompStorage(['1.5GB', '2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB', 'N/A'].includes(value) ? value : '');
-            break;
-          case 'asset_class':
-            setAssetClass(value);
-            break;
-          case 'comp_type':
-            setCompType(value);
-            break;
-          case 'comp_gen':
-            setCompGen(value);
-            break;  
-          case 'department_comp':
-            setDepartmentComp(value);
-            break;
-          case 'comp_os':
-            setCompOs(value);
-            break;
-          default:
-            break;
+        let filteredValue = value;
+        if (name === 'comp_storage') {
+            filteredValue = ['1.5GB', '2GB', '4GB', '6GB', '8GB', '12GB', '16GB', '32GB', 'N/A'].includes(value) ? value : '';
         }
-        handleFilterChange(name, value);
+        handleFilterChange(name, filteredValue);
     };
     
     // Sort change handler
     const sortChanged = (name) => {
-        if(name === queryParams.sort_field){
-            queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
+        const newQueryParams = { ...queryParams };
+        if (name === newQueryParams.sort_field) {
+            newQueryParams.sort_direction = newQueryParams.sort_direction === 'asc' ? 'desc' : 'asc';
         } else {
-            queryParams.sort_field = name;
-            queryParams.sort_direction = 'asc';
+            newQueryParams.sort_field = name;
+            newQueryParams.sort_direction = 'asc';
         }
-        router.get(route('computers.index'), queryParams, { preserveScroll: true });
+        router.get(route('computers.index'), newQueryParams, { preserveScroll: true });
     };
 
     const deleteComputers = (computer) => {
@@ -275,7 +224,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                             <div className="ms-3 text-sm font-medium">
                                 {success}
                             </div>
-                            <button onClick={() => router.get(route('computers.index'))} type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-slate-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close">
+                            <button type="button" className="ms-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-slate-800 dark:text-green-400 dark:hover:bg-gray-700"  data-dismiss-target="#alert-border-3" aria-label="Close" onClick={(e) => e.currentTarget.parentElement.style.display = 'none'}>
                                 <span className="sr-only">Dismiss</span>
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -288,9 +237,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                             <div className="overflow-auto">
                                 <div className="w-[1000px] md:w-full lg:w-auto flex justify-between items-center py-2">
                                     <div>
-                                        <TextInput 
+                                        <TextInput
                                             className="w-full"
-                                            defaultValue={searchQuery} 
+                                            defaultValue={searchQuery}
                                             placeholder="Computer"
                                             onBlur={e => searchFieldChanged(e.target.value)}
                                             onChange={(e) => searchFieldChanged(e.target.value)}
@@ -298,9 +247,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         />
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={compStatus}
+                                            defaultValue={queryParams.comp_status}
                                             onChange={(e) => handleSelectChange('comp_status', e.target.value)}
                                         >
                                             <option value="">Select Status</option>
@@ -312,9 +261,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </SelectInput>
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={compStorage}
+                                            defaultValue={queryParams.comp_storage}
                                             onChange={(e) => handleSelectChange('comp_storage', e.target.value)}
                                         >
                                             <option value="">Select Ram Capacity </option>
@@ -330,9 +279,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </SelectInput>
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={assetClass}
+                                            defaultValue={queryParams.asset_class}
                                             onChange={(e) => handleSelectChange('asset_class', e.target.value)}
                                         >
                                             <option value="">Choose Asset Classification</option>
@@ -344,9 +293,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </SelectInput>
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={compType}
+                                            defaultValue={queryParams.comp_type}
                                             onChange={(e) => handleSelectChange('comp_type', e.target.value)}
                                         >
                                             <option value="">Comp Type</option>
@@ -357,7 +306,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                     <div>
                                         <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={compGen}
+                                            defaultValue={queryParams.comp_gen}
                                             onChange={(e) => handleSelectChange('comp_gen', e.target.value)}
                                         >
                                             <option value="">Select Generation </option>
@@ -369,7 +318,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                     <div>
                                         <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            defaultValue={departmentComp}
+                                            defaultValue={queryParams.department_comp}
                                             onChange={(e) => handleSelectChange('department_comp', e.target.value)}
                                         >
                                             <option value="">Select Department</option>
@@ -383,7 +332,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                     <div>
                                         <SelectInput
                                             className="w-full text-sm h-8 py-1"
-                                            value={compOs}
+                                            defaultValue={queryParams.comp_os}
                                             onChange={(e) => handleSelectChange('comp_os', e.target.value)}
                                         >
                                             <option value="">Select OS</option>
@@ -475,11 +424,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {loading ? (
-                                            <tr className="text-center">
-                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
-                                            </tr>
-                                        ) : computers.data && computers.data.length > 0 ? (
+                                        {computers.data && computers.data.length > 0 ? (
                                                 computers.data.map((computer) => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                                                         <td>
@@ -496,7 +441,17 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                             </Link>
                                                         </th>
                                                         <td className="px-3 py-2">
-                                                            <img src={computer.img_path} alt="" style={{width: 60}} />
+                                                            {computer.img_path ? (
+                                                                <img
+                                                                    src={computer.img_path}
+                                                                    alt=""
+                                                                    style={{width: 60}}
+                                                                    onError={(e) => {
+                                                                        e.target.onerror = null;
+                                                                        e.target.style.display = 'none';
+                                                                    }}
+                                                                />
+                                                            ) : null}
                                                         </td>
                                                         <td className="px-3 py-2">{computer.comp_type}</td>
                                                         <td className="px-3 py-2 font-bold text-slate-300">{computer.fullName}</td>
@@ -552,18 +507,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                     </tbody>
                                 </table>
                             </div>
-                            <Pagination  
+                            <Pagination
                                 links={computers.meta.links}
-                                queryParams={{
-                                    search: searchQuery,
-                                    comp_status: compStatus,
-                                    comp_storage: compStorage,
-                                    asset_class: assetClass,
-                                    comp_type: compType,
-                                    comp_gen: compGen,
-                                    department_comp: departmentComp,
-                                    comp_os: compOs
-                                }}
+                                queryParams={queryParams}
                             />
                         </div>
                     </div>
