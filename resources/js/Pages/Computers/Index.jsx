@@ -4,6 +4,7 @@ import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
+import Dropdown from '@/Components/Dropdown'
 import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -18,7 +19,7 @@ import { debounce, set } from 'lodash'
 import { printAssetTag } from '@/Components/hooks/printAssetTag'
 import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
-export default function Index({auth, computers, departmentsList, generations, compUsersList, compUsersFnameList, queryParams = null, success}) {
+export default function Index({auth, computers, departmentsList, generations, compUsersList, compUsersFnameList, queryParams = null, success, win10Count = 0, win11Count = 0}) {
     
     const { showModal, selected, openModal, closeModal } = useModal();
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
@@ -32,6 +33,7 @@ export default function Index({auth, computers, departmentsList, generations, co
     const [compType, setCompType] = useState(queryParams.comp_type || '');
     const [compGen, setCompGen] = useState(queryParams.comp_gen || '');
     const [departmentComp, setDepartmentComp] = useState(queryParams.department_comp || '');
+    const [compOs, setCompOs] = useState(queryParams.comp_os || '');
     const [selectedItems, setSelectedItems] = useState([]);
 
     // Load selectedItems from localStorage on component mount
@@ -62,11 +64,12 @@ export default function Index({auth, computers, departmentsList, generations, co
               comp_type: compType,
               comp_gen: compGen,
               department_comp: departmentComp,
+              comp_os: compOs,
               page: 1
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp]);
+        }, 300), [queryParams, compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs]);
     //end
 
     const handleFilterChange = useCallback((name, value) => {
@@ -74,13 +77,19 @@ export default function Index({auth, computers, departmentsList, generations, co
           route('computers.index'),
             {
                 ...queryParams,
-                [name]: value,
                 search: searchQuery,
+                comp_status: compStatus,
+                comp_storage: compStorage,
+                asset_class: assetClass,
+                comp_type: compType,
+                comp_gen: compGen,
+                department_comp: departmentComp,
+                comp_os: name === 'comp_os' ? value : compOs,
                 page: 1
             },
             {preserveScroll: true}
         );
-      }, [queryParams]);
+      }, [queryParams, searchQuery, compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs]);
     //end
     
     const searchFieldChanged = (value) => {
@@ -101,7 +110,7 @@ export default function Index({auth, computers, departmentsList, generations, co
             setLoading(false);
         }, 800);
         return () => clearTimeout(timer);
-    }, [compStatus, compStorage, assetClass, compType, compGen, departmentComp, searchQuery]);
+    }, [compStatus, compStorage, assetClass, compType, compGen, departmentComp, compOs, searchQuery]);
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
@@ -123,6 +132,9 @@ export default function Index({auth, computers, departmentsList, generations, co
             break;  
           case 'department_comp':
             setDepartmentComp(value);
+            break;
+          case 'comp_os':
+            setCompOs(value);
             break;
           default:
             break;
@@ -305,7 +317,7 @@ export default function Index({auth, computers, departmentsList, generations, co
                                             defaultValue={compStorage}
                                             onChange={(e) => handleSelectChange('comp_storage', e.target.value)}
                                         >
-                                            <option value="">Select Ram Capacity: </option>
+                                            <option value="">Select Ram Capacity </option>
                                             <option value="1.5GB">1.5GB</option>
                                             <option value="2GB">2GB</option>
                                             <option value="4GB">4GB</option>
@@ -343,19 +355,19 @@ export default function Index({auth, computers, departmentsList, generations, co
                                         </SelectInput>
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
                                             defaultValue={compGen}
                                             onChange={(e) => handleSelectChange('comp_gen', e.target.value)}
                                         >
-                                            <option value="">Select Generation: </option>
+                                            <option value="">Select Generation </option>
                                             {generations.map((gen, index) => (
                                                 <option key={index} value={gen}>{gen}</option>
                                             ))}
                                         </SelectInput>
                                     </div>
                                     <div>
-                                        <SelectInput 
+                                        <SelectInput
                                             className="w-full text-sm h-8 py-1"
                                             defaultValue={departmentComp}
                                             onChange={(e) => handleSelectChange('department_comp', e.target.value)}
@@ -366,6 +378,17 @@ export default function Index({auth, computers, departmentsList, generations, co
                                                     {dept.dept_list}
                                                 </option>
                                             ))}
+                                        </SelectInput>
+                                    </div>
+                                    <div>
+                                        <SelectInput
+                                            className="w-full text-sm h-8 py-1"
+                                            value={compOs}
+                                            onChange={(e) => handleSelectChange('comp_os', e.target.value)}
+                                        >
+                                            <option value="">Select OS</option>
+                                            <option value="Windows 10 Pro 64bit">Windows 10 Pro 64bit</option>
+                                            <option value="Windows 11 Pro">Windows 11 Pro</option>
                                         </SelectInput>
                                     </div>
                                 </div>
@@ -538,8 +561,9 @@ export default function Index({auth, computers, departmentsList, generations, co
                                     asset_class: assetClass,
                                     comp_type: compType,
                                     comp_gen: compGen,
-                                    department_comp: departmentComp
-                                }} 
+                                    department_comp: departmentComp,
+                                    comp_os: compOs
+                                }}
                             />
                         </div>
                     </div>

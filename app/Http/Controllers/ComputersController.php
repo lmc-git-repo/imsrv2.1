@@ -65,6 +65,9 @@ class ComputersController extends Controller
             ->when(request('department_comp'), function (Builder $query, $depComp) {
                 $query->where('department_comp', $depComp);
             })
+            ->when(request('comp_os'), function (Builder $query, $compOs) {
+                $query->where('comp_os', $compOs);
+            })
             ->paginate(10)->onEachSide(1);
         //end
 
@@ -73,6 +76,9 @@ class ComputersController extends Controller
         $compUsersFnameList = AccountUsers::orderBy('name')->get();
         $computersAllData = Computers::orderBy('CID')->get();
         $generations = GenerationHelper::getGenerations();
+
+        $win10Count = Computers::where('comp_os', 'Windows 10 Pro 64bit')->count();
+        $win11Count = Computers::where('comp_os', 'Windows 11 Pro')->count();
 
         // echo $computersAllData;
         // dd($computersAllData);
@@ -85,6 +91,8 @@ class ComputersController extends Controller
             'compUsersFnameList' => AccountUsersResource::collection($compUsersFnameList),
             'computersAllData' => ComputersResource::collection($computersAllData),
             'queryParams' => request()->query() ?: null,
+            'win10Count' => $win10Count,
+            'win11Count' => $win11Count,
             'success' => session('success'),
         ]);
     }
