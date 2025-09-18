@@ -98,15 +98,7 @@ export default function Index({auth, serverUps, departmentsList, generations, se
         searchFieldChanged(e.target.value);
     }
 
-    const [loading, setLoading] = useState(false);
-    // Update loading state based on filtering
-     useEffect(() => {
-        setLoading(true);
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 800); // Simulate a delay, adjust based on actual data processing
-        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
-    }, [serverUpsStatus, assetClass, serverUpsType, serverUpsGen, departmentSU, searchQuery]);
+    // Removed artificial loading delay
 
     const handleSelectChange = (name, value) => {
         setLoading(true);
@@ -466,11 +458,7 @@ export default function Index({auth, serverUps, departmentsList, generations, se
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {loading ? (
-                                            <tr className="text-center">
-                                                <td colSpan="17" className="py-4 text-gray-500">Please wait while rendering...</td>
-                                            </tr>
-                                        ) : serverUps.data && serverUps.data.length > 0 ? (
+                                        {serverUps.data && serverUps.data.length > 0 ? (
                                                 serverUps.data.map(serverups => (
                                                     <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={serverups.S_UID}>
                                                         <td>

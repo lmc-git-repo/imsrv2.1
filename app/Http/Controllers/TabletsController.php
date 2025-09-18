@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -61,14 +62,21 @@ class TabletsController extends Controller
             })
             ->paginate(10)->onEachSide(1);
         //end
-
-        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $tabletUsersList = AccountUsers::orderBy('initial')->get();
-        $tabletUsersFnameList = AccountUsers::orderBy('name')->get();
-        $tabletsAllData = Tablets::orderBy('tablet_id')->get();
-        $generations = GenerationHelper::getGenerations();
-
-        // echo $tabletsAllData;
+    
+        $departmentsList = Cache::remember('departments_list', 3600, function () {
+            return Departments::orderBy('dept_list')->get();
+        });
+    
+        // Fetch AccountUsers once, sorted by name
+        $tabletUsersFnameList = Cache::remember('tablet_users_fname_list', 3600, function () {
+            return AccountUsers::orderBy('name')->get();
+        });
+        // Sort the same data by 'initial' for tabletUsersList
+        $tabletUsersList = $tabletUsersFnameList->sortBy('initial')->values();
+    
+        $generations = Cache::remember('generations', 3600, function () {
+            return GenerationHelper::getGenerations();
+        });
 
         return inertia("Tablets/Index", [
             'tablets' => TabletsResource::collection($tablets),
@@ -76,7 +84,6 @@ class TabletsController extends Controller
             'generations' => $generations,
             'tabletUsersList' => AccountUsersResource::collection($tabletUsersList),
             'tabletUsersFnameList' => AccountUsersResource::collection($tabletUsersFnameList),
-            'tabletsAllData' => TabletsResource::collection($tabletsAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -61,20 +62,24 @@ class ServerUPSController extends Controller
             })
             ->paginate(10)->onEachSide(1);
         //end
-
-        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $serverUpsUsersList = AccountUsers::orderBy('initial')->get();
-        $serverUpsAllData = ServerUPS::orderBy('S_UID')->get();
-        $generations = GenerationHelper::getGenerations();
-
-        // echo $serverUpsAllData;
+    
+        $departmentsList = Cache::remember('departments_list', 3600, function () {
+            return Departments::orderBy('dept_list')->get();
+        });
+    
+        $serverUpsUsersList = Cache::remember('server_ups_users_list', 3600, function () {
+            return AccountUsers::orderBy('initial')->get();
+        });
+    
+        $generations = Cache::remember('generations', 3600, function () {
+            return GenerationHelper::getGenerations();
+        });
 
         return inertia("ServerUps/Index", [
             'serverUps' => ServerUPSResource::collection($serverUps),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
             'generations' => $generations,
             'serverUpsUsersList' => AccountUsersResource::collection($serverUpsUsersList),
-            'serverUpsAllData' => ServerUPSResource::collection($serverUpsAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

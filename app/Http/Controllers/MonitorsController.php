@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -53,20 +54,22 @@ class MonitorsController extends Controller
             })
             ->paginate(10)->onEachSide(1);
         //end
-
-        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $mntrUsersList = AccountUsers::orderBy('name')->get();
-        $monitorsAllData = Monitors::orderBy('monitor_id')->get();
-        $compNameList = Computers::orderBy('comp_name')->get();
-
-        // echo $monitorsAllData;
+    
+        $departmentsList = Cache::remember('departments_list', 3600, function () {
+            return Departments::orderBy('dept_list')->get();
+        });
+        $mntrUsersList = Cache::remember('monitors_users_list', 3600, function () {
+            return AccountUsers::orderBy('name')->get();
+        });
+        $compNameList = Cache::remember('monitors_comp_list', 3600, function () {
+            return Computers::orderBy('comp_name')->get();
+        });
 
         return inertia("Monitors/Index", [
             'monitors' => MonitorsResource::collection($monitors),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
             'compNameList' => ComputersResource::collection($compNameList),
             'mntrUsersList' => AccountUsersResource::collection($mntrUsersList),
-            'monitorsAllData' => MonitorsResource::collection($monitorsAllData),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

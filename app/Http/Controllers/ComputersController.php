@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -71,17 +72,29 @@ class ComputersController extends Controller
             ->paginate(10)->onEachSide(1);
         //end
 
-        $departmentsList = Departments::orderBy('dept_list')->get(); // Fetch all departments
-        $compUsersList = AccountUsers::orderBy('initial')->get();
-        $compUsersFnameList = AccountUsers::orderBy('name')->get();
-        $computersAllData = Computers::orderBy('CID')->get();
-        $generations = GenerationHelper::getGenerations();
+        $departmentsList = Cache::remember('departments_list', 3600, function () {
+            return Departments::orderBy('dept_list')->get();
+        });
 
-        $win10Count = Computers::where('comp_os', 'Windows 10 Pro 64bit')->count();
-        $win11Count = Computers::where('comp_os', 'Windows 11 Pro')->count();
+        // Fetch AccountUsers once, sorted by name
+        $compUsersFnameList = Cache::remember('comp_users_fname_list', 3600, function () {
+            return AccountUsers::orderBy('name')->get();
+        });
+        // Sort the same data by 'initial' for compUsersList
+        $compUsersList = $compUsersFnameList->sortBy('initial')->values();
 
-        // echo $computersAllData;
-        // dd($computersAllData);
+        $generations = Cache::remember('generations', 3600, function () {
+            return GenerationHelper::getGenerations();
+        });
+
+        $osCounts = Cache::remember('computers_os_counts', 3600, function () {
+            return Computers::selectRaw('
+                SUM(CASE WHEN comp_os = "Windows 10 Pro 64bit" THEN 1 ELSE 0 END) as win10_count,
+                SUM(CASE WHEN comp_os = "Windows 11 Pro" THEN 1 ELSE 0 END) as win11_count
+            ')->first();
+        });
+        $win10Count = $osCounts->win10_count ?? 0;
+        $win11Count = $osCounts->win11_count ?? 0;
 
         return inertia("Computers/Index", [
             'computers' => ComputersResource::collection($computers),
@@ -89,7 +102,6 @@ class ComputersController extends Controller
             'generations' => $generations,
             'compUsersList' => AccountUsersResource::collection($compUsersList),
             'compUsersFnameList' => AccountUsersResource::collection($compUsersFnameList),
-            'computersAllData' => ComputersResource::collection($computersAllData),
             'queryParams' => request()->query() ?: null,
             'win10Count' => $win10Count,
             'win11Count' => $win11Count,
