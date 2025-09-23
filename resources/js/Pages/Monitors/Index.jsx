@@ -260,8 +260,8 @@ export default function Index({auth, monitors, departmentsList, mntrUsersList, c
                 <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div className="p-6 text-gray-900 dark:text-gray-100">
                         <div className="overflow-auto">
-                            <div className="flex justify-between items-center py-2">
-                                <div className="w-1/3">
+                            <div className="w-[1000px] md:w-full lg:w-auto flex justify-between items-center py-2">
+                                <div>
                                     <TextInput
                                         className="w-full"
                                         value={searchQuery}
