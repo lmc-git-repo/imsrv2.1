@@ -1,8 +1,18 @@
-// Components-ModalComponent.jsx
 import { Modal, Button } from 'flowbite-react';
-// import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+import { useEffect } from 'react';
 
 const ModalComponent = ({ show, onClose, user }) => {
+  useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (typeof onClose === 'function') onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, onClose]);
+
   if (!user) return null;
 
   return (

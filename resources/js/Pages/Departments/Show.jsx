@@ -1,7 +1,18 @@
-// Components-ModalComponent.jsx
 import { Modal, Button } from 'flowbite-react';
+import { useEffect } from 'react';
 
 const ModalComponent = ({ show, onClose, user }) => {
+  useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (typeof onClose === 'function') onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, onClose]);
+
   if (!user) return null;
 
   return (

@@ -1,8 +1,18 @@
-// Components-ModalComponent.jsx
 import { Modal, Button } from 'flowbite-react';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 
 const ShowServer = forwardRef(function ShowServer({ show, onClose, server }, ref) {
+  useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (typeof onClose === 'function') onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, onClose]);
+
   if (!server) return null;
 
   return (

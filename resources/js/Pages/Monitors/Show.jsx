@@ -1,8 +1,18 @@
-// Components-ModalComponent.jsx
 import { Modal, Button } from 'flowbite-react';
-// import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+import { useEffect } from 'react';
 
 const ModalComponent = ({ show, onClose, user }) => {
+  useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (typeof onClose === 'function') onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, onClose]);
+
   if (!user) return null;
 
   return (
@@ -30,7 +40,7 @@ const ModalComponent = ({ show, onClose, user }) => {
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Monitor Asset:</strong> {user.mntr_asset}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Asset Classification:</strong> {user.asset_class}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Purchased:</strong> {user.datePurchased}</p>  
-                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy.name}</p>
+                  <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {user.createdBy?.name}</p>
                   <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {user.created_at}</p>
                 </div>
             </div>

@@ -1,8 +1,19 @@
-// Components-ModalComponent.jsx
 import { Modal, Button } from 'flowbite-react';
 import { COMPUTERS_STATUS_CLASS_MAP, COMPUTERS_STATUS_TEXT_MAP } from '@/constants'
+import { useEffect } from 'react'
 
 const ModalComponent = ({ show, onClose, user }) => {
+  useEffect(() => {
+    if (!show) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        if (typeof onClose === 'function') onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, onClose]);
+
   if (!user) return null;
 
   return (
@@ -39,7 +50,6 @@ const ModalComponent = ({ show, onClose, user }) => {
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Product Key:</strong> {user.comp_prdctkey}</p>  
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                         <strong className='pe-4'>Status:</strong> 
-                        {/* {user.status} */}
                         <span className={'px-2 rounded-e-full text-white ' + COMPUTERS_STATUS_CLASS_MAP[user.comp_status]}>{COMPUTERS_STATUS_TEXT_MAP[user.comp_status]}</span>
                     </p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Date Purchased:</strong> {user.datePurchased}</p>  
