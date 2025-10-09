@@ -25,6 +25,8 @@ class FirewallResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'serial_number' => $this->serial_number,
+            'switch_connected' => $this->switch_connected, // ✅ NEW
+            'port_number' => $this->port_number,           // ✅ NEW
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,

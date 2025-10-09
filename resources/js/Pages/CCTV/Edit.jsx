@@ -1,6 +1,5 @@
 import InputError from '@/Components/InputError';
-import { useForm, router } from '@inertiajs/react';
-import { Modal, Button, Label, TextInput } from 'flowbite-react';
+import { useForm } from '@inertiajs/react';
 import { useEffect, useState, forwardRef } from 'react';
 
 const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, ref) {
@@ -11,12 +10,26 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
     username: '',
     password: '',
     installer_supplier: '',
+    switch_connected: '',  // ✅ NEW
+    port_number: '',       // ✅ NEW
     _method: 'PUT',
   });
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  const SWITCH_OPTIONS = [
+    'CCTV Room Ruijie SW',
+    'DC_OFFICE_Ruijie_SW',
+    'ASSY_Ruijie_SW',
+    'DB_Ruijie_SW',
+    'Machining_Ruijie_SW',
+    'LMC-AdminOfficeL2',
+    'SERVER_RM_Ruijie_SW',
+  ];
+
+  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
 
   // Update form data when selectedCctv changes
   useEffect(() => {
@@ -28,6 +41,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
         username: selectedCctv.username || '',
         password: selectedCctv.password || '',
         installer_supplier: selectedCctv.installer_supplier || '',
+        switch_connected: selectedCctv.switch_connected || '',  // ✅
+        port_number: selectedCctv.port_number || '',            // ✅
         _method: 'PUT',
       });
       setHasChanges(false);
@@ -44,6 +59,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
         username: selectedCctv.username || '',
         password: selectedCctv.password || '',
         installer_supplier: selectedCctv.installer_supplier || '',
+        switch_connected: selectedCctv.switch_connected || '',
+        port_number: selectedCctv.port_number || '',
       };
       const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
       setHasChanges(isChanged);
@@ -70,7 +87,6 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
     });
   };
 
-  // Move the early return AFTER all hooks
   if (!show || !selectedCctv) return null;
 
   return (
@@ -92,6 +108,7 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
         {/* Body */}
         <div className="p-6">
           <form onSubmit={onSubmit} className="space-y-4">
+            {/* CCTV Name */}
             <div>
               <label htmlFor="cctv_name" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter CCTV Name
@@ -102,13 +119,13 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="text"
                 value={data.cctv_name}
                 onChange={(e) => setData('cctv_name', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                 required
-                autoComplete="name"
               />
               <InputError message={errors.cctv_name} className="mt-1 text-red-400" />
             </div>
 
+            {/* Hikvision Model */}
             <div>
               <label htmlFor="hikvision_model" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Hikvision Model
@@ -119,13 +136,13 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="text"
                 value={data.hikvision_model}
                 onChange={(e) => setData('hikvision_model', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                 required
-                autoComplete="model"
               />
               <InputError message={errors.hikvision_model} className="mt-1 text-red-400" />
             </div>
 
+            {/* IP Address */}
             <div>
               <label htmlFor="ip_address" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter IP Address
@@ -136,13 +153,13 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="text"
                 value={data.ip_address}
                 onChange={(e) => setData('ip_address', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                 required
-                autoComplete="address-line1"
               />
               <InputError message={errors.ip_address} className="mt-1 text-red-400" />
             </div>
 
+            {/* Username */}
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Username
@@ -153,13 +170,12 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="text"
                 value={data.username}
                 onChange={(e) => setData('username', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-                autoComplete="username"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
               />
               <InputError message={errors.username} className="mt-1 text-red-400" />
             </div>
 
+            {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Password
@@ -170,13 +186,12 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="password"
                 value={data.password}
                 onChange={(e) => setData('password', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-                autoComplete="off"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
               />
               <InputError message={errors.password} className="mt-1 text-red-400" />
             </div>
 
+            {/* Installer/Supplier */}
             <div>
               <label htmlFor="installer_supplier" className="block text-sm font-medium text-gray-300 mb-2">
                 Enter Installer/Supplier
@@ -187,13 +202,54 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
                 type="text"
                 value={data.installer_supplier}
                 onChange={(e) => setData('installer_supplier', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-                autoComplete="organization"
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
               />
               <InputError message={errors.installer_supplier} className="mt-1 text-red-400" />
             </div>
 
+            {/* Switch Connected - NEW */}
+            <div>
+              <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
+                Switch Connected
+              </label>
+              <select
+                id="switch_connected"
+                name="switch_connected"
+                value={data.switch_connected}
+                onChange={(e) => setData('switch_connected', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                required
+              >
+                <option value="">Select switch</option>
+                {SWITCH_OPTIONS.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
+            </div>
+
+            {/* Port Number - NEW */}
+            <div>
+              <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
+                Port Number
+              </label>
+              <select
+                id="port_number"
+                name="port_number"
+                value={data.port_number}
+                onChange={(e) => setData('port_number', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                required
+              >
+                <option value="">Select port</option>
+                {PORT_OPTIONS.map(port => (
+                  <option key={port} value={port}>{port}</option>
+                ))}
+              </select>
+              <InputError message={errors.port_number} className="mt-1 text-red-400" />
+            </div>
+
+            {/* Buttons */}
             <div className="flex justify-end gap-3 mt-6">
               <button
                 type="button"

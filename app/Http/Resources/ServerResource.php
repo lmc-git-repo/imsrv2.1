@@ -9,11 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ServerResource extends JsonResource
 {
     public static $wrap = false;
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
         return [
@@ -25,6 +21,8 @@ class ServerResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'serial_number' => $this->serial_number,
+            'switch_connected' => $this->switch_connected,
+            'port_number' => $this->port_number,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,
@@ -33,7 +31,7 @@ class ServerResource extends JsonResource
                     'role' => $this->createdBy->role,
                 ];
             }),
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d'),
         ];
     }
 }

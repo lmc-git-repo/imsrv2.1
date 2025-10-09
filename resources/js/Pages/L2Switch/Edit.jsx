@@ -1,9 +1,8 @@
 import InputError from '@/Components/InputError';
-import { useForm, router } from '@inertiajs/react';
-import { Modal, Button, Label, TextInput } from 'flowbite-react';
+import { useForm } from '@inertiajs/react';
 import { useEffect, useState, forwardRef } from 'react';
 
-const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, selectedL2Switch }, ref) {
+const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch }, ref) {
   const { data, setData, put, errors, reset } = useForm({
     device_name: '',
     model: '',
@@ -11,51 +10,69 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, selectedL
     username: '',
     password: '',
     serial_number: '',
+    switch_connected: '',  // NEW
+    port_number: '',       // NEW
   });
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Update form data when selectedL2Switch changes
+  const SWITCH_OPTIONS = [
+    'CCTV Room Ruijie SW',
+    'DC_OFFICE_Ruijie_SW',
+    'ASSY_Ruijie_SW',
+    'DB_Ruijie_SW',
+    'Machining_Ruijie_SW',
+    'LMC-AdminOfficeL2',
+    'SERVER_RM_Ruijie_SW',
+  ];
+
+  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
+
+  // Update form data when l2switch changes
   useEffect(() => {
-    if (selectedL2Switch) {
+    if (l2switch) {
       const newData = {
-        device_name: selectedL2Switch.device_name || '',
-        model: selectedL2Switch.model || '',
-        ip_address: selectedL2Switch.ip_address || '',
-        username: selectedL2Switch.username || '',
-        password: selectedL2Switch.password || '',
-        serial_number: selectedL2Switch.serial_number || '',
+        device_name: l2switch.device_name || '',
+        model: l2switch.model || '',
+        ip_address: l2switch.ip_address || '',
+        username: l2switch.username || '',
+        password: l2switch.password || '',
+        serial_number: l2switch.serial_number || '',
+        switch_connected: l2switch.switch_connected || '',  // NEW
+        port_number: l2switch.port_number || '',            // NEW
       };
       setData(newData);
       setHasChanges(false);
     }
-  }, [selectedL2Switch]);
+  }, [l2switch]);
 
   // Check for changes
   useEffect(() => {
-    if (selectedL2Switch) {
+    if (l2switch) {
       const original = {
-        device_name: selectedL2Switch.device_name || '',
-        model: selectedL2Switch.model || '',
-        ip_address: selectedL2Switch.ip_address || '',
-        username: selectedL2Switch.username || '',
-        password: selectedL2Switch.password || '',
-        serial_number: selectedL2Switch.serial_number || '',
+        device_name: l2switch.device_name || '',
+        model: l2switch.model || '',
+        ip_address: l2switch.ip_address || '',
+        username: l2switch.username || '',
+        password: l2switch.password || '',
+        serial_number: l2switch.serial_number || '',
+        switch_connected: l2switch.switch_connected || '',  // NEW
+        port_number: l2switch.port_number || '',            // NEW
       };
       const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
       setHasChanges(isChanged);
     }
-  }, [data, selectedL2Switch]);
+  }, [data, l2switch]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (!selectedL2Switch?.id || loading || submitted) return;
+    if (!l2switch?.id || loading || submitted) return;
 
     setLoading(true);
     setSubmitted(true);
-    put(route('l2sw.update', selectedL2Switch.id), {
+    put(route('l2sw.update', l2switch.id), {
       onSuccess: () => {
         setLoading(false);
         setSubmitted(false);
@@ -69,15 +86,14 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, selectedL
     });
   };
 
-  // Move the early return AFTER all hooks
-  if (!show || !selectedL2Switch) return null;
+  if (!show || !l2switch) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-slate-700 rounded-lg shadow-xl w-full max-w-md mx-4">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-slate-600">
-          <h2 className="text-xl font-semibold text-white">Edit L2 Switch - {selectedL2Switch.device_name || 'Unknown'}</h2>
+          <h2 className="text-xl font-semibold text-white">Edit L2 Switch - {l2switch.device_name || 'Unknown'}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
@@ -140,6 +156,48 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, selectedL
                 autoComplete="address-line1"
               />
               <InputError message={errors.ip_address} className="mt-1 text-red-400" />
+            </div>
+
+            {/* New Switch Connected */}
+            <div>
+              <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
+                Switch Connected
+              </label>
+              <select
+                id="switch_connected"
+                name="switch_connected"
+                value={data.switch_connected}
+                onChange={(e) => setData('switch_connected', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                required
+              >
+                <option value="">Select switch</option>
+                {SWITCH_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
+            </div>
+
+            {/* New Port Number */}
+            <div>
+              <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
+                Port Number
+              </label>
+              <select
+                id="port_number"
+                name="port_number"
+                value={data.port_number}
+                onChange={(e) => setData('port_number', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                required
+              >
+                <option value="">Select port</option>
+                {PORT_OPTIONS.map((port) => (
+                  <option key={port} value={port}>{port}</option>
+                ))}
+              </select>
+              <InputError message={errors.port_number} className="mt-1 text-red-400" />
             </div>
 
             <div>

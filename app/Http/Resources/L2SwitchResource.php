@@ -9,11 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class L2SwitchResource extends JsonResource
 {
     public static $wrap = false;
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
         return [
@@ -24,6 +20,8 @@ class L2SwitchResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'serial_number' => $this->serial_number,
+            'switch_connected' => $this->switch_connected, // ✅ NEW
+            'port_number' => $this->port_number,             // ✅ NEW
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,

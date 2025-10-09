@@ -17,6 +17,8 @@ class L2Switch extends Model
         'username',
         'password',
         'serial_number',
+        'switch_connected',
+        'port_number',
         'created_by',
     ];
 
@@ -24,5 +26,4 @@ class L2Switch extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
 }

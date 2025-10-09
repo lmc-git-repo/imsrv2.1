@@ -49,9 +49,11 @@ class CCTVController extends Controller
             'hikvision_model' => 'required|string|max:255',
             'cctv_name' => 'required|string|max:255',
             'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'installer_supplier' => 'required|string|max:255',
+            'username' => 'nullable|string|max:255',
+            'password' => 'nullable|string|max:255',
+            'installer_supplier' => 'nullable|string|max:255',
+            'switch_connected' => 'nullable|string|max:255',
+            'port_number' => 'nullable|string|max:255',
         ]);
 
         $validated['created_by'] = Auth::id();
@@ -79,9 +81,11 @@ class CCTVController extends Controller
             'hikvision_model' => 'required|string|max:255',
             'cctv_name' => 'required|string|max:255',
             'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'installer_supplier' => 'required|string|max:255',
+            'username' => 'nullable|string|max:255',
+            'password' => 'nullable|string|max:255',
+            'installer_supplier' => 'nullable|string|max:255',
+            'switch_connected' => 'nullable|string|max:255',
+            'port_number' => 'nullable|string|max:255',
         ]);
 
         $cctv->update($validated);

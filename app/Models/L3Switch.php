@@ -11,14 +11,17 @@ class L3Switch extends Model
     use HasFactory;
 
     protected $fillable = [
-        'device_name',
-        'model',
-        'ip_address',
-        'username',
-        'password',
-        'serial_number',
-        'created_by',
+    'device_name',
+    'model',
+    'ip_address',
+    'username',
+    'password',
+    'serial_number',
+    'switch_connected',
+    'port_number',
+    'created_by',
     ];
+
 
     public function createdBy()
     {

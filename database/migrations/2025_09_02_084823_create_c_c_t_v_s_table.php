@@ -10,20 +10,23 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-   Schema::create('c_c_t_v_s', function (Blueprint $table) {
-       $table->id();
-       $table->string('hikvision_model');
-       $table->string('cctv_name');
-       $table->string('ip_address');
-       $table->string('username')->nullable();
-       $table->string('password')->nullable();
-       $table->string('installer_supplier')->nullable();
-       $table->unsignedBigInteger('created_by')->nullable();
-       $table->timestamps();
+    {
 
-       $table->foreign('created_by')->references('id')->on('users');
-   });
+    Schema::create('c_c_t_v_s', function (Blueprint $table) {
+        $table->id();
+        $table->string('hikvision_model');
+        $table->string('cctv_name');
+        $table->string('ip_address');
+        $table->string('username')->nullable();
+        $table->string('password')->nullable();
+        $table->string('installer_supplier')->nullable();
+        $table->string('switch_connected')->nullable();
+        $table->string('port_number')->nullable();
+        $table->unsignedBigInteger('created_by')->nullable();
+        $table->timestamps();
+
+        $table->foreign('created_by')->references('id')->on('users');
+    });
 }
 
     /**

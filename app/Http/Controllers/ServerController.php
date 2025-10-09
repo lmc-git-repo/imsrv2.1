@@ -65,18 +65,19 @@ class ServerController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
-        ]);
-
-        // Automatically set created_by
-        $validated['created_by'] = Auth::id();
-
-        Server::create($validated);
+        'device_name' => 'required|string|max:255',
+        'model' => 'required|string|max:255',
+        'ip_address' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'serial_number' => 'required|string|max:255',
+        'switch_connected' => 'nullable|string|max:255',
+        'port_number' => 'nullable|string|max:255',
+    ]);
+    
+    $validated['created_by'] = Auth::id();
+    
+    Server::create($validated);
 
         return redirect()->route('server.index')->with('success', 'Server added successfully.');
     }
@@ -107,18 +108,21 @@ class ServerController extends Controller
     public function update(Request $request, Server $server)
     {
         $validated = $request->validate([
-            'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
-        ]);
-
-        $server->update($validated);
-
-        return redirect()->route('server.index')->with('success', 'Server updated successfully.');
-    }
+        'device_name' => 'required|string|max:255',
+        'model' => 'required|string|max:255',
+        'ip_address' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'serial_number' => 'required|string|max:255',
+        'switch_connected' => 'nullable|string|max:255',
+        'port_number' => 'nullable|string|max:255',
+    ]);
+    
+    $server->update($validated);
+    
+    return redirect()->route('server.index')->with('success', 'Server updated successfully.');
+    
+}
 
     /**
      * Remove the specified resource from storage.

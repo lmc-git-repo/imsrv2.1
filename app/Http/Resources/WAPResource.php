@@ -2,19 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class WAPResource extends JsonResource
 {
-    public static $wrap = false;
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
             'id' => $this->id,
@@ -24,15 +16,11 @@ class WAPResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'serial_number' => $this->serial_number,
-            'createdBy' => $this->whenLoaded('createdBy', function () {
-                return [
-                    'id' => $this->createdBy->id,
-                    'name' => $this->createdBy->name,
-                    'email' => $this->createdBy->email,
-                    'role' => $this->createdBy->role,
-                ];
-            }),
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'switch_connected' => $this->switch_connected,
+            'port_number' => $this->port_number,
+            'created_by' => $this->createdBy?->name ?? 'N/A',
+            'created_at' => $this->created_at?->format('Y-m-d'),
+            'updated_at' => $this->updated_at,
         ];
     }
 }

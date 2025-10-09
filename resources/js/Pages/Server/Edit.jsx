@@ -1,13 +1,26 @@
 import InputError from '@/Components/InputError';
 import { useForm, router } from '@inertiajs/react';
-import { Modal, Button } from 'flowbite-react';
 import { useState, forwardRef, useEffect } from 'react';
+
+const SWITCH_OPTIONS = [
+    'CCTV Room Ruijie SW',
+    'DC_OFFICE_Ruijie_SW',
+    'ASSY_Ruijie_SW',
+    'DB_Ruijie_SW',
+    'Machining_Ruijie_SW',
+    'LMC-AdminOfficeL2',
+    'SERVER_RM_Ruijie_SW',
+];
+
+const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
 
 const EditServer = forwardRef(function EditServer({ show, onClose, selectedServer }, ref) {
     const { data, setData, put, errors, reset } = useForm({
         device_name: '',
         model: '',
         ip_address: '',
+        switch_connected: '',
+        port_number: '',
         username: '',
         password: '',
         serial_number: '',
@@ -23,6 +36,8 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                 device_name: selectedServer.device_name || '',
                 model: selectedServer.model || '',
                 ip_address: selectedServer.ip_address || '',
+                switch_connected: selectedServer.switch_connected || '',
+                port_number: selectedServer.port_number || '',
                 username: selectedServer.username || '',
                 password: selectedServer.password || '',
                 serial_number: selectedServer.serial_number || '',
@@ -39,6 +54,8 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                 device_name: selectedServer.device_name || '',
                 model: selectedServer.model || '',
                 ip_address: selectedServer.ip_address || '',
+                switch_connected: selectedServer.switch_connected || '',
+                port_number: selectedServer.port_number || '',
                 username: selectedServer.username || '',
                 password: selectedServer.password || '',
                 serial_number: selectedServer.serial_number || '',
@@ -64,7 +81,6 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
         });
     };
 
-    // Move the early return AFTER all hooks
     if (!show) return null;
 
     return (
@@ -76,8 +92,6 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-white transition-colors"
-                        id="close-modal-button"
-                        name="close-modal"
                         type="button"
                         aria-label="Close modal"
                     >
@@ -89,7 +103,8 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
 
                 {/* Body */}
                 <div className="p-4 sm:p-6">
-                    <form onSubmit={onSubmit} className="space-y-4" id="edit-server-form" name="edit-server-form">
+                    <form onSubmit={onSubmit} className="space-y-4" name="edit-server-form">
+                        {/* Device Name */}
                         <div>
                             <label htmlFor="device_name" className="block text-sm font-medium text-gray-300 mb-2">
                                 Device Name
@@ -100,13 +115,13 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="text"
                                 value={data.device_name}
                                 onChange={(e) => setData("device_name", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                                 required
-                                autoComplete="name"
                             />
                             <InputError message={errors.device_name} className="mt-1 text-red-400" />
                         </div>
 
+                        {/* Model */}
                         <div>
                             <label htmlFor="model" className="block text-sm font-medium text-gray-300 mb-2">
                                 Model
@@ -117,13 +132,13 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="text"
                                 value={data.model}
                                 onChange={(e) => setData("model", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                                 required
-                                autoComplete="model"
                             />
                             <InputError message={errors.model} className="mt-1 text-red-400" />
                         </div>
 
+                        {/* IP Address */}
                         <div>
                             <label htmlFor="ip_address" className="block text-sm font-medium text-gray-300 mb-2">
                                 IP Address
@@ -134,13 +149,55 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="text"
                                 value={data.ip_address}
                                 onChange={(e) => setData("ip_address", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                                 required
-                                autoComplete="address-line1"
                             />
                             <InputError message={errors.ip_address} className="mt-1 text-red-400" />
                         </div>
 
+                        {/* Switch Connected */}
+                        <div>
+                            <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
+                                Switch Connected
+                            </label>
+                            <select
+                                id="switch_connected"
+                                name="switch_connected"
+                                value={data.switch_connected}
+                                onChange={(e) => setData("switch_connected", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                                required
+                            >
+                                <option value="">Select switch</option>
+                                {SWITCH_OPTIONS.map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
+                            </select>
+                            <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
+                        </div>
+
+                        {/* Port Number */}
+                        <div>
+                            <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
+                                Port Number
+                            </label>
+                            <select
+                                id="port_number"
+                                name="port_number"
+                                value={data.port_number}
+                                onChange={(e) => setData("port_number", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
+                                required
+                            >
+                                <option value="">Select port</option>
+                                {PORT_OPTIONS.map((p) => (
+                                    <option key={p} value={p}>{p}</option>
+                                ))}
+                            </select>
+                            <InputError message={errors.port_number} className="mt-1 text-red-400" />
+                        </div>
+
+                        {/* Serial Number */}
                         <div>
                             <label htmlFor="serial_number" className="block text-sm font-medium text-gray-300 mb-2">
                                 Serial Number
@@ -151,12 +208,12 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="text"
                                 value={data.serial_number}
                                 onChange={(e) => setData("serial_number", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                autoComplete="serial-number"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                             />
                             <InputError message={errors.serial_number} className="mt-1 text-red-400" />
                         </div>
 
+                        {/* Username */}
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
                                 Username
@@ -167,13 +224,13 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="text"
                                 value={data.username}
                                 onChange={(e) => setData("username", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                                 required
-                                autoComplete="username"
                             />
                             <InputError message={errors.username} className="mt-1 text-red-400" />
                         </div>
 
+                        {/* Password */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                                 Password
@@ -184,21 +241,18 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 type="password"
                                 value={data.password}
                                 onChange={(e) => setData("password", e.target.value)}
-                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white"
                                 required
-                                autoComplete="off"
                             />
                             <InputError message={errors.password} className="mt-1 text-red-400" />
                         </div>
 
-
+                        {/* Buttons */}
                         <div className="flex justify-end gap-3 mt-6">
                             <button
                                 type="button"
                                 onClick={onClose}
                                 className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-                                id="cancel-button"
-                                name="cancel"
                             >
                                 Cancel
                             </button>
@@ -208,8 +262,6 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
                                 className={`px-4 py-2 bg-green-600 text-white rounded-md transition-colors ${
                                     !hasChanges || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
                                 }`}
-                                id="submit-button"
-                                name="submit"
                             >
                                 {loading ? "Updating..." : "Update"}
                             </button>
@@ -222,5 +274,4 @@ const EditServer = forwardRef(function EditServer({ show, onClose, selectedServe
 });
 
 EditServer.displayName = 'EditServer';
-
 export default EditServer;

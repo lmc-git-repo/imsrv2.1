@@ -93,9 +93,10 @@ class FirewallController extends Controller
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255',
+            'switch_connected' => 'required|string|max:255',
+            'port_number' => 'required|string|max:255',
         ]);
 
-        // Automatically set created_by and created_at
         $validated['created_by'] = Auth::id();
 
         Firewall::create($validated);
@@ -135,9 +136,12 @@ class FirewallController extends Controller
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255',
+            'switch_connected' => 'required|string|max:255',
+            'port_number' => 'required|string|max:255',
         ]);
 
         $firewall->update($validated);
+
 
         return redirect()->route('firewall.index')->with('success', 'Firewall device updated successfully.');
     }

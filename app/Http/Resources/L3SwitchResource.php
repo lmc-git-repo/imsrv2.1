@@ -24,6 +24,9 @@ class L3SwitchResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'serial_number' => $this->serial_number,
+            'switch_connected' => $this->switch_connected,
+            'port_number' => $this->port_number,
+
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,
@@ -32,7 +35,7 @@ class L3SwitchResource extends JsonResource
                     'role' => $this->createdBy->role,
                 ];
             }),
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'created_at' => (new \Carbon\Carbon($this->created_at))->format('Y-m-d'),
         ];
     }
 }

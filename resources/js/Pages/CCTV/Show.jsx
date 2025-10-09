@@ -34,6 +34,8 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, cctv 
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {cctv.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Switch Connected:</strong> {cctv.switch_connected || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Port Number:</strong> {cctv.port_number || 'N/A'}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {cctv.password}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Installer/Supplier:</strong> {cctv.installer_supplier}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {cctv.createdBy?.name || 'N/A'}</p>

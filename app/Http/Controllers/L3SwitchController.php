@@ -45,13 +45,16 @@ class L3SwitchController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
-        ]);
+        'device_name' => 'required|string|max:255',
+        'model' => 'required|string|max:255',
+        'ip_address' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'serial_number' => 'required|string|max:255',
+        'switch_connected' => 'nullable|string|max:255',
+        'port_number' => 'nullable|string|max:255',
+    ]);
+
 
         // Automatically set created_by
         $validated['created_by'] = Auth::id() ?? 1; // Fallback to user ID 1 if not authenticated
@@ -78,13 +81,15 @@ class L3SwitchController extends Controller
     public function update(Request $request, L3Switch $l3sw)
     {
         $validated = $request->validate([
-            'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
-        ]);
+        'device_name' => 'required|string|max:255',
+        'model' => 'required|string|max:255',
+        'ip_address' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'serial_number' => 'required|string|max:255',
+        'switch_connected' => 'nullable|string|max:255',
+        'port_number' => 'nullable|string|max:255',
+    ]);
 
         $l3sw->update($validated);
 

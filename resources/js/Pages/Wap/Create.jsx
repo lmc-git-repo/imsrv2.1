@@ -11,6 +11,8 @@ const CreateWAP = forwardRef(function CreateWAP({ show, onClose }, ref) {
         username: '',
         password: '',
         serial_number: '',
+        switch_connected: '',
+        port_number: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -23,7 +25,8 @@ const CreateWAP = forwardRef(function CreateWAP({ show, onClose }, ref) {
         setLoading(true);
         setSubmitted(true);
 
-        post(route("wap.store"), {
+        // Use router.post to send the exact payload object so backend receives switch_connected / port_number
+        router.post(route("wap.store"), data, {
             onSuccess: () => {
                 setLoading(false);
                 setSubmitted(false);
@@ -39,6 +42,18 @@ const CreateWAP = forwardRef(function CreateWAP({ show, onClose }, ref) {
 
     // Move the early return AFTER all hooks
     if (!show) return null;
+
+    const SWITCH_OPTIONS = [
+        'CCTV Room Ruijie SW',
+        'DC_OFFICE_Ruijie_SW',
+        'ASSY_Ruijie_SW',
+        'DB_Ruijie_SW',
+        'Machining_Ruijie_SW',
+        'LMC-AdminOfficeL2',
+        'SERVER_RM_Ruijie_SW',
+    ];
+
+    const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -108,6 +123,48 @@ const CreateWAP = forwardRef(function CreateWAP({ show, onClose }, ref) {
                                 autoComplete="address-line1"
                             />
                             <InputError message={errors.ip_address} className="mt-1 text-red-400" />
+                        </div>
+
+                        {/* New: Switch Connected dropdown */}
+                        <div>
+                            <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
+                                Switch Connected
+                            </label>
+                            <select
+                                id="switch_connected"
+                                name="switch_connected"
+                                value={data.switch_connected}
+                                onChange={(e) => setData("switch_connected", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            >
+                                <option value="">Select switch</option>
+                                {SWITCH_OPTIONS.map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
+                            </select>
+                            <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
+                        </div>
+
+                        {/* New: Port Number dropdown */}
+                        <div>
+                            <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
+                                Port Number
+                            </label>
+                            <select
+                                id="port_number"
+                                name="port_number"
+                                value={data.port_number}
+                                onChange={(e) => setData("port_number", e.target.value)}
+                                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            >
+                                <option value="">Select port</option>
+                                {PORT_OPTIONS.map((p) => (
+                                    <option key={p} value={p}>{p}</option>
+                                ))}
+                            </select>
+                            <InputError message={errors.port_number} className="mt-1 text-red-400" />
                         </div>
 
                         <div>

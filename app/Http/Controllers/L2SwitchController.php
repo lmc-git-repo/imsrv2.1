@@ -44,51 +44,40 @@ class L2SwitchController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
-        ]);
+    $validated = $request->validate([
+        'device_name' => 'required|string|max:255',
+        'model' => 'nullable|string|max:255',
+        'ip_address' => 'required|string|max:255',
+        'username' => 'nullable|string|max:255',
+        'password' => 'nullable|string|max:255',
+        'serial_number' => 'nullable|string|max:255',
+        'switch_connected' => 'nullable|string|max:255',
+        'port_number' => 'nullable|string|max:255',
+    ]);
 
-        // Automatically set created_by
-        $validated['created_by'] = Auth::id();
+    $validated['created_by'] = Auth::id();
 
-        L2Switch::create($validated);
+    L2Switch::create($validated);
 
-        return redirect()->route('l2sw.index')->with('success', 'L2 Switch added successfully.');
-    }
-
-    public function show(L2Switch $l2sw)
-    {
-        return Inertia::render('L2Switch/Show', [
-            'l2switch' => new L2SwitchResource($l2sw->load('createdBy'))
-        ]);
-    }
-
-    public function edit(L2Switch $l2sw)
-    {
-        return Inertia::render('L2Switch/Edit', [
-            'l2switch' => $l2sw
-        ]);
+    return redirect()->route('l2sw.index')->with('success', 'L2 Switch added successfully.');
     }
 
     public function update(Request $request, L2Switch $l2sw)
     {
         $validated = $request->validate([
             'device_name' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
+            'model' => 'nullable|string|max:255',
             'ip_address' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
-            'password' => 'required|string|max:255',
-            'serial_number' => 'required|string|max:255',
+            'username' => 'nullable|string|max:255',
+            'password' => 'nullable|string|max:255',
+            'serial_number' => 'nullable|string|max:255',
+            'switch_connected' => 'nullable|string|max:255',
+            'port_number' => 'nullable|string|max:255',
         ]);
 
-        $l2sw->update($validated);
+    $l2sw->update($validated);
 
-        return redirect()->route('l2sw.index')->with('success', 'L2 Switch updated successfully.');
+    return redirect()->route('l2sw.index')->with('success', 'L2 Switch updated successfully.');
     }
 
     public function destroy(L2Switch $l2sw)

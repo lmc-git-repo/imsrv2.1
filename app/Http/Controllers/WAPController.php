@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\WAP;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Resources\WAPResource;
@@ -22,13 +21,16 @@ class WAPController extends Controller
             ->with(['createdBy'])
             ->orderBy($sortField, $sortDirection)
             ->when(request('search'), function ($query, $search) {
-                $search = (string)$search;
-                $query->where('device_name', 'like', "%{$search}%")
-                    ->orWhere('model', 'like', "%{$search}%")
-                    ->orWhere('ip_address', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%");
+                $search = (string) $search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('device_name', 'like', "%{$search}%")
+                        ->orWhere('model', 'like', "%{$search}%")
+                        ->orWhere('ip_address', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%");
+                });
             })
-            ->paginate(10)->onEachSide(1);
+            ->paginate(10)
+            ->onEachSide(1);
 
         return Inertia::render('Wap/Index', [
             'waps' => WAPResource::collection($waps),
@@ -51,14 +53,18 @@ class WAPController extends Controller
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255',
+            'switch_connected' => 'nullable|string|max:255',
+            'port_number' => 'nullable|string|max:255',
         ]);
 
         // Automatically set created_by
-        $validated['created_by'] = Auth::id() ?? 1; // Fallback to user ID 1 if not authenticated
+        $validated['created_by'] = Auth::id() ?? 1; // fallback to ID 1 if not authenticated
 
         WAP::create($validated);
 
-        return redirect()->route('wap.index')->with('success', 'WAP added successfully.');
+        return redirect()
+            ->route('wap.index')
+            ->with('success', 'WAP added successfully.');
     }
 
     public function show(WAP $wap)
@@ -84,17 +90,23 @@ class WAPController extends Controller
             'username' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'serial_number' => 'required|string|max:255',
+            'switch_connected' => 'nullable|string|max:255',
+            'port_number' => 'nullable|string|max:255',
         ]);
 
         $wap->update($validated);
 
-        return redirect()->route('wap.index')->with('success', 'WAP updated successfully.');
+        return redirect()
+            ->route('wap.index')
+            ->with('success', 'WAP updated successfully.');
     }
 
     public function destroy(WAP $wap)
     {
         $wap->delete();
 
-        return redirect()->route('wap.index')->with('success', 'WAP deleted.');
+        return redirect()
+            ->route('wap.index')
+            ->with('success', 'WAP deleted.');
     }
 }

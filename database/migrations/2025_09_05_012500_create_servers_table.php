@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->string('serial_number')->nullable();
+            $table->string('switch_connected')->nullable();  // ➕ Added
+            $table->string('port_number')->nullable();       // ➕ Added
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 

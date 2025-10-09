@@ -34,6 +34,8 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, l2swi
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {l2switch.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Switch Connected:</strong> {l2switch.switch_connected || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Port Number:</strong> {l2switch.port_number || 'N/A'}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {l2switch.password}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {l2switch.created_by?.name || 'N/A'}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created Date:</strong> {l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</p>

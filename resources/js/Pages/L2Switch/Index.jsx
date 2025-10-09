@@ -17,15 +17,12 @@ export default function Index({
     queryParams = null,
     success
 }) {
-
-    // Modal state management
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedEdit, setSelectedEdit] = useState(null);
 
-    // Modal functions
     const openModal = (l2switch, e) => {
         e.preventDefault();
         setSelected(l2switch);
@@ -57,8 +54,6 @@ export default function Index({
 
     queryParams = queryParams || {};
     const [searchQuery, setSearchQuery] = useState(queryParams?.search || '');
-
-
 
     const handleSearchChange = debounce((query) => {
         setSearchQuery(query);
@@ -99,7 +94,6 @@ export default function Index({
         router.visit(route('l2sw.destroy', l2switch.id), { method: 'delete' });
     };
 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -107,21 +101,21 @@ export default function Index({
                 <div className='flex justify-between items-center'>
                     <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of L2 Switches</h2>
                     <div className='flex justify-end'>
-                            {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                <Button
-                                    onClick={() => openCreateModal()}
-                                    className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
-                                    aria-label="Add new l2switch"
-                                >
-                                    <span className='flex items-center'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mr-1">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v4M12 18v4M2 12h4M18 12h4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-                                        </svg>
-                                        Add
-                                    </span>
-                                </Button>
-                            )}
-                        </div>
+                        {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
+                            <Button
+                                onClick={openCreateModal}
+                                className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
+                                aria-label="Add new l2switch"
+                            >
+                                <span className='flex items-center'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mr-1">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 2v4M12 18v4M2 12h4M18 12h4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                    Add
+                                </span>
+                            </Button>
+                        )}
+                    </div>
                 </div>
             }
         >
@@ -159,68 +153,39 @@ export default function Index({
                                             defaultValue={searchQuery}
                                             placeholder="Search..."
                                             onBlur={e => searchFieldChanged(e.target.value)}
-                                            onChange={(e) => searchFieldChanged(e.target.value)}
-                                            onKeyPress={e => onKeyPress(e)}
+                                            onChange={e => searchFieldChanged(e.target.value)}
+                                            onKeyPress={onKeyPress}
                                         />
                                     </div>
                                 </div>
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            <TableHeading
-                                                name="device_name"
-                                                sort_field={queryParams.sort_field}
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
+                                            <TableHeading name="device_name" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Device Name
                                             </TableHeading>
-                                            <TableHeading
-                                                name="ip_address"
-                                                sort_field={queryParams.sort_field}
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
+                                            <TableHeading name="ip_address" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 IP Address
                                             </TableHeading>
-                                            <TableHeading
-                                                name="username"
-                                                sort_field={queryParams.sort_field}
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
+                                            <TableHeading name="username" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Username
                                             </TableHeading>
-                                            <TableHeading
-                                                name="password"
-                                                sort_field={queryParams.sort_field}
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
+                                            <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Password
                                             </TableHeading>
                                             <th className="px-3 py-3">Created By</th>
-                                            <TableHeading
-                                                name="created_at"
-                                                sort_field={queryParams.sort_field}
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
+                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Created Date
                                             </TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {l2switches.data && l2switches.data.length > 0 ? (
-                                            l2switches.data.map(l2switch => (
+                                        {l2switches?.data?.length > 0 ? (
+                                            l2switches.data.map((l2switch) => (
                                                 <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={l2switch.id}>
                                                     <th className="px-3 py-2 text-nowrap">
-                                                        <button
-                                                            className="text-left hover:text-white hover:underline cursor-pointer"
-                                                            onClick={(e) => openModal(l2switch, e)}
-                                                            aria-label={`View ${l2switch.device_name} details`}
-                                                        >
+                                                        <button className="text-left hover:text-white hover:underline cursor-pointer" onClick={(e) => openModal(l2switch, e)}>
                                                             {l2switch.device_name}
                                                         </button>
                                                     </th>
@@ -231,30 +196,22 @@ export default function Index({
                                                     <td className="px-3 py-2 text-nowrap">{l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                                            <button
-                                                                className="inline-block py-1 px-2  text-blue-500 hover:text-white hover:underline hover:scale-110 hover:animate-spin mx-1"
-                                                                onClick={() => openEditModal(l2switch)}
-                                                                aria-label={`Edit ${l2switch.device_name}`}
-                                                            >
-                                                                <span className='flex items-center justify-center'>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                                    </svg>
-                                                                </span>
-                                                            </button>
-                                                        )}
-                                                        {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
-                                                            <button
-                                                                onClick={(e) => deleteL2Switch(l2switch)}
-                                                                className="inline-block py-1 px-2 text-red-500 hover:text-white hover:underline hover:scale-110 hover:animate-bounce mx-1"
-                                                                aria-label={`Delete ${l2switch.device_name}`}
-                                                            >
-                                                                <span className='flex items-center justify-center'>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                                    </svg>
-                                                                </span>
-                                                            </button>
+                                                            <>
+                                                                <button className="inline-block py-1 px-2 text-blue-500 hover:text-white hover:underline hover:scale-110 hover:animate-spin mx-1" onClick={() => openEditModal(l2switch)}>
+                                                                    <span className='flex items-center justify-center'>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                                        </svg>
+                                                                    </span>
+                                                                </button>
+                                                                <button className="inline-block py-1 px-2 text-red-500 hover:text-white hover:underline hover:scale-110 hover:animate-bounce mx-1" onClick={() => deleteL2Switch(l2switch)}>
+                                                                    <span className='flex items-center justify-center'>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                        </svg>
+                                                                    </span>
+                                                                </button>
+                                                            </>
                                                         )}
                                                     </td>
                                                 </tr>
@@ -263,12 +220,11 @@ export default function Index({
                                             <tr className='text-center'>
                                                 <td className='font-medium text-base py-4' colSpan="7">No data available</td>
                                             </tr>
-                                        )
-                                        }
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
-                            {l2switches.meta && (
+                            {l2switches?.meta?.links && (
                                 <Pagination
                                     links={l2switches.meta.links}
                                     queryParams={{
@@ -280,16 +236,11 @@ export default function Index({
                     </div>
                 </div>
             </div>
+
+            {/* Modals */}
             <Show show={showModal} onClose={closeModal} l2switch={selected} auth={auth} />
-            <CreateModalComponent
-                show={showCreateModal}
-                onClose={closeCreateModal}
-            />
-            <EditModalComponent
-                show={showEditModal}
-                onClose={closeEditModal}
-                selectedL2Switch={selectedEdit}
-            />
+            <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
+            <EditModalComponent show={showEditModal} onClose={closeEditModal} l2switch={selectedEdit} />
         </AuthenticatedLayout>
     );
 }

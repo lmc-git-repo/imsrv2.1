@@ -1,7 +1,6 @@
 import InputError from '@/Components/InputError';
 import { useForm, router } from '@inertiajs/react';
-import { Modal, Button, Label, TextInput } from 'flowbite-react';
-import { useEffect, useState, forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref) {
   const { data, setData, put, errors, reset } = useForm({
@@ -11,11 +10,25 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
     username: '',
     password: '',
     serial_number: '',
+    switch_connected: '',
+    port_number: '',
   });
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+
+  const SWITCH_OPTIONS = [
+    'CCTV Room Ruijie SW',
+    'DC_OFFICE_Ruijie_SW',
+    'ASSY_Ruijie_SW',
+    'DB_Ruijie_SW',
+    'Machining_Ruijie_SW',
+    'LMC-AdminOfficeL2',
+    'SERVER_RM_Ruijie_SW',
+  ];
+
+  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
 
   // Update form data when selectedWAP changes
   useEffect(() => {
@@ -27,6 +40,8 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
         username: selectedWAP.username || '',
         password: selectedWAP.password || '',
         serial_number: selectedWAP.serial_number || '',
+        switch_connected: selectedWAP.switch_connected || '',
+        port_number: selectedWAP.port_number || '',
       };
       setData(newData);
       setHasChanges(false);
@@ -43,6 +58,8 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
         username: selectedWAP.username || '',
         password: selectedWAP.password || '',
         serial_number: selectedWAP.serial_number || '',
+        switch_connected: selectedWAP.switch_connected || '',
+        port_number: selectedWAP.port_number || '',
       };
       const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
       setHasChanges(isChanged);
@@ -140,6 +157,48 @@ const EditWAP = forwardRef(function EditWAP({ show, onClose, selectedWAP }, ref)
                 autoComplete="address-line1"
               />
               <InputError message={errors.ip_address} className="mt-1 text-red-400" />
+            </div>
+
+            {/* Switch Connected dropdown */}
+            <div>
+              <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
+                Switch Connected
+              </label>
+              <select
+                id="switch_connected"
+                name="switch_connected"
+                value={data.switch_connected}
+                onChange={(e) => setData('switch_connected', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Select switch</option>
+                {SWITCH_OPTIONS.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+              <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
+            </div>
+
+            {/* Port Number dropdown */}
+            <div>
+              <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
+                Port Number
+              </label>
+              <select
+                id="port_number"
+                name="port_number"
+                value={data.port_number}
+                onChange={(e) => setData('port_number', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="">Select port</option>
+                {PORT_OPTIONS.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+              <InputError message={errors.port_number} className="mt-1 text-red-400" />
             </div>
 
             <div>

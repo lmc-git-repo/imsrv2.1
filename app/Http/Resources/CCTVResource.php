@@ -25,6 +25,8 @@ class CCTVResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'installer_supplier' => $this->installer_supplier,
+            'switch_connected' => $this->switch_connected,  // ✅ Added
+            'port_number' => $this->port_number,            // ✅ Added
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return [
                     'id' => $this->createdBy->id,

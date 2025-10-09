@@ -12,13 +12,15 @@ class CCTV extends Model
     protected $table = 'c_c_t_v_s';
 
     protected $fillable = [
-        'hikvision_model',
-        'cctv_name',
-        'ip_address',
-        'username',
-        'password',
-        'installer_supplier',
-        'created_by',
+    'hikvision_model',
+    'cctv_name',
+    'ip_address',
+    'username',
+    'password',
+    'installer_supplier',
+    'switch_connected',
+    'port_number',
+    'created_by',
     ];
 
     public function createdBy()

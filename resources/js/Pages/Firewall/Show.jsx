@@ -34,6 +34,8 @@ const ModalComponent = forwardRef(function ModalComponent({ show, onClose, firew
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Username:</strong> {firewall.username}</p>
                 </div>
                 <div className="rounded p-3 w-full">
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Switch Connected:</strong> {firewall.switch_connected || 'N/A'}</p>
+                    <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Port Number:</strong> {firewall.port_number || 'N/A'}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Password:</strong> {firewall.password}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created By:</strong> {firewall.createdBy?.name}</p>
                     <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Created At:</strong> {firewall.created_at}</p>
