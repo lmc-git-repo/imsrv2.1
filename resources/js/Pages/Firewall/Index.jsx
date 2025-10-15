@@ -12,7 +12,7 @@ import EditModalComponent from './Edit';
 
 export default function Index({
     auth,
-    firewalls, // Renamed from l3switches/l2switches to firewalls
+    firewalls,
     queryParams = null,
     success
 }) {
@@ -22,7 +22,7 @@ export default function Index({
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedEdit, setSelectedEdit] = useState(null);
 
-    const openModal = (firewall, e) => { // Updated variable name
+    const openModal = (firewall, e) => {
         e.preventDefault();
         setSelected(firewall);
         setShowModal(true);
@@ -41,7 +41,7 @@ export default function Index({
         setShowCreateModal(false);
     };
 
-    const openEditModal = (firewall) => { // Updated variable name
+    const openEditModal = (firewall) => {
         setSelectedEdit(firewall);
         setShowEditModal(true);
     };
@@ -57,7 +57,7 @@ export default function Index({
     const handleSearchChange = debounce((query) => {
         setSearchQuery(query);
         router.get(
-            route('firewall.index'), // Updated route name
+            route('firewall.index'),
             {
                 ...queryParams,
                 search: query,
@@ -83,14 +83,14 @@ export default function Index({
             queryParams.sort_field = name;
             queryParams.sort_direction = 'asc';
         }
-        router.get(route('firewall.index'), queryParams, { preserveScroll: true }); // Updated route name
+        router.get(route('firewall.index'), queryParams, { preserveScroll: true });
     };
 
-    const deleteFirewall = (firewall) => { // Updated variable name
-        if (!window.confirm('Are you sure you want to delete this Firewall?')) { // Updated confirmation message
+    const deleteFirewall = (firewall) => {
+        if (!window.confirm('Are you sure you want to delete this Firewall?')) {
             return;
         }
-        router.delete(route('firewall.destroy', firewall.id)); // Updated route name
+        router.delete(route('firewall.destroy', firewall.id));
     };
 
     return (
@@ -98,7 +98,7 @@ export default function Index({
             user={auth.user}
             header={
                 <div className='flex justify-between items-center'>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Firewalls</h2> {/* Updated title */}
+                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">List of Firewalls</h2>
                     <div className='flex justify-end'>
                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                             <Button
@@ -119,7 +119,7 @@ export default function Index({
                 </div>
             }
         >
-            <Head title="Firewalls" /> {/* Updated page title */}
+            <Head title="Firewalls" />
 
             <div className="py-12">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-8">
@@ -145,11 +145,11 @@ export default function Index({
                                 <div className="flex justify-between items-center py-2">
                                     <div>
                                         <TextInput
-                                            id="firewall-search" // Updated ID/Name
+                                            id="firewall-search"
                                             name="firewall-search"
                                             className="w-full"
                                             defaultValue={searchQuery}
-                                            placeholder="Search..." // Updated placeholder
+                                            placeholder="Search..."
                                             onBlur={e => searchFieldChanged(e.target.value)}
                                             onChange={(e) => searchFieldChanged(e.target.value)}
                                             onKeyPress={onKeyPress}
@@ -160,26 +160,25 @@ export default function Index({
                                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
-                                            {/* Table Headings are copied from L3 Switches but should display firewall-related data */}
                                             <TableHeading name="device_name" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Device Name</TableHeading>
                                             <TableHeading name="ip_address" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>IP Address</TableHeading>
                                             <TableHeading name="username" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Username</TableHeading>
                                             <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Password</TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Created Date</TableHeading>
+                                            <TableHeading name="switch_connected" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Switch Connected</TableHeading>
+                                            <TableHeading name="port_number" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Port Number</TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                         {firewalls.data && firewalls.data.length > 0 ? (
-                                            firewalls.data.map(firewall => ( // Updated variable name
+                                            firewalls.data.map(firewall => (
                                                 <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={firewall.id}>
                                                     <th className="px-3 py-2 text-nowrap">
                                                         <button
-                                                            id={`view-firewall-${firewall.id}`} // Updated ID
+                                                            id={`view-firewall-${firewall.id}`}
                                                             className="text-left hover:text-white hover:underline cursor-pointer"
-                                                            onClick={(e) => openModal(firewall, e)} // Updated function call/variable
+                                                            onClick={(e) => openModal(firewall, e)}
                                                             aria-label={`View ${firewall.device_name} details`}
                                                         >
                                                             {firewall.device_name}
@@ -188,14 +187,14 @@ export default function Index({
                                                     <td className="px-3 py-2">{firewall.ip_address}</td>
                                                     <td className="px-3 py-2">{firewall.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{firewall.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{firewall.createdBy?.name}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{firewall.created_at}</td>
+                                                    <td className="px-3 py-2">{firewall.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{firewall.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <>
                                                                 <button
                                                                     className="inline-block py-1 px-2 text-blue-500 hover:text-white hover:underline hover:scale-110 hover:animate-spin mx-1"
-                                                                    onClick={() => openEditModal(firewall)} // Updated function call/variable
+                                                                    onClick={() => openEditModal(firewall)}
                                                                     aria-label={`Edit ${firewall.device_name}`}
                                                                 >
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -203,7 +202,7 @@ export default function Index({
                                                                     </svg>
                                                                 </button>
                                                                 <button
-                                                                    onClick={(e) => deleteFirewall(firewall)} // Updated function call/variable
+                                                                    onClick={() => deleteFirewall(firewall)}
                                                                     className="inline-block py-1 px-2 text-red-500 hover:text-white hover:underline hover:scale-110 hover:animate-bounce mx-1"
                                                                     aria-label={`Delete ${firewall.device_name}`}
                                                                 >
@@ -234,10 +233,9 @@ export default function Index({
                 </div>
             </div>
 
-            {/* Modals - ensure the 'firewall' prop is passed to Show/Edit if needed, as it was 'l3switch' previously */}
-            <Show show={showModal} onClose={closeModal} firewall={selected} /> {/* Updated prop name */}
+            <Show show={showModal} onClose={closeModal} firewall={selected} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
-            <EditModalComponent show={showEditModal} onClose={closeEditModal} selectedFirewall={selectedEdit} /> {/* Updated prop name */}
+            <EditModalComponent show={showEditModal} onClose={closeEditModal} selectedFirewall={selectedEdit} />
         </AuthenticatedLayout>
     );
 }

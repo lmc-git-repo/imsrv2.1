@@ -165,14 +165,11 @@ export default function Index({
                                             <TableHeading name="ip_address" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>IP Address</TableHeading>
                                             <TableHeading name="username" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Username</TableHeading>
                                             <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Password</TableHeading>
-                                            {/* Removed Switch Connected */}
-                                            {/* Removed Port Number */}
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Created Date</TableHeading>
+                                            <TableHeading name="switch_connected" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Switch Connected</TableHeading>
+                                            <TableHeading name="port_number" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Port Number</TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
                                         {servers.data && servers.data.length > 0 ? (
                                             servers.data.map(server => (
@@ -190,10 +187,8 @@ export default function Index({
                                                     <td className="px-3 py-2">{server.ip_address}</td>
                                                     <td className="px-3 py-2">{server.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{server.password || 'N/A'}</td>
-                                                    {/* Removed Switch Connected cell */}
-                                                    {/* Removed Port Number cell */}
-                                                    <td className="px-3 py-2">{server.createdBy?.name}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{server.created_at}</td>
+                                                    <td className="px-3 py-2">{server.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{server.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <>

@@ -173,13 +173,16 @@ export default function Index({
                                             <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Password
                                             </TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
-                                                Created Date
+                                            <TableHeading name="switch_connected" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
+                                                Switch Connected
+                                            </TableHeading>
+                                            <TableHeading name="port_number" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
+                                                Port Number
                                             </TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         {l2switches?.data?.length > 0 ? (
                                             l2switches.data.map((l2switch) => (
@@ -192,8 +195,8 @@ export default function Index({
                                                     <td className="px-3 py-2">{l2switch.ip_address}</td>
                                                     <td className="px-3 py-2">{l2switch.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{l2switch.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{l2switch.created_by?.name || 'N/A'}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{l2switch.created_at ? new Date(l2switch.created_at).toISOString().split('T')[0] : 'N/A'}</td>
+                                                    <td className="px-3 py-2">{l2switch.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{l2switch.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <>

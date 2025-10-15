@@ -58,8 +58,6 @@ export default function Index({
     queryParams = queryParams || {};
     const [searchQuery, setSearchQuery] = useState(queryParams?.search || '');
 
-
-
     const handleSearchChange = debounce((query) => {
         setSearchQuery(query);
         router.get(
@@ -199,18 +197,26 @@ export default function Index({
                                             >
                                                 Password
                                             </TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
                                             <TableHeading
-                                                name="created_at"
+                                                name="switch_connected"
                                                 sort_field={queryParams.sort_field}
                                                 sort_direction={queryParams.sort_direction}
                                                 sortChanged={sortChanged}
                                             >
-                                                Created Date
+                                                Switch Connected
+                                            </TableHeading>
+                                            <TableHeading
+                                                name="port_number"
+                                                sort_field={queryParams.sort_field}
+                                                sort_direction={queryParams.sort_direction}
+                                                sortChanged={sortChanged}
+                                            >
+                                                Port Number
                                             </TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         {waps.data && waps.data.length > 0 ? (
                                             waps.data.map(wap => (
@@ -227,8 +233,8 @@ export default function Index({
                                                     <td className="px-3 py-2">{wap.ip_address}</td>
                                                     <td className="px-3 py-2">{wap.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{wap.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{wap.created_by || 'N/A'}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{wap.created_at || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{wap.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{wap.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <button

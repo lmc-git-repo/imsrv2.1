@@ -6,7 +6,6 @@ import TableHeading from '@/Components/TableHeading';
 import { Button } from 'flowbite-react';
 import { useState } from 'react';
 import { debounce } from 'lodash';
-// ** Adjusted imports to match your provided list:
 import Show from './Show';
 import CreateModalComponent from './Create';
 import EditModalComponent from './Edit';
@@ -165,8 +164,8 @@ export default function Index({
                                             <TableHeading name="ip_address" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>IP Address</TableHeading>
                                             <TableHeading name="username" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Username</TableHeading>
                                             <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Password</TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Created Date</TableHeading>
+                                            <TableHeading name="switch_connected" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Switch Connected</TableHeading>
+                                            <TableHeading name="port_number" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>Port Number</TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -188,12 +187,11 @@ export default function Index({
                                                     <td className="px-3 py-2">{l3switch.ip_address}</td>
                                                     <td className="px-3 py-2">{l3switch.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{l3switch.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{l3switch.createdBy?.name}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{l3switch.created_at}</td>
+                                                    <td className="px-3 py-2">{l3switch.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{l3switch.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <>
-                                                                {/* ** UPDATED EDIT BUTTON STYLES ** */}
                                                                 <button
                                                                     className="inline-block py-1 px-2 text-blue-500 hover:text-white hover:underline hover:scale-110 hover:animate-spin mx-1"
                                                                     onClick={() => openEditModal(l3switch)}
@@ -203,7 +201,6 @@ export default function Index({
                                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                                     </svg>
                                                                 </button>
-                                                                {/* ** UPDATED DELETE BUTTON STYLES ** */}
                                                                 <button
                                                                     onClick={(e) => deleteL3Switch(l3switch)}
                                                                     className="inline-block py-1 px-2 text-red-500 hover:text-white hover:underline hover:scale-110 hover:animate-bounce mx-1"
@@ -236,7 +233,6 @@ export default function Index({
                 </div>
             </div>
 
-            {/* Adjusted component names to match your imports: Show, CreateModalComponent, EditModalComponent */}
             <Show show={showModal} onClose={closeModal} l3switch={selected} />
             <CreateModalComponent show={showCreateModal} onClose={closeCreateModal} />
             <EditModalComponent show={showEditModal} onClose={closeEditModal} selectedL3Switch={selectedEdit} />

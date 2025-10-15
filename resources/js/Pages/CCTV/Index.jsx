@@ -1,4 +1,3 @@
-// ... all existing imports remain unchanged
 import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import TextInput from '@/Components/TextInput';
@@ -18,7 +17,6 @@ export default function Index({
     queryParams = null,
     success
 }) {
-
     const [showModal, setShowModal] = useState(false);
     const [selected, setSelected] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -171,9 +169,11 @@ export default function Index({
                                             <TableHeading name="password" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
                                                 Password
                                             </TableHeading>
-                                            <th className="px-3 py-3">Created By</th>
-                                            <TableHeading name="created_at" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
-                                                Created Date
+                                            <TableHeading name="switch_connected" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
+                                                Switch Connected
+                                            </TableHeading>
+                                            <TableHeading name="port_number" sort_field={queryParams.sort_field} sort_direction={queryParams.sort_direction} sortChanged={sortChanged}>
+                                                Port Number
                                             </TableHeading>
                                             <th className="px-3 py-3 text-center">Actions</th>
                                         </tr>
@@ -190,8 +190,8 @@ export default function Index({
                                                     <td className="px-3 py-2">{cctv.ip_address}</td>
                                                     <td className="px-3 py-2">{cctv.username || 'N/A'}</td>
                                                     <td className="px-3 py-2">{cctv.password || 'N/A'}</td>
-                                                    <td className="px-3 py-2">{cctv.createdBy?.name || 'N/A'}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{cctv.created_at}</td>
+                                                    <td className="px-3 py-2">{cctv.switch_connected || 'N/A'}</td>
+                                                    <td className="px-3 py-2">{cctv.port_number || 'N/A'}</td>
                                                     <td className="px-3 py-2 text-center text-nowrap">
                                                         {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                             <>
