@@ -30,7 +30,10 @@ const EditL3Switch = forwardRef(function EditL3Switch({ show, onClose, selectedL
     'Ruijie Layer SW',
   ];
 
-  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
+  const PORT_OPTIONS = Array.from({ length: 28 }, (_, i) => {
+    const portNum = i + 1;
+    return portNum >= 25 ? `SFP ${portNum}` : `Port ${portNum}`;
+  });
 
   // Sync selectedL3Switch to form data
   useEffect(() => {

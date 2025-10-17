@@ -30,7 +30,10 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
     'Ruijie Layer SW',
   ];
 
-  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
+  const PORT_OPTIONS = Array.from({ length: 28 }, (_, i) => {
+    const portNum = i + 1;
+    return portNum >= 25 ? `SFP ${portNum}` : `Port ${portNum}`;
+  });
 
   // Update form data when selectedFirewall changes
   useEffect(() => {

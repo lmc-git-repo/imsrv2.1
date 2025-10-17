@@ -29,10 +29,12 @@ const CreateServer = forwardRef(function CreateServer({ show, onClose }, ref) {
     'Ruijie Layer SW',
   ];
 
-  const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
+  const PORT_OPTIONS = Array.from({ length: 28 }, (_, i) => {
+    const portNum = i + 1;
+    return portNum >= 25 ? `SFP ${portNum}` : `Port ${portNum}`;
+});
 
   if (!show) return null;
-
 
     const onSubmit = (e) => {
       e.preventDefault();
