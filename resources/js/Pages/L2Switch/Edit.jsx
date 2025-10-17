@@ -10,8 +10,8 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
     username: '',
     password: '',
     serial_number: '',
-    switch_connected: '',  // NEW
-    port_number: '',       // NEW
+    switch_connected: '',
+    port_number: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,6 +26,8 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
     'Machining_Ruijie_SW',
     'LMC-AdminOfficeL2',
     'SERVER_RM_Ruijie_SW',
+    'TPLINK Server Room',
+    'Ruijie Layer SW',
   ];
 
   const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
@@ -40,8 +42,8 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
         username: l2switch.username || '',
         password: l2switch.password || '',
         serial_number: l2switch.serial_number || '',
-        switch_connected: l2switch.switch_connected || '',  // NEW
-        port_number: l2switch.port_number || '',            // NEW
+        switch_connected: l2switch.switch_connected || '',
+        port_number: l2switch.port_number || '',
       };
       setData(newData);
       setHasChanges(false);
@@ -58,8 +60,8 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
         username: l2switch.username || '',
         password: l2switch.password || '',
         serial_number: l2switch.serial_number || '',
-        switch_connected: l2switch.switch_connected || '',  // NEW
-        port_number: l2switch.port_number || '',            // NEW
+        switch_connected: l2switch.switch_connected || '',
+        port_number: l2switch.port_number || '',
       };
       const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
       setHasChanges(isChanged);
@@ -158,7 +160,7 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
               <InputError message={errors.ip_address} className="mt-1 text-red-400" />
             </div>
 
-            {/* New Switch Connected */}
+            {/* Switch Connected */}
             <div>
               <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
                 Switch Connected
@@ -179,7 +181,7 @@ const EditL2Switch = forwardRef(function EditL2Switch({ show, onClose, l2switch 
               <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
             </div>
 
-            {/* New Port Number */}
+            {/* Port Number */}
             <div>
               <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
                 Port Number

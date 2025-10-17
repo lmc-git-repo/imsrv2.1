@@ -25,6 +25,8 @@ const CreateL3Switch = forwardRef(function CreateL3Switch({ show, onClose }, ref
     'Machining_Ruijie_SW',
     'LMC-AdminOfficeL2',
     'SERVER_RM_Ruijie_SW',
+    'TPLINK Server Room',
+    'Ruijie Layer SW',
   ];
 
   const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);

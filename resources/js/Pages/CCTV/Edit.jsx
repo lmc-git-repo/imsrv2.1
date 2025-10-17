@@ -10,8 +10,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
     username: '',
     password: '',
     installer_supplier: '',
-    switch_connected: '',  // ✅ NEW
-    port_number: '',       // ✅ NEW
+    switch_connected: '',
+    port_number: '',
     _method: 'PUT',
   });
 
@@ -27,6 +27,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
     'Machining_Ruijie_SW',
     'LMC-AdminOfficeL2',
     'SERVER_RM_Ruijie_SW',
+    'TPLINK Server Room',
+    'Ruijie Layer SW',
   ];
 
   const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
@@ -41,8 +43,8 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
         username: selectedCctv.username || '',
         password: selectedCctv.password || '',
         installer_supplier: selectedCctv.installer_supplier || '',
-        switch_connected: selectedCctv.switch_connected || '',  // ✅
-        port_number: selectedCctv.port_number || '',            // ✅
+        switch_connected: selectedCctv.switch_connected || '',
+        port_number: selectedCctv.port_number || '',
         _method: 'PUT',
       });
       setHasChanges(false);
@@ -207,7 +209,7 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
               <InputError message={errors.installer_supplier} className="mt-1 text-red-400" />
             </div>
 
-            {/* Switch Connected - NEW */}
+            {/* Switch Connected */}
             <div>
               <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
                 Switch Connected
@@ -228,7 +230,7 @@ const EditCCTV = forwardRef(function EditCCTV({ show, onClose, selectedCctv }, r
               <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
             </div>
 
-            {/* Port Number - NEW */}
+            {/* Port Number */}
             <div>
               <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
                 Port Number

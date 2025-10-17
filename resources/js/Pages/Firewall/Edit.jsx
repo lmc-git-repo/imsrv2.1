@@ -10,8 +10,8 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
     username: '',
     password: '',
     serial_number: '',
-    switch_connected: '',  // ✅ NEW
-    port_number: '',       // ✅ NEW
+    switch_connected: '',
+    port_number: '',
     _method: 'PUT',
   });
 
@@ -26,6 +26,8 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
     'Machining_Ruijie_SW',
     'LMC-AdminOfficeL2',
     'SERVER_RM_Ruijie_SW',
+    'TPLINK Server Room',
+    'Ruijie Layer SW',
   ];
 
   const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
@@ -40,8 +42,8 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
         username: selectedFirewall.username || '',
         password: selectedFirewall.password || '',
         serial_number: selectedFirewall.serial_number || '',
-        switch_connected: selectedFirewall.switch_connected || '', // ✅ NEW
-        port_number: selectedFirewall.port_number || '',           // ✅ NEW
+        switch_connected: selectedFirewall.switch_connected || '',
+        port_number: selectedFirewall.port_number || '',
         _method: 'PUT',
       };
       setData(newData);
@@ -59,8 +61,8 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
         username: selectedFirewall.username || '',
         password: selectedFirewall.password || '',
         serial_number: selectedFirewall.serial_number || '',
-        switch_connected: selectedFirewall.switch_connected || '', // ✅ NEW
-        port_number: selectedFirewall.port_number || '',           // ✅ NEW
+        switch_connected: selectedFirewall.switch_connected || '',
+        port_number: selectedFirewall.port_number || '',
       };
       const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
       setHasChanges(isChanged);
@@ -154,7 +156,7 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
               <InputError message={errors.ip_address} className="mt-1 text-red-400" />
             </div>
 
-            {/* Switch Connected - NEW */}
+            {/* Switch Connected */}
             <div>
               <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
                 Switch Connected
@@ -175,7 +177,7 @@ const EditFirewall = forwardRef(function EditFirewall({ show, onClose, selectedF
               <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
             </div>
 
-            {/* Port Number - NEW */}
+            {/* Port Number */}
             <div>
               <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
                 Port Number

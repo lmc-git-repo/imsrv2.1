@@ -10,8 +10,8 @@ const CreateCCTV = forwardRef(function CreateCCTV({ show, onClose }, ref) {
         username: '',
         password: '',
         installer_supplier: '',
-        switch_connected: '',  // ✅ NEW
-        port_number: '',       // ✅ NEW
+        switch_connected: '',
+        port_number: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -24,6 +24,8 @@ const CreateCCTV = forwardRef(function CreateCCTV({ show, onClose }, ref) {
         'Machining_Ruijie_SW',
         'LMC-AdminOfficeL2',
         'SERVER_RM_Ruijie_SW',
+        'TPLINK Server Room',
+        'Ruijie Layer SW',
     ];
 
     const PORT_OPTIONS = Array.from({ length: 24 }, (_, i) => `Port ${i + 1}`);
@@ -116,7 +118,7 @@ const CreateCCTV = forwardRef(function CreateCCTV({ show, onClose }, ref) {
                             <InputError message={errors.ip_address} className="mt-1 text-red-400" />
                         </div>
 
-                        {/* Switch Connected - NEW */}
+                        {/* Switch Connected */}
                         <div>
                             <label htmlFor="switch_connected" className="block text-sm font-medium text-gray-300 mb-2">
                                 Switch Connected
@@ -137,7 +139,7 @@ const CreateCCTV = forwardRef(function CreateCCTV({ show, onClose }, ref) {
                             <InputError message={errors.switch_connected} className="mt-1 text-red-400" />
                         </div>
 
-                        {/* Port Number - NEW */}
+                        {/* Port Number */}
                         <div>
                             <label htmlFor="port_number" className="block text-sm font-medium text-gray-300 mb-2">
                                 Port Number
