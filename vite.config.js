@@ -16,7 +16,7 @@ export default defineConfig({
             interval: 1500,
         },
         hmr: {
-            port: 446,
+            port: 443,
         },
     },
 });
