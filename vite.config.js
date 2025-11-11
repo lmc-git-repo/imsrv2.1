@@ -13,9 +13,10 @@ export default defineConfig({
     server: {
         watch: {
             usePolling: true,
+            interval: 1500,
         },
         hmr: {
-            port: 443,
+            port: 446,
         },
     },
 });
