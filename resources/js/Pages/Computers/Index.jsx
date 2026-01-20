@@ -161,23 +161,24 @@ export default function Index({
   };
 
   const handleSelectAll = (e) => {
-    const allIDsOnPage = computers.data.map((comp) => comp.CID);
+    // ✅ FIX: computers or computers.data can be undefined
+    const allIDsOnPage = (computers?.data || []).map((comp) => comp.CID);
     if (e.target.checked) {
       setSelectedItems((prevSelected) => [
-        ...new Set([...prevSelected, ...allIDsOnPage]),
+        ...new Set([...(prevSelected || []), ...allIDsOnPage]),
       ]);
     } else {
       setSelectedItems((prevSelected) =>
-        prevSelected.filter((id) => !allIDsOnPage.includes(id))
+        (prevSelected || []).filter((id) => !allIDsOnPage.includes(id))
       );
     }
   };
 
   const handleSelectItem = (CID) => {
     setSelectedItems((prevSelected) =>
-      prevSelected.includes(CID)
+      (prevSelected || []).includes(CID)
         ? prevSelected.filter((id) => id !== CID)
-        : [...prevSelected, CID]
+        : [...(prevSelected || []), CID]
     );
   };
 
@@ -188,12 +189,13 @@ export default function Index({
       return;
     }
 
-    const selectedItemDetails = computers.data.filter((comp) =>
+    // ✅ FIX: computers or computers.data can be undefined
+    const selectedItemDetails = (computers?.data || []).filter((comp) =>
       selectedItems.includes(comp.CID)
     );
 
     const missingItemIDs = selectedItems.filter(
-      (id) => !computers.data.some((comp) => comp.CID === id)
+      (id) => !(computers?.data || []).some((comp) => comp.CID === id)
     );
 
     if (missingItemIDs.length > 0) {
@@ -354,7 +356,8 @@ export default function Index({
                       onChange={(e) => handleSelectChange('comp_gen', e.target.value)}
                     >
                       <option value="">Select Generation </option>
-                      {generations.map((gen, index) => (
+                      {/* ✅ FIX: generations can be undefined */}
+                      {(generations || []).map((gen, index) => (
                         <option key={index} value={gen}>{gen}</option>
                       ))}
                     </SelectInput>
@@ -366,7 +369,8 @@ export default function Index({
                       onChange={(e) => handleSelectChange('department_comp', e.target.value)}
                     >
                       <option value="">Select Department</option>
-                      {departmentsList.data.map(dept => (
+                      {/* ✅ FIX: departmentsList or departmentsList.data can be undefined */}
+                      {(departmentsList?.data || []).map(dept => (
                         <option key={dept.dept_id} value={dept.dept_list}>
                           {dept.dept_list}
                         </option>
@@ -468,8 +472,8 @@ export default function Index({
                     </tr>
                   </thead>
                   <tbody>
-                    {computers.data && computers.data.length > 0 ? (
-                      computers.data.map((computer) => (
+                    {(computers?.data || []).length > 0 ? (
+                      (computers?.data || []).map((computer) => (
                         <tr className="bg-white border-b dark:bg-slate-800 dark:border-gray-700" key={computer.CID}>
                           <td>
                             <input
@@ -551,8 +555,9 @@ export default function Index({
                   </tbody>
                 </table>
               </div>
+
               <Pagination
-                links={computers.meta.links}
+                links={computers?.meta?.links || []}
                 queryParams={{
                   search: filters.search,
                   comp_status: filters.comp_status,
@@ -570,23 +575,26 @@ export default function Index({
           </div>
         </div>
       </div>
+
       <Show show={showModal} onClose={closeModal} user={selected} />
+
       <CreateModalComponent
         show={showCreateModal}
         onClose={closeCreateModal}
-        departmentsList={departmentsList.data}
-        compUsersList={compUsersList.data}
-        compUsersFnameList={compUsersFnameList.data}
-        generations={generations}
+        departmentsList={departmentsList?.data || []}
+        compUsersList={compUsersList?.data || []}
+        compUsersFnameList={compUsersFnameList?.data || []}
+        generations={generations || []}
       />
+
       <EditModalComponent
         show={showEditModal}
         onClose={closeEditModal}
-        listDepartments={departmentsList.data}
-        listCompUsers={compUsersList.data}
-        listCompUsersFname={compUsersFnameList.data}
+        listDepartments={departmentsList?.data || []}
+        listCompUsers={compUsersList?.data || []}
+        listCompUsersFname={compUsersFnameList?.data || []}
         selectedEditComp={selectedEdit}
-        generations={generations}
+        generations={generations || []}
       />
     </AuthenticatedLayout>
   )
