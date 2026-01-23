@@ -11,14 +11,11 @@ use App\Models\Computers;
 use App\Http\Requests\StoreComputersRequest;
 use App\Http\Requests\UpdateComputersRequest;
 use App\Models\Departments;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ComputersController extends Controller
 {
@@ -26,14 +23,17 @@ class ComputersController extends Controller
     {
         $query = Computers::query();
 
-        $sortField = request("sort_field", 'created_at');
-        $sortDirection = request("sort_direction", "desc");
+        $sortField = request('sort_field', 'created_at');
+        $sortDirection = request('sort_direction', 'desc');
 
         $computers = $query
             ->with(['createdBy', 'updatedBy'])
             ->orderBy($sortField, $sortDirection)
+
+            // 🔍 SEARCH (EXISTING – UNTOUCHED)
             ->when(request('search'), function (Builder $query, $search) {
-                $query->where('comp_name', 'like', "%{$search}%")
+                $query->where(function ($q) use ($search) {
+                    $q->where('comp_name', 'like', "%{$search}%")
                       ->orWhere('comp_model', 'like', "%{$search}%")
                       ->orWhere('fullName', 'like', "%{$search}%")
                       ->orWhere('comp_asset', 'like', "%{$search}%")
@@ -41,7 +41,18 @@ class ComputersController extends Controller
                       ->orWhere('comp_serial', 'like', "%{$search}%")
                       ->orWhere('comp_storage', 'like', "%{$search}%")
                       ->orWhere('comp_user', 'like', "%{$search}%");
+                });
             })
+
+            // ✅ FIX: DROPDOWN FILTERS (THIS WAS MISSING)
+            ->when(request('comp_status'), fn ($q, $v) => $q->where('comp_status', $v))
+            ->when(request('comp_storage'), fn ($q, $v) => $q->where('comp_storage', $v))
+            ->when(request('asset_class'), fn ($q, $v) => $q->where('asset_class', $v))
+            ->when(request('comp_type'), fn ($q, $v) => $q->where('comp_type', $v))
+            ->when(request('comp_gen'), fn ($q, $v) => $q->where('comp_gen', $v))
+            ->when(request('department_comp'), fn ($q, $v) => $q->where('department_comp', $v))
+            ->when(request('comp_os'), fn ($q, $v) => $q->where('comp_os', $v))
+
             ->paginate(10);
 
         $departmentsList = Cache::remember('departments_list', 3600, function () {
@@ -54,15 +65,15 @@ class ComputersController extends Controller
 
         $compUsersList = $compUsersFnameList->sortBy('initial')->values();
 
-        // ✅ FIX: PROVIDE GENERATIONS (THIS WAS MISSING)
+        // ✅ REQUIRED (already correct)
         $generations = GenerationHelper::getGenerations();
 
-        return inertia("Computers/Index", [
+        return inertia('Computers/Index', [
             'computers' => ComputersResource::collection($computers),
             'departmentsList' => DepartmentsResource::collection($departmentsList),
             'compUsersList' => AccountUsersResource::collection($compUsersList),
             'compUsersFnameList' => AccountUsersResource::collection($compUsersFnameList),
-            'generations' => $generations, // ✅ REQUIRED
+            'generations' => $generations,
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -75,12 +86,11 @@ class ComputersController extends Controller
         $data['updated_by'] = Auth::id();
 
         if (!empty($data['img_path'])) {
-            $data['img_path'] = $data['img_path']->store('Computers/'.Str::random(), 'public');
+            $data['img_path'] = $data['img_path']->store('Computers/' . Str::random(), 'public');
         }
 
         Computers::create($data);
 
-        // ✅ REQUIRED FIX (DO NOT REMOVE)
         Cache::forget('departments_list');
         Cache::forget('comp_users_fname_list');
 
@@ -96,16 +106,15 @@ class ComputersController extends Controller
             if ($computer->img_path) {
                 Storage::disk('public')->deleteDirectory(dirname($computer->img_path));
             }
-            $data['img_path'] = $request->file('img_path')->store('Computers/'.Str::random(), 'public');
+            $data['img_path'] = $request->file('img_path')->store('Computers/' . Str::random(), 'public');
         }
 
         $computer->update($data);
 
-        // ✅ REQUIRED FIX
         Cache::forget('departments_list');
         Cache::forget('comp_users_fname_list');
 
-        return to_route('computers.index')->with('success', "Computer updated");
+        return to_route('computers.index')->with('success', 'Computer updated');
     }
 
     public function destroy(Computers $computer)
@@ -116,7 +125,6 @@ class ComputersController extends Controller
 
         $computer->delete();
 
-        // ✅ REQUIRED FIX
         Cache::forget('departments_list');
         Cache::forget('comp_users_fname_list');
 

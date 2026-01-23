@@ -67,15 +67,10 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         Phones
                                                     </div>
                                                 </Dropdown.Link>
-                                                
+
                                                 <Dropdown.Link href={route('consumables.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Consumables
-                                                    </div>
-                                                </Dropdown.Link>
-                                                <Dropdown.Link href={route('purchase_requisitions.index')}>
-                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('purchase_requisitions.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                        Purchase Requisitions
                                                     </div>
                                                 </Dropdown.Link>
                                             </Dropdown.Content>
@@ -111,61 +106,61 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
                                             Network
                                             <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                             </svg>
-                                            </NavLink>
-                                            </Dropdown.Trigger>
-                                            <Dropdown.Content>
-                                                <Dropdown.Link href={route('firewall.index')}>
-                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                        Firewall
-                                                    </div>
-                                                        </Dropdown.Link>
-                                                        <Dropdown.Link href={route('server.index')}>
-                                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                                Server
-                                                            </div>
-                                                            </Dropdown.Link>
-                                                            <Dropdown.Link href={route('l2sw.index')}>
-                                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                                    L2 Switch
-                                                                </div>
-                                                                </Dropdown.Link>
-                                                            <Dropdown.Link href={route('l3sw.index')}>
-                                                                <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                                    L3 Switch
-                                                                </div>
-                                                                </Dropdown.Link>
-                                                                <Dropdown.Link href={route('wap.index')}>
-                                                                    <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                                        WAP
-                                                                    </div>
-                                                                    </Dropdown.Link>
-                                                                    </Dropdown.Content>
-                                                                    </Dropdown>
+                                        </NavLink>
+                                    </Dropdown.Trigger>
+                                    <Dropdown.Content>
+                                        <Dropdown.Link href={route('firewall.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                Firewall
+                                            </div>
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('server.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                Server
+                                            </div>
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('l2sw.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                L2 Switch
+                                            </div>
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('l3sw.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                L3 Switch
+                                            </div>
+                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('wap.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                WAP
+                                            </div>
+                                        </Dropdown.Link>
+                                    </Dropdown.Content>
+                                </Dropdown>
 
                                 {/* CCTV Link */}
                                 <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>
                                     CCTV
                                 </NavLink>
                                 <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
-                                    Account Management{/* List of Accounts */}
+                                    Account Management
                                 </NavLink>
                                 <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
-                                    MS Account{/* List of Accounts */}
+                                    MS Account
                                 </NavLink>
                                 <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
-                                    Printer Password{/* List of Accounts */}
+                                    Printer Password
                                 </NavLink>
                                 <NavLink href={route('departments.index')} active={route().current('departments.index')}>
-                                    Departments{/* List of Departments */}
+                                    Departments
                                 </NavLink>
                                 <NavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
-                                    Employees{/* List of Employees/Users */}
+                                    Employees
                                 </NavLink>
                                 {(user.role === 'super admin' || user.role === 'admin') && (
                                     <NavLink href={route('user.index')} active={route().current('user.index')}>
-                                        Users {/* All Accounts */}
+                                        Users
                                     </NavLink>
                                 )}
                             </div>
@@ -251,7 +246,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </svg>
                                 </ResponsiveNavLink>
                             </Dropdown.Trigger>
-                            
+
                             <Dropdown.Content className=''>
                                 <div className='absolute right-4 w-[450px] shadow-lg rounded-lg'>
                                     <div className=' bg-white dark:bg-blue-900 rounded-lg'>
@@ -286,15 +281,10 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                 Phones
                                             </div>
                                         </Dropdown.Link>
-                                        
+
                                         <Dropdown.Link href={route('consumables.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Consumables
-                                            </div>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link href={route('purchase_requisitions.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('purchase_requisitions.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                Purchase Requisitions
                                             </div>
                                         </Dropdown.Link>
                                     </div>
