@@ -24,6 +24,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+
                                 {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member') && (
                                     <div className='flex justify-center items-center'>
                                         <Dropdown>
@@ -61,13 +62,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         Tablets
                                                     </div>
                                                 </Dropdown.Link>
-
                                                 <Dropdown.Link href={route('phones.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Phones
                                                     </div>
                                                 </Dropdown.Link>
-
                                                 <Dropdown.Link href={route('consumables.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Consumables
@@ -100,6 +99,8 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
+                                {(user.role === 'super admin') && (
+                                <>
                                 {/* Network Dropdown */}
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -111,54 +112,29 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         </NavLink>
                                     </Dropdown.Trigger>
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('firewall.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('firewall.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                Firewall
-                                            </div>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link href={route('server.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                Server
-                                            </div>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link href={route('l2sw.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                L2 Switch
-                                            </div>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link href={route('l3sw.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                L3 Switch
-                                            </div>
-                                        </Dropdown.Link>
-                                        <Dropdown.Link href={route('wap.index')}>
-                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
-                                                WAP
-                                            </div>
-                                        </Dropdown.Link>
+                                        <Dropdown.Link href={route('firewall.index')}><div className="block px-4 py-2 text-sm">Firewall</div></Dropdown.Link>
+                                        <Dropdown.Link href={route('server.index')}><div className="block px-4 py-2 text-sm">Server</div></Dropdown.Link>
+                                        <Dropdown.Link href={route('l2sw.index')}><div className="block px-4 py-2 text-sm">L2 Switch</div></Dropdown.Link>
+                                        <Dropdown.Link href={route('l3sw.index')}><div className="block px-4 py-2 text-sm">L3 Switch</div></Dropdown.Link>
+                                        <Dropdown.Link href={route('wap.index')}><div className="block px-4 py-2 text-sm">WAP</div></Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
 
-                                {/* CCTV Link */}
-                                <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>
-                                    CCTV
-                                </NavLink>
-                                <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
-                                    Account Management
-                                </NavLink>
-                                <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
-                                    MS Account
-                                </NavLink>
-                                <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
-                                    Printer Password
-                                </NavLink>
-                                <NavLink href={route('departments.index')} active={route().current('departments.index')}>
-                                    Departments
-                                </NavLink>
-                                <NavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
-                                    Employees
-                                </NavLink>
-                                {(user.role === 'super admin' || user.role === 'admin') && (
+                                <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>CCTV</NavLink>
+                                <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>Account Management</NavLink>
+                                <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>MS Account</NavLink>
+                                <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>Printer Password</NavLink>
+                                <NavLink href={route('departments.index')} active={route().current('departments.index')}>Departments</NavLink>
+                                </>
+                                )}
+
+                                {(user.role === 'super admin' || user.role === 'hr') && (
+                                    <NavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
+                                        Employees
+                                    </NavLink>
+                                )}
+
+                                {(user.role === 'super admin') && (
                                     <NavLink href={route('user.index')} active={route().current('user.index')}>
                                         Users
                                     </NavLink>
