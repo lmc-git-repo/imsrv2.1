@@ -4,15 +4,13 @@ import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 
-
-
-
 const CreateModalComponent = ({ show, onClose, departmentsList }) => {
     if (!show) return null;
 
     const {data, setData, post, errors, reset} = useForm({
         name: '',
         department_users: '',
+        position: '',
         initial: '',
         outlookEmail: '',
         password: '',
@@ -94,6 +92,21 @@ const CreateModalComponent = ({ show, onClose, departmentsList }) => {
                             </SelectInput>
                             <InputError message={errors.department_users} className='mt-2' />
                         </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="position" value="Enter Position" />
+                                </div>
+                                <TextInput
+                                id="position"
+                                type="text"
+                                name="position"
+                                value={data.position}
+                                onChange={(e) => setData("position", e.target.value)}
+                                />
+                                <InputError message={errors.position} className='mt-2' />
+                                </div>
+
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="initial" value="Enter Initial" />

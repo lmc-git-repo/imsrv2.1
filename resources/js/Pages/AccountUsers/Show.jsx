@@ -29,7 +29,10 @@ const ModalComponent = ({ show, onClose, user }) => {
           <div className="flex justify-around">
             <div className="rounded p-3 w-full">
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Account ID:</strong> {user.account_id}</p>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_users}</p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Department:</strong> {user.department_users
+              }</p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Position:</strong> {user.position
+              }</p>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><strong>Initials:</strong> {user.initial}</p>
             </div>
             <div className="rounded p-3 w-full">

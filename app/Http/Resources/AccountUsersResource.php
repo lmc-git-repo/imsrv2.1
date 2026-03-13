@@ -22,6 +22,7 @@ class AccountUsersResource extends JsonResource
             'name' => $this->name,
             'profile_path' => $this->profile_path ? Storage::url($this->profile_path) : '',
             'department_users' => $this->department_users,
+            'position' => $this->position,
             'initial' => $this->initial,
             'outlookEmail' => $this->outlookEmail,
             'password' => $this->password,

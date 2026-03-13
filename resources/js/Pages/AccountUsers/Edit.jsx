@@ -12,6 +12,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
     const {data, setData, post, errors, reset} = useForm({
         name: selectedEditUser.name || "",
         department_users: selectedEditUser.department_users || "",
+        position: selectedEditUser.position || "",
         initial: selectedEditUser.initial || "",
         outlookEmail: selectedEditUser.outlookEmail || "",
         password: selectedEditUser.password || "",
@@ -58,6 +59,7 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
             const original = {
                 name: selectedEditUser.name || "",
                 department_users: selectedEditUser.department_users || "",
+                position: selectedEditUser.position || "",
                 initial: selectedEditUser.initial || "",
                 outlookEmail: selectedEditUser.outlookEmail || "",
                 password: selectedEditUser.password || "",
@@ -151,6 +153,19 @@ const EditModalComponent = ({ show, onClose, listDepartments, selectedEditUser }
                             </SelectInput>
                             <InputError message={errors.department_users} className='mt-2' />
                         </div>
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="position" value="Enter Position" />
+                                </div>
+                                <TextInput
+                                id="position"
+                                type="text"
+                                name="position"
+                                value={data.position}
+                                onChange={(e) => setData("position", e.target.value)}
+                            />
+                            <InputError message={errors.position} className='mt-2' />
+                            </div>
                         <div>
                             <div className="mb-2 block">
                                 <Label htmlFor="initial" value="Enter Initial" />

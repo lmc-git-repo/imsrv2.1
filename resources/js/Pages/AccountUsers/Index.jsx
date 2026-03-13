@@ -220,7 +220,6 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                             >
                                                 Name
                                             </TableHeading>
-                                            <th className="px-3 py-3">Profile</th>
                                             <TableHeading
                                                 name="department_users"
                                                 sort_field={queryParams.sort_field} 
@@ -229,6 +228,7 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                             >
                                                 Department
                                             </TableHeading>
+                                            <th className="px-3 py-3">Position</th>
                                             <TableHeading
                                                 name="initial"
                                                 sort_field={queryParams.sort_field} 
@@ -303,10 +303,8 @@ export default function Index({auth, accountUsers, departmentsList, queryParams 
                                                                 {accountusers.name}
                                                             </Link>
                                                         </th>
-                                                        <td className="px-3 py-2">
-                                                            <img src={accountusers.profile_path} alt="" style={{width: 60}} />
-                                                        </td>
                                                         <td className="px-3 py-2">{accountusers.department_users}</td>
+                                                        <td className="px-3 py-2">{accountusers.position}</td>
                                                         <td className="px-3 py-2">{accountusers.initial}</td>
                                                         <td className="px-3 py-2">{accountusers.outlookEmail}</td>
                                                         <td className="px-3 py-2">

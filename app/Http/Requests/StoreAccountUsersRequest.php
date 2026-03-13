@@ -28,6 +28,7 @@ class StoreAccountUsersRequest extends FormRequest
             //
             "name" => ['required', 'max:255'],
             "department_users" => ['required', Rule::in($departments)],
+            "position" => ['nullable','max:255'],
             "initial" => ['required', 'max:255', 'unique:account_users,initial'],
             "outlookEmail" => ['nullable', 'email', 'unique:account_users,outlookEmail', 'max:255'],
             "password" => ['nullable', 'max:255'],
