@@ -131,8 +131,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList }) => {
                                 type="text"
                                 name='outlookEmail' 
                                 value={data.outlookEmail}
-                                onChange={(e) => setData("outlookEmail", e.target.value)}
-                                required 
+                                onChange={(e) => setData("outlookEmail", e.target.value)} 
                             />
                             <InputError message={errors.outlookEmail} className='mt-2' />
                         </div>
@@ -146,8 +145,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList }) => {
                                 type="text"
                                 name='password' 
                                 value={data.password}
-                                onChange={(e) => setData("password", e.target.value)}
-                                required 
+                                onChange={(e) => setData("password", e.target.value)} 
                             />
                             <InputError message={errors.password} className='mt-2' />
                         </div>
