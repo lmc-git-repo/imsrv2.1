@@ -4,9 +4,6 @@ import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
-
-
-
 const EditModalComponent = ({ show, onClose, listDepartments, generations, listCompUsers, listCompUsersFname, selectedEditComp }) => {
     if (!show) return null;
 
@@ -109,16 +106,13 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
         e.preventDefault();
         setLoading(true);
 
-        // console.log("Form Data:", data); // Add this line to log form data
         post(route("computers.update", selectedEditComp && selectedEditComp.CID), {
             onSuccess: () => {
                 setLoading(false);
-                // console.log("Update Successful"); 
                 onClose();
                 reset();
             },
             onError: (errors) => {
-                // Handle errors if needed
                 setLoading(false);
                 console.error(errors);
             }
@@ -140,14 +134,13 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
         <div className="fixed inset-0 flex items-center justify-center z-50"> 
             <div
                 className="absolute inset-0 bg-black opacity-50"
-            ></div> {/* Backdrop */}
+            ></div>
             <Modal show={show} onClose={onClose} className="" style={{ overflowY: 'scroll', scrollbarWidth: 'none'}}>
                 <Modal.Header className="p-4">
                     Edit Computer - {selectedEditComp && selectedEditComp.comp_name}
                 </Modal.Header>
                 <Modal.Body className=''>
                     <form action="" onSubmit={onSubmit}>
-                        {/* <pre className='bg-white'>{JSON.stringify(data, undefined, 2)}</pre> */}
                         <div className="space-y-6">
                             <div className='flex justify-around'>
                                 <div className='w-full p-3'>
@@ -160,8 +153,6 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
                                             type='text'
                                             name='comp_name'
                                             value={data.comp_name}
-                                            // placeholder=""
-                                            // isFocused={true}
                                             onChange={(e) => setData("comp_name", e.target.value)}
                                             required
                                         />

@@ -161,7 +161,6 @@ export default function Index({
   };
 
   const handleSelectAll = (e) => {
-    // ✅ FIX: computers or computers.data can be undefined
     const allIDsOnPage = (computers?.data || []).map((comp) => comp.CID);
     if (e.target.checked) {
       setSelectedItems((prevSelected) => [
@@ -189,7 +188,6 @@ export default function Index({
       return;
     }
 
-    // ✅ FIX: computers or computers.data can be undefined
     const selectedItemDetails = (computers?.data || []).filter((comp) =>
       selectedItems.includes(comp.CID)
     );

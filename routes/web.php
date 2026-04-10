@@ -107,6 +107,9 @@ Route::middleware(['auth', 'verified']) ->group(function(){
         ->withoutMiddleware([VerifyCsrfToken::class])
         ->middleware(['auth', 'verified']);
 
+    Route::resource('tv', \App\Http\Controllers\TVController::class)
+    ->middleware(CheckRole::class.':super admin,admin,member');
+
     Route::post('/firewall/bulk-fetch', [FirewallController::class, 'bulkFetch'])
         ->name('firewall.bulkFetch')
         ->withoutMiddleware([VerifyCsrfToken::class])

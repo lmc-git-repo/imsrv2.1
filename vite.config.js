@@ -11,12 +11,18 @@ export default defineConfig({
         react(),
     ],
     server: {
+        host: '127.0.0.1',
+        port: 5173,
+        strictPort: true,
+
         watch: {
             usePolling: true,
             interval: 1500,
         },
+
         hmr: {
-            port: 443,
+            host: '127.0.0.1',
+            port: 5173,
         },
     },
 });
