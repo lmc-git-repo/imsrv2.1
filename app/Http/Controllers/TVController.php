@@ -12,6 +12,9 @@ class TVController extends Controller
     {
         $query = TV::with('createdBy')->latest();
 
+        $sortField = $request->get('sort_field', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
         if ($request->filled('search')) {
             $search = $request->search;
 
@@ -21,7 +24,8 @@ class TVController extends Controller
                   ->orWhere('asset_tag', 'like', "%{$search}%")
                   ->orWhere('location', 'like', "%{$search}%")
                   ->orWhere('serial_number', 'like', "%{$search}%")
-                  ->orWhere('status', 'like', "%{$search}%");
+                  ->orWhere('status', 'like', "%{$search}%")
+                  ->orWhere('datePurchased', 'like', "%{$search}%");
             });
         }
 
@@ -29,7 +33,34 @@ class TVController extends Controller
             $query->where('status', $request->status);
         }
 
-        $tv = $query->paginate(10)->withQueryString();
+        $allowedSortFields = [
+            'TID',
+            'brand',
+            'model',
+            'asset_tag',
+            'location',
+            'serial_number',
+            'status',
+            'datePurchased',
+            'created_at',
+        ];
+
+        if (!in_array($sortField, $allowedSortFields)) {
+            $sortField = 'created_at';
+        }
+
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $tv = $query->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->withQueryString()
+            ->through(function ($item) {
+                $item->created_by_name = $item->createdBy ? $item->createdBy->name : 'N/A';
+                $item->created_at_formatted = $item->created_at ? $item->created_at->format('Y-m-d') : 'N/A';
+                return $item;
+            });
 
         return inertia('TV/Index', [
             'tv' => $tv,
@@ -47,10 +78,10 @@ class TVController extends Controller
             'location' => 'required',
             'serial_number' => 'required',
             'status' => 'required',
+            'datePurchased' => 'nullable|date',
         ]);
 
         $data['created_by'] = Auth::id();
-        $data['updated_by'] = Auth::id();
 
         TV::create($data);
 
@@ -66,9 +97,8 @@ class TVController extends Controller
             'location' => 'required',
             'serial_number' => 'required',
             'status' => 'required',
+            'datePurchased' => 'nullable|date',
         ]);
-
-        $data['updated_by'] = Auth::id();
 
         $tv->update($data);
 

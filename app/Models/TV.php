@@ -20,6 +20,7 @@ class TV extends Model
         'location',
         'serial_number',
         'status',
+        'datePurchased',
         'created_by',
         'updated_by'
     ];

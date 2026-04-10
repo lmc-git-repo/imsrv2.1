@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('serial_number');
             $table->enum('status', ['Deployed','Spare','For Disposal','Borrow']);
             $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
         });
     }

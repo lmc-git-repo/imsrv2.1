@@ -4,9 +4,6 @@ import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, FileInput, Label, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 
-
-
-
 const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, compUsersFnameList, generations }) => {
     if (!show) return null;
 

@@ -4,20 +4,22 @@ import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, Label, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 
-export default function Edit({ show, onClose, selected }) {
+const EditModalComponent = ({ show, onClose, selected }) => {
     if (!show || !selected) return null;
 
-    const { data, setData, post, errors } = useForm({
+    const { data, setData, post, errors, reset } = useForm({
         brand: selected.brand || '',
         model: selected.model || '',
         asset_tag: selected.asset_tag || '',
         location: selected.location || '',
         serial_number: selected.serial_number || '',
         status: selected.status || '',
+        datePurchased: selected.datePurchased || '',
         _method: 'PUT',
     });
 
     const [loading, setLoading] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
 
     useEffect(() => {
         if (selected) {
@@ -28,10 +30,29 @@ export default function Edit({ show, onClose, selected }) {
                 location: selected.location || '',
                 serial_number: selected.serial_number || '',
                 status: selected.status || '',
+                datePurchased: selected.datePurchased || '',
                 _method: 'PUT',
             });
+            setHasChanges(false);
         }
     }, [selected]);
+
+    useEffect(() => {
+        if (selected) {
+            const original = {
+                brand: selected.brand || '',
+                model: selected.model || '',
+                asset_tag: selected.asset_tag || '',
+                location: selected.location || '',
+                serial_number: selected.serial_number || '',
+                status: selected.status || '',
+                datePurchased: selected.datePurchased || '',
+            };
+
+            const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
+            setHasChanges(isChanged);
+        }
+    }, [data, selected]);
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -41,20 +62,21 @@ export default function Edit({ show, onClose, selected }) {
             onSuccess: () => {
                 setLoading(false);
                 onClose();
+                reset();
             },
-            onError: () => setLoading(false),
+            onError: () => {
+                setLoading(false);
+            }
         });
     };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-
             <Modal show={show} onClose={onClose} className="" style={{ overflowY: 'scroll', scrollbarWidth: 'none' }}>
                 <Modal.Header className="p-4">
-                    Edit Television
+                    Edit Television - {selected && selected.brand}
                 </Modal.Header>
-
                 <Modal.Body className=''>
                     <form action="" onSubmit={onSubmit}>
                         <div className="space-y-6">
@@ -65,8 +87,8 @@ export default function Edit({ show, onClose, selected }) {
                                 </div>
                                 <TextInput
                                     id="brand"
-                                    type="text"
-                                    name="brand"
+                                    type='text'
+                                    name='brand'
                                     value={data.brand}
                                     onChange={(e) => setData('brand', e.target.value)}
                                     required
@@ -80,8 +102,8 @@ export default function Edit({ show, onClose, selected }) {
                                 </div>
                                 <TextInput
                                     id="model"
-                                    type="text"
-                                    name="model"
+                                    type='text'
+                                    name='model'
                                     value={data.model}
                                     onChange={(e) => setData('model', e.target.value)}
                                     required
@@ -95,8 +117,8 @@ export default function Edit({ show, onClose, selected }) {
                                 </div>
                                 <TextInput
                                     id="asset_tag"
-                                    type="text"
-                                    name="asset_tag"
+                                    type='text'
+                                    name='asset_tag'
                                     value={data.asset_tag}
                                     onChange={(e) => setData('asset_tag', e.target.value)}
                                     required
@@ -110,8 +132,8 @@ export default function Edit({ show, onClose, selected }) {
                                 </div>
                                 <TextInput
                                     id="location"
-                                    type="text"
-                                    name="location"
+                                    type='text'
+                                    name='location'
                                     value={data.location}
                                     onChange={(e) => setData('location', e.target.value)}
                                     required
@@ -125,8 +147,8 @@ export default function Edit({ show, onClose, selected }) {
                                 </div>
                                 <TextInput
                                     id="serial_number"
-                                    type="text"
-                                    name="serial_number"
+                                    type='text'
+                                    name='serial_number'
                                     value={data.serial_number}
                                     onChange={(e) => setData('serial_number', e.target.value)}
                                     required
@@ -139,7 +161,7 @@ export default function Edit({ show, onClose, selected }) {
                                     <Label htmlFor="status" value="Status" />
                                 </div>
                                 <SelectInput
-                                    name="status"
+                                    name='status'
                                     id="status"
                                     value={data.status}
                                     onChange={(e) => setData('status', e.target.value)}
@@ -154,15 +176,28 @@ export default function Edit({ show, onClose, selected }) {
                                 <InputError message={errors.status} className='mt-2' />
                             </div>
 
+                            <div>
+                                <div className="mb-2 block">
+                                    <Label htmlFor="datePurchased" value="Date Purchased" />
+                                </div>
+                                <TextInput
+                                    id="datePurchased"
+                                    type='date'
+                                    name='datePurchased'
+                                    value={data.datePurchased || ''}
+                                    onChange={(e) => setData('datePurchased', e.target.value)}
+                                />
+                                <InputError message={errors.datePurchased} className='mt-2' />
+                            </div>
+
                             <div className='flex justify-end'>
                                 <Link href={route('tv.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                     Cancel
                                 </Link>
-
                                 <button
                                     type="submit"
-                                    className={`bg-blue-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
-                                    disabled={loading}
+                                    className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${!hasChanges || loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
+                                    disabled={!hasChanges || loading}
                                 >
                                     {loading ? (
                                         <span className="flex items-center">
@@ -177,11 +212,9 @@ export default function Edit({ show, onClose, selected }) {
                                     )}
                                 </button>
                             </div>
-
                         </div>
                     </form>
                 </Modal.Body>
-
                 <Modal.Footer>
                     <Button onClick={onClose} color="blue">
                         Close
@@ -190,4 +223,6 @@ export default function Edit({ show, onClose, selected }) {
             </Modal>
         </div>
     );
-}
+};
+
+export default EditModalComponent;

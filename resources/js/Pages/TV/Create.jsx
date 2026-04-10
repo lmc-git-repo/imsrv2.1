@@ -4,7 +4,7 @@ import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, Label, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 
-export default function Create({ show, onClose }) {
+const CreateModalComponent = ({ show, onClose }) => {
     if (!show) return null;
 
     const { data, setData, post, errors, reset } = useForm({
@@ -14,6 +14,7 @@ export default function Create({ show, onClose }) {
         location: '',
         serial_number: '',
         status: '',
+        datePurchased: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -37,12 +38,10 @@ export default function Create({ show, onClose }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-
             <Modal show={show} onClose={onClose} className="" style={{ overflowY: 'scroll', scrollbarWidth: 'none' }}>
                 <Modal.Header className="p-4">
                     Add New Television
                 </Modal.Header>
-
                 <Modal.Body className=''>
                     <form action="" onSubmit={onSubmit}>
                         <div className="space-y-6">
@@ -53,8 +52,8 @@ export default function Create({ show, onClose }) {
                                 </div>
                                 <TextInput
                                     id="brand"
-                                    type="text"
-                                    name="brand"
+                                    type='text'
+                                    name='brand'
                                     value={data.brand}
                                     onChange={(e) => setData('brand', e.target.value)}
                                     required
@@ -68,8 +67,8 @@ export default function Create({ show, onClose }) {
                                 </div>
                                 <TextInput
                                     id="model"
-                                    type="text"
-                                    name="model"
+                                    type='text'
+                                    name='model'
                                     value={data.model}
                                     onChange={(e) => setData('model', e.target.value)}
                                     required
@@ -83,8 +82,8 @@ export default function Create({ show, onClose }) {
                                 </div>
                                 <TextInput
                                     id="asset_tag"
-                                    type="text"
-                                    name="asset_tag"
+                                    type='text'
+                                    name='asset_tag'
                                     value={data.asset_tag}
                                     onChange={(e) => setData('asset_tag', e.target.value)}
                                     required
@@ -98,8 +97,8 @@ export default function Create({ show, onClose }) {
                                 </div>
                                 <TextInput
                                     id="location"
-                                    type="text"
-                                    name="location"
+                                    type='text'
+                                    name='location'
                                     value={data.location}
                                     onChange={(e) => setData('location', e.target.value)}
                                     required
@@ -113,8 +112,8 @@ export default function Create({ show, onClose }) {
                                 </div>
                                 <TextInput
                                     id="serial_number"
-                                    type="text"
-                                    name="serial_number"
+                                    type='text'
+                                    name='serial_number'
                                     value={data.serial_number}
                                     onChange={(e) => setData('serial_number', e.target.value)}
                                     required
@@ -127,7 +126,7 @@ export default function Create({ show, onClose }) {
                                     <Label htmlFor="status" value="Status" />
                                 </div>
                                 <SelectInput
-                                    name="status"
+                                    name='status'
                                     id="status"
                                     value={data.status}
                                     onChange={(e) => setData('status', e.target.value)}
@@ -142,11 +141,24 @@ export default function Create({ show, onClose }) {
                                 <InputError message={errors.status} className='mt-2' />
                             </div>
 
+                            <div>
+                                <div className="mb-2 block">
+                                    <Label htmlFor="datePurchased" value="Date Purchased" />
+                                </div>
+                                <TextInput
+                                    id="datePurchased"
+                                    type='date'
+                                    name='datePurchased'
+                                    value={data.datePurchased}
+                                    onChange={(e) => setData('datePurchased', e.target.value)}
+                                />
+                                <InputError message={errors.datePurchased} className='mt-2' />
+                            </div>
+
                             <div className='flex justify-end'>
                                 <Link href={route('tv.index')} className='bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2'>
                                     Cancel
                                 </Link>
-
                                 <button
                                     type="submit"
                                     className={`bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'}`}
@@ -161,15 +173,13 @@ export default function Create({ show, onClose }) {
                                             Processing...
                                         </span>
                                     ) : (
-                                        'Save'
+                                        'Submit'
                                     )}
                                 </button>
                             </div>
-
                         </div>
                     </form>
                 </Modal.Body>
-
                 <Modal.Footer>
                     <Button onClick={onClose} color="blue">
                         Close
@@ -178,4 +188,6 @@ export default function Create({ show, onClose }) {
             </Modal>
         </div>
     );
-}
+};
+
+export default CreateModalComponent;

@@ -1,9 +1,11 @@
-//Components/hooks/printAssetTag.jsx
 const generateAssetContent = (asset, assetType) => {
     const formatDate = date => {
+        if (!date) return 'N/A';
         const d = new Date(date);
+        if (isNaN(d.getTime())) return 'N/A';
         return `${('0' + (d.getMonth() + 1)).slice(-2)}/${('0' + d.getDate()).slice(-2)}/${d.getFullYear()}`;
     };
+
     const assetDetails = {
         computer: `
             <div class="column">
@@ -27,7 +29,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -61,7 +63,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -95,7 +97,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -129,7 +131,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -163,7 +165,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -197,7 +199,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">${formatDate(asset.datePurchased) || 'N/A'}</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -231,7 +233,7 @@ const generateAssetContent = (asset, assetType) => {
             <div class="column2">
                 <div class="row">
                     <div class="label">Date Purchased:</div>
-                    <div class="large-text">N/A</div>
+                    <div class="large-text">${formatDate(asset.datePurchased)}</div>
                 </div>
                 <div class="row">
                     <div class="label">Department:</div>
@@ -361,24 +363,23 @@ export const printAssetTag = (asset, assetType) => {
                 padding: 0 1%;
             }
             .label{
-                /* border: 1px solid green; */
                 font-weight: bold;
                 padding: 0 auto;
-                font-size: 9px; /* Reduced font size */
+                font-size: 9px;
             }
             .large-text{
                 display: flex;
                 justify-content: center;
                 font-weight: bold;
                 padding: 0 auto;
-                font-size: 15px; /* Reduced font size */
+                font-size: 15px;
             }
             .small-text{
                 display: flex;
                 justify-content: center;
                 font-weight: bold;
                 padding: 0 auto;
-                font-size: 8px; /* Reduced font size */
+                font-size: 8px;
             }
         </style>
     `);
