@@ -209,6 +209,40 @@ const generateAssetContent = (asset, assetType) => {
                 </div>
             </div>
         `,
+        tv: `
+            <div class="column">
+                <div class="row">
+                    <div class="label">Asset Tag No:</div>
+                    <div class="large-text"><strong>${asset.asset_tag || 'N/A'}</strong></div>
+                </div>
+                <div class="row">
+                    <div class="label">Description:</div>
+                    <div class="small-text">${asset.model || 'N/A'}</div>
+                </div>
+                <div class="row">
+                    <div class="label">Model No.:</div>
+                    <div class="small-text">${asset.model || 'N/A'}</div>
+                </div>
+                <div class="row">
+                    <div class="label">Serial No.:</div>
+                    <div class="small-text">${asset.serial_number || 'N/A'}</div>
+                </div>
+            </div>
+            <div class="column2">
+                <div class="row">
+                    <div class="label">Date Purchased:</div>
+                    <div class="large-text">N/A</div>
+                </div>
+                <div class="row">
+                    <div class="label">Department:</div>
+                    <div class="large-text">${asset.location || 'N/A'}</div>
+                </div>
+                <div class="row">
+                    <div class="label">Issued To:</div>
+                    <div class="small-text">${asset.brand || 'N/A'}</div>
+                </div>
+            </div>
+        `,
     };
 
     return assetDetails[assetType] || '<p>Unknown asset type.</p>';
@@ -218,7 +252,6 @@ export const printAssetTag = (asset, assetType) => {
     const printWindow = window.open('', '', 'height=600,width=800');
     printWindow.document.write('<html><head><title>Asset Tag</title>');
     
-    // Updated inline styles
     printWindow.document.write(`
         <style>
             body {
@@ -228,7 +261,6 @@ export const printAssetTag = (asset, assetType) => {
                 width: 325px;
                 border: 2px solid black;
                 padding: 2px;
-                /* margin: 20px auto; */
             }
 
             .header {
@@ -236,7 +268,6 @@ export const printAssetTag = (asset, assetType) => {
                 color: white;
                 padding: 0px 0;
                 display: flex;
-                /* border: 1px solid red; */
                 text-align: center;
                 margin-bottom: 1px;
                 border: 1px solid black;
@@ -247,14 +278,12 @@ export const printAssetTag = (asset, assetType) => {
                 margin: 0;
             }
             .header .logo{
-                /* border: 1px solid #fff; */
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 padding: 0 1%;
             }
             .header .lmc{
-                /* border: 1px solid cyan; */
                 flex-grow: 1;
             }
 
@@ -279,12 +308,10 @@ export const printAssetTag = (asset, assetType) => {
                 display: flex;
                 justify-content: space-between;
                 border: 1px solid #000;
-                /* padding: 1%; */
                 margin-bottom: 1px;
             }
             .column{
                 flex-grow: 1;
-                // border: 1px solid red;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
@@ -293,7 +320,6 @@ export const printAssetTag = (asset, assetType) => {
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
-                // border: 1px solid green;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
@@ -308,10 +334,10 @@ export const printAssetTag = (asset, assetType) => {
                 flex-grow: 1;
             }
             .column2 .row:last-child .small-text{
-                word-wrap: break-word; /* Allow long words to break */
-                overflow: hidden;    /* Hide the overflowing text */
-                text-overflow: ellipsis; /* Show "..." when text overflows */
-                max-width: 100%;     /* Set the max width to control when the overflow happens */
+                word-wrap: break-word; 
+                overflow: hidden;    
+                text-overflow: ellipsis; 
+                max-width: 100%;     
                 font-size: 10px;
             }
             .column2 .row:first-child .large-text{
@@ -359,8 +385,6 @@ export const printAssetTag = (asset, assetType) => {
 
     printWindow.document.write('</head><body>');
     printWindow.document.write('<div class="asset-tag">');
-
-    // Updated Header
     printWindow.document.write(`
         <div class="header">
             <div class="logo">
@@ -372,13 +396,9 @@ export const printAssetTag = (asset, assetType) => {
             </div>
         </div>
     `);
-
-    // Generate dynamic asset content
     printWindow.document.write('<div class="asset-tag-body">');
     printWindow.document.write(generateAssetContent(asset, assetType));
     printWindow.document.write('</div>');
-
-    // Updated Footer
     printWindow.document.write(`
         <div class="footer">
             <p>DO NOT REMOVE UNDER LMC-GCP POLICY</p>
@@ -392,39 +412,3 @@ export const printAssetTag = (asset, assetType) => {
     printWindow.focus();
     printWindow.print();
 };
-
-
-
-
-
-// printAssetTag.jsx
-// export const printAssetTag = (asset, type) => {
-//     let url = '';
-
-//     switch (type) {
-//         case 'computer':
-//             url = route('computers.printAssetTag', { id: asset.CID });
-//             break;
-//         case 'serverups':
-//             url = route('serverups.printAssetTag', { id: asset.S_UID });
-//             break;
-//         case 'monitor':
-//             url = route('monitors.printAssetTag', { id: asset.monitor_id });
-//             break;
-//         case 'printer':
-//             url = route('printers.printAssetTag', { id: asset.printer_id });
-//             break;
-//         case 'tablet':
-//             url = route('tablets.printAssetTag', { id: asset.tablet_id });
-//             break;
-//         case 'phone':
-//             url = route('phones.printAssetTag', { id: asset.phone_id });
-//             break;
-//         // Add other asset types as needed
-//         default:
-//             console.error('Unknown asset type');
-//             return;
-//     }
-
-//     window.open(url, '_blank');
-// };

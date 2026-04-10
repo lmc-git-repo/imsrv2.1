@@ -8,7 +8,9 @@ import Edit from './Edit'
 import Pagination from '@/Components/Pagination'
 import TextInput from '@/Components/TextInput'
 import SelectInput from '@/Components/SelectInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { printAssetTag } from '@/Components/hooks/printAssetTag'
+import bulkPrintAssetTags from '@/Components/hooks/bulkPrintAssetTags'
 
 export default function Index({ auth, tv, success, queryParams = null }) {
     const { showCreateModal, openCreateModal, closeCreateModal } = useCreateModal();
@@ -20,10 +22,60 @@ export default function Index({ auth, tv, success, queryParams = null }) {
         search: queryParams.search || '',
         status: queryParams.status || '',
     });
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    useEffect(() => {
+        const savedSelectedItems = JSON.parse(localStorage.getItem('selectedTVItems')) || [];
+        setSelectedItems(savedSelectedItems);
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('selectedTVItems', JSON.stringify(selectedItems));
+    }, [selectedItems]);
 
     const deleteTV = (item) => {
         if (!confirm('Delete this TV?')) return;
         router.delete(route('tv.destroy', item.TID));
+    };
+
+    const handlePrint = (item) => {
+        printAssetTag(item, 'tv');
+    };
+
+    const handleSelectAll = (e) => {
+        const allIDsOnPage = (tv?.data || []).map((item) => item.TID);
+
+        if (e.target.checked) {
+            setSelectedItems((prevSelected) => [
+                ...new Set([...(prevSelected || []), ...allIDsOnPage]),
+            ]);
+        } else {
+            setSelectedItems((prevSelected) =>
+                (prevSelected || []).filter((id) => !allIDsOnPage.includes(id))
+            );
+        }
+    };
+
+    const handleSelectItem = (TID) => {
+        setSelectedItems((prevSelected) =>
+            (prevSelected || []).includes(TID)
+                ? prevSelected.filter((id) => id !== TID)
+                : [...(prevSelected || []), TID]
+        );
+    };
+
+    const handleBulkPrint = () => {
+        const selectedItemDetails = (tv?.data || []).filter((item) =>
+            selectedItems.includes(item.TID)
+        );
+
+        if (selectedItemDetails.length === 0) {
+            return;
+        }
+
+        bulkPrintAssetTags(selectedItemDetails, 'tv');
+        setSelectedItems([]);
+        localStorage.removeItem('selectedTVItems');
     };
 
     const applyFilters = (nextFilters) => {
@@ -70,7 +122,7 @@ export default function Index({ auth, tv, success, queryParams = null }) {
                         Television List
                     </h2>
 
-                    <div className='flex gap-2'>
+                    <div className='flex justify-between w-auto lg:w-1/4 gap-auto gap-2'>
                         <Button
                             onClick={() => openCreateModal()}
                             className='bg-emerald-500 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -83,6 +135,14 @@ export default function Index({ auth, tv, success, queryParams = null }) {
                                 Add
                             </span>
                         </Button>
+
+                        <button
+                            onClick={handleBulkPrint}
+                            disabled={selectedItems.length === 0}
+                            className="bg-blue-500 text-white rounded shadow p-2"
+                        >
+                            Bulk Print Asset Tags
+                        </button>
                     </div>
                 </div>
             }
@@ -131,6 +191,9 @@ export default function Index({ auth, tv, success, queryParams = null }) {
                                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
+                                            <th className="px-3 py-3">
+                                                <input type="checkbox" onChange={handleSelectAll} />
+                                            </th>
                                             <th className="px-3 py-3">Brand</th>
                                             <th className="px-3 py-3">Model</th>
                                             <th className="px-3 py-3">Asset Tag</th>
@@ -145,7 +208,13 @@ export default function Index({ auth, tv, success, queryParams = null }) {
                                         {(tv?.data || []).length > 0 ? (
                                             tv.data.map(item => (
                                                 <tr key={item.TID} className="bg-white border-b dark:bg-slate-800 dark:border-gray-700">
-
+                                                    <td className="px-3 py-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedItems.includes(item.TID)}
+                                                            onChange={() => handleSelectItem(item.TID)}
+                                                        />
+                                                    </td>
                                                     <td className="px-3 py-2">{item.brand}</td>
                                                     <td className="px-3 py-2">{item.model}</td>
                                                     <td className="px-3 py-2">{item.asset_tag}</td>
@@ -184,12 +253,21 @@ export default function Index({ auth, tv, success, queryParams = null }) {
                                                                 </svg>
                                                             </span>
                                                         </button>
+
+                                                        <button
+                                                            className="inline-block py-1 px-2 text-green-500 hover:text-green-300 hover:scale-110 mx-1"
+                                                            onClick={(e) => { e.stopPropagation(); handlePrint(item); }}
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                                            </svg>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr className='text-center'>
-                                                <td className='font-medium text-base py-4' colSpan="7">
+                                                <td className='font-medium text-base py-4' colSpan="8">
                                                     No data available
                                                 </td>
                                             </tr>
