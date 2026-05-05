@@ -32,7 +32,7 @@ class StoreComputersRequest extends FormRequest
             "comp_name" => ['required', 'max:255', Rule::unique('computers', 'comp_name')],
             "img_path" => ['nullable', 'image'],
             "comp_model" => ['required', 'max:255'],
-            "comp_type" => ['required', Rule::in(['Desktop','Laptop'])],
+            "comp_type" => ['required', Rule::in(['Desktop','Laptop','Mini PC'])],
             "comp_user" => ['required', Rule::in($comp_users)],
             "fullName" => ['required', Rule::in($fullName)],
             "department_comp" => ['required', Rule::in($departments)],

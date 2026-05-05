@@ -30,7 +30,6 @@ class ComputersController extends Controller
             ->with(['createdBy', 'updatedBy'])
             ->orderBy($sortField, $sortDirection)
 
-            // 🔍 SEARCH (EXISTING – UNTOUCHED)
             ->when(request('search'), function (Builder $query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('comp_name', 'like', "%{$search}%")

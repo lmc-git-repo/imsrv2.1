@@ -345,6 +345,7 @@ export default function Index({
                       <option value="">Comp Type</option>
                       <option value="Desktop">Desktop</option>
                       <option value="Laptop">Laptop</option>
+                      <option value="Mini PC">Mini PC</option>
                     </SelectInput>
                   </div>
                   <div>

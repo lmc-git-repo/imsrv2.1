@@ -185,9 +185,10 @@ const EditModalComponent = ({ show, onClose, listDepartments, generations, listC
                                             onChange={(e) => setData("comp_type", e.target.value)}
                                             required 
                                         >
-                                            <option value="">Select Computer Type: </option>
+                                            <option value="">Select Computer Type </option>
                                             <option value="Desktop">Desktop</option>
                                             <option value="Laptop">Laptop</option>
+                                            <option value="Mini PC">Mini PC</option>
                                         </SelectInput>
                                         <InputError message={errors.comp_type} className='mt-2' />
                                     </div>

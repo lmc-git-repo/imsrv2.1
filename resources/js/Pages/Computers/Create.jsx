@@ -105,7 +105,7 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, c
                                     </div>
                                     <div>
                                         <div className="mb-2 block">
-                                            <Label htmlFor="comp_type" value="Computer Type:" />
+                                            <Label htmlFor="comp_type" value="Computer Type" />
                                         </div>
                                         <SelectInput 
                                             name='comp_type' 
@@ -113,9 +113,10 @@ const CreateModalComponent = ({ show, onClose, departmentsList, compUsersList, c
                                             onChange={(e) => setData("comp_type", e.target.value)}
                                             required 
                                         >
-                                            <option value="">Select Type: </option>
+                                            <option value="">Select Type </option>
                                             <option value="Desktop">Desktop</option>
                                             <option value="Laptop">Laptop</option>
+                                            <option value="Mini PC">Mini PC</option>
                                         </SelectInput>
                                         <InputError message={errors.comp_type} className='mt-2' />
                                     </div>
