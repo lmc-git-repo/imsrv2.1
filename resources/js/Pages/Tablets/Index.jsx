@@ -10,9 +10,6 @@ import TableHeading from '@/Components/TableHeading'
 import { Modal, Button } from 'flowbite-react';
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-// import useModal from './hooks/useModal'
-// import useCreateModal from './hooks/useCreateModal'
-// import useEditModal from './hooks/useEditModal'
 import useCreateModal from '@/Components/hooks/useCreateModal'
 import useEditModal from '@/Components/hooks/useEditModal'
 
@@ -36,18 +33,15 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
     const [departmentTablet, setDepartmentTablet] = useState(queryParams.department_tablet || '');
     const [selectedItems, setSelectedItems] = useState([]);
 
-    // Load selectedItems from localStorage on component mount
     useEffect(() => {
         const savedSelectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
         setSelectedItems(savedSelectedItems);
     }, []);
 
-    // Save selectedItems to localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
     }, [selectedItems]);
 
-    // Handle search query change with debouncing to improve performance
     const handleSearchChange = useMemo(() =>
         debounce((query) => {
     
@@ -57,9 +51,7 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
             route('tablets.index'),
             {
               ...queryParams,
-              search: query,
-              
-              // This time add other filters 
+              search: query, 
               tablet_status: tabletStatus,
               asset_status: assetClass,
               tablet_gen: tabletGen,
@@ -68,8 +60,7 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
             },
             {preserveState: true, preserveScroll: true}
           )
-        }, 300), [queryParams, tabletStatus, assetClass, tabletGen, departmentTablet]); // need to add dependency for queryParams changes
-    //end
+        }, 300), [queryParams, tabletStatus, assetClass, tabletGen, departmentTablet]); 
 
     const handleFilterChange = useCallback((name, value) => {
         router.get(
@@ -83,13 +74,11 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
             {preserveScroll: true}
         );
       }, [queryParams]);
-    //end
     
     const searchFieldChanged = (value) => {
         handleSearchChange(value);
     }; 
 
-    // Key press event handler (specifically for Enter key)
     const onKeyPress = (e) => {
         if(e.key !== 'Enter') return;
         
@@ -102,8 +91,8 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
         setLoading(true);
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 800); // Simulate a delay, adjust based on actual data processing
-        return () => clearTimeout(timer); // Cleanup timer on component unmount or if effect dependencies change
+        }, 800); 
+        return () => clearTimeout(timer); 
     }, [tabletStatus, assetClass, tabletGen, departmentTablet, searchQuery]);
 
     const handleSelectChange = (name, value) => {
@@ -127,7 +116,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
         handleFilterChange(name, value);
     };
 
-    // Sort change handler
     const sortChanged = (name) => {
         if(name === queryParams.sort_field){
             queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
@@ -148,15 +136,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
     const handlePrint = (tablet) => {
         printAssetTag(tablet, 'tablet');
     };
-
-    // const handleSelectAll = (e) => {
-    //     if (e.target.checked) {
-    //         const allIDs = tablets.data.map((item) => item.tablet_id);
-    //         setSelectedItems(allIDs);
-    //     } else {
-    //         setSelectedItems([]);
-    //     }
-    // };
 
     const handleSelectAll = (e) => {
         const allIDsOnPage = tablets.data.map((item) => item.tablet_id);
@@ -182,7 +161,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
 
     const handleBulkPrint = () => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        // console.log('CSRF Token:', csrfToken);
         if (!csrfToken) {
             console.error('CSRF token not found in the document.');
             return;
@@ -214,8 +192,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
             .then((missingItems) => {
                 const allItemsToPrint = [...selectedItemDetails, ...missingItems];
                 bulkPrintAssetTags(allItemsToPrint, 'tablet');
-
-                // Clear selected items and remove from localStorage
                 setSelectedItems([]);
                 localStorage.removeItem('selectedItems');
             })
@@ -223,10 +199,7 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                 console.error('Error fetching missing items:', error);
             });
         } else {
-            // console.log('All Selected Items:', selectedItemDetails);
             bulkPrintAssetTags(selectedItemDetails, 'tablet'); 
-            
-            // Clear selected items and remove from localStorage
             setSelectedItems([]);
             localStorage.removeItem('selectedItems');
         }
@@ -330,6 +303,21 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                     <div>
                                         <SelectInput 
                                             className="w-full text-sm h-8 py-1"
+                                            defaultValue={departmentTablet}
+                                            onChange={(e) => handleSelectChange('department_tablet', e.target.value)}
+                                        >
+                                            <option value="">Select Department</option>
+                                            {departmentsList.data.map(dept => (
+                                                <option key={dept.dept_id} value={dept.dept_list}>
+                                                    {dept.dept_list}
+                                                </option>
+                                            ))}
+                                        </SelectInput>
+                                    </div>
+
+                                    <div>
+                                        <SelectInput 
+                                            className="w-full text-sm h-8 py-1"
                                             defaultValue={tabletGen}
                                             onChange={(e) => handleSelectChange('tablet_gen', e.target.value)}
                                         >
@@ -371,22 +359,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                             >
                                                 Tablet Model
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="tablet_type"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Tablet Type
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="tablet_user"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                User
-                                            </TableHeading> */}
                                             
                                             <TableHeading
                                                 name="fullName"
@@ -405,30 +377,7 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                             >
                                                 Department
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="tablet_os"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Operating System
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="tablet_storage"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Tablet Storage
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="tablet_serial"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Tablet Serial
-                                            </TableHeading> */}
+
                                             <TableHeading
                                                 name="tablet_asset"
                                                 sort_field={queryParams.sort_field} 
@@ -437,38 +386,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                             >
                                                 Tablet Asset
                                             </TableHeading>
-                                            {/* <TableHeading
-                                                name="tablet_cpu"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Processor
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="tablet_gen"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Tablet Gen
-                                            </TableHeading> */}
-                                            {/* <TableHeading
-                                                name="tablet_address"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Mac Address
-                                            </TableHeading>
-                                            <TableHeading
-                                                name="tablet_prdctkey"
-                                                sort_field={queryParams.sort_field} 
-                                                sort_direction={queryParams.sort_direction}
-                                                sortChanged={sortChanged}
-                                            >
-                                                Product Key
-                                            </TableHeading> */}
 
                                             <TableHeading
                                                 name="tablet_status"
@@ -541,18 +458,9 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                                             <img src={tablet.img_path} alt="" style={{width: 60}} />
                                                         </td>
                                                         <td className="px-3 py-2">{tablet.tablet_model}</td>
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_type}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_user}</td> */}
                                                         <td className="px-3 py-2">{tablet.fullName}</td>
                                                         <td className="px-3 py-2">{tablet.department_tablet}</td>
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_os}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_storage}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_serial}</td> */}
                                                         <td className="px-3 py-2">{tablet.tablet_asset}</td>
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_cpu}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_gen}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_address}</td> */}
-                                                        {/* <td className="px-3 py-2">{tablet.tablet_prdctkey}</td> */}
                                                         <td className="px-3 py-2 text-nowrap">
                                                             <span className={'px-2 rounded-e-full text-white ' + TABLETS_STATUS_CLASS_MAP[tablet.tablet_status]}>{TABLETS_STATUS_TEXT_MAP[tablet.tablet_status]}</span>
                                                         </td>
@@ -560,7 +468,6 @@ export default function Index({auth, tablets, departmentsList, generations, tabl
                                                         <td className="px-3 py-2">{tablet.createdBy.name}</td>
                                                         <td className="px-3 py-2 text-nowrap">{tablet.created_at}</td>
                                                         <td className="px-3 py-2 text-right text-nowrap">
-                                                            {/* <Link href={route('tablets.edit', tablet.tablet_id)} className="font-medium inline-block py-1 px-2 rounded-lg  text-white  bg-blue-600 hover:bg-blue-700 mx-1">Edit</Link> */}
                                                             {(auth.user.role === 'super admin' || auth.user.role === 'admin') && (
                                                                 <button
                                                                     className="inline-block py-1 px-2  text-blue-500 hover:text-blue-300 hover:scale-110 hover:animate-spin mx-1" 
