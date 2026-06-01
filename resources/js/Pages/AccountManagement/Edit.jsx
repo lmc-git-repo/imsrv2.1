@@ -15,6 +15,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
         managementIp: selectedEdit.managementIp || "",
         username: selectedEdit.username || "",
         password: selectedEdit.password || "",
+        localPassword: selectedEdit.localPassword || "",
         _method: 'PUT',
     });
 
@@ -30,6 +31,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                 managementIp: selectedEdit.managementIp || "",
                 username: selectedEdit.username || "",
                 password: selectedEdit.password || "",
+                localPassword: selectedEdit.localPassword || "",
                 _method: 'PUT',
             });
             setHasChanges(false);
@@ -44,6 +46,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                 managementIp: selectedEdit.managementIp || "",
                 username: selectedEdit.username || "",
                 password: selectedEdit.password || "",
+                localPassword: selectedEdit.localPassword || "",
             };
             const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
             setHasChanges(isChanged);
@@ -144,6 +147,21 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                                 required 
                             />
                             <InputError message={errors.password} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="localPassword" value="Enter Local Password" />
+                            </div>
+                            <TextInput 
+                                id="localPassword" 
+                                type="text"
+                                name='localPassword' 
+                                value={data.localPassword}
+                                onChange={(e) => setData("localPassword", e.target.value)}
+                                required 
+                            />
+                            <InputError message={errors.localPassword} className='mt-2' />
                         </div>
 
                         <div className='flex justify-end'>

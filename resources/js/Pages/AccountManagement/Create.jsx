@@ -14,6 +14,7 @@ const CreateModalComponent = ({ show, onClose }) => {
         managementIp: '',
         username: '',
         password: '',
+        localPassword: '',
     })
     const [loading, setLoading] = useState(false);
 
@@ -102,6 +103,21 @@ const CreateModalComponent = ({ show, onClose }) => {
                                 required 
                             />
                             <InputError message={errors.password} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="localPassword" value="Enter Local Password" />
+                            </div>
+                            <TextInput 
+                            id="localPassword" 
+                            type="text"
+                            name='localPassword' 
+                            value={data.localPassword}
+                            onChange={(e) => setData("localPassword", e.target.value)}
+                            required 
+                            />
+                            <InputError message={errors.localPassword} className='mt-2' />
                         </div>
 
                         <div className='flex justify-end'>

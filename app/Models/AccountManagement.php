@@ -9,7 +9,7 @@ class AccountManagement extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['equipmentName', 'managementIp', 'username', 'password', 'created_by', 'updated_by'];
+    protected $fillable = ['equipmentName', 'managementIp', 'username', 'password', 'localPassword', 'created_by', 'updated_by'];
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');
     }

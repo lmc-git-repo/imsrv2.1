@@ -9,11 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AccountManagementResource extends JsonResource
 {
     public static $wrap = false;
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+
     public function toArray(Request $request): array
     {
         return [
@@ -22,6 +18,7 @@ class AccountManagementResource extends JsonResource
             'managementIp' => $this->managementIp,
             'username' => $this->username,
             'password' => $this->password,
+            'localPassword' => $this->localPassword,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);
             }),
@@ -29,7 +26,6 @@ class AccountManagementResource extends JsonResource
                 return new UserResource($this->updatedBy);
             }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
-            // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];
     }
 }
