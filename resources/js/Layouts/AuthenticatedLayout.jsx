@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -7,6 +7,172 @@ import { Link } from '@inertiajs/react';
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    const scannerBufferRef = useRef('');
+    const scannerTimerRef = useRef(null);
+    const scannerLastKeyTimeRef = useRef(0);
+
+    useEffect(() => {
+        const allowedInventoryPaths = [
+            '/computers',
+            '/serverups',
+            '/serverUps',
+            '/monitors',
+            '/printers',
+            '/tablets',
+            '/phones',
+            '/tv',
+        ];
+
+        const resetScannerBuffer = () => {
+            scannerBufferRef.current = '';
+            scannerLastKeyTimeRef.current = 0;
+
+            if (scannerTimerRef.current) {
+                clearTimeout(scannerTimerRef.current);
+                scannerTimerRef.current = null;
+            }
+        };
+
+        const processScannedValue = (scannedValue) => {
+            const value = String(scannedValue || '').trim();
+
+            if (!value) {
+                resetScannerBuffer();
+                return;
+            }
+
+            try {
+                let scannedUrl;
+
+                if (
+                    value.startsWith('http://') ||
+                    value.startsWith('https://')
+                ) {
+                    scannedUrl = new URL(value);
+                } else if (value.startsWith('/')) {
+                    scannedUrl = new URL(value, window.location.origin);
+                } else {
+                    resetScannerBuffer();
+                    return;
+                }
+
+                const normalizedPath = scannedUrl.pathname.replace(/\/+$/, '') || '/';
+
+                const isAllowedInventoryPath = allowedInventoryPaths.some(
+                    (allowedPath) =>
+                        normalizedPath.toLowerCase() === allowedPath.toLowerCase()
+                );
+
+                if (!isAllowedInventoryPath) {
+                    resetScannerBuffer();
+                    return;
+                }
+
+                const searchValue = scannedUrl.searchParams.get('search');
+
+                if (!searchValue) {
+                    resetScannerBuffer();
+                    return;
+                }
+
+                /*
+                 * The QR may contain localhost, a development URL, or an old
+                 * internal IP. Only its inventory path and search value are
+                 * used. The current system origin is retained.
+                 */
+                const redirectUrl = new URL(normalizedPath, window.location.origin);
+                redirectUrl.searchParams.set('search', searchValue);
+
+                resetScannerBuffer();
+
+                window.location.assign(redirectUrl.toString());
+            } catch (error) {
+                console.error('Unable to process scanned asset QR code:', error);
+                resetScannerBuffer();
+            }
+        };
+
+        const scheduleScannerProcessing = () => {
+            if (scannerTimerRef.current) {
+                clearTimeout(scannerTimerRef.current);
+            }
+
+            /*
+             * Also processes scanners that do not send Enter after scanning.
+             */
+            scannerTimerRef.current = setTimeout(() => {
+                const scannedValue = scannerBufferRef.current;
+
+                if (scannedValue.length >= 8) {
+                    processScannedValue(scannedValue);
+                } else {
+                    resetScannerBuffer();
+                }
+            }, 120);
+        };
+
+        const handleScannerKeyDown = (event) => {
+            if (event.ctrlKey || event.altKey || event.metaKey) {
+                return;
+            }
+
+            const currentTime = Date.now();
+            const elapsedTime =
+                scannerLastKeyTimeRef.current > 0
+                    ? currentTime - scannerLastKeyTimeRef.current
+                    : 0;
+
+            /*
+             * USB scanners normally send characters very quickly.
+             * Reset an old/incomplete buffer when the delay is too long.
+             */
+            if (
+                scannerLastKeyTimeRef.current > 0 &&
+                elapsedTime > 300 &&
+                event.key !== 'Enter'
+            ) {
+                resetScannerBuffer();
+            }
+
+            scannerLastKeyTimeRef.current = currentTime;
+
+            if (event.key === 'Enter') {
+                const scannedValue = scannerBufferRef.current;
+
+                if (scannedValue.length >= 8) {
+                    event.preventDefault();
+                    processScannedValue(scannedValue);
+                } else {
+                    resetScannerBuffer();
+                }
+
+                return;
+            }
+
+            if (event.key === 'Escape') {
+                resetScannerBuffer();
+                return;
+            }
+
+            if (event.key.length !== 1) {
+                return;
+            }
+
+            scannerBufferRef.current += event.key;
+            scheduleScannerProcessing();
+        };
+
+        window.addEventListener('keydown', handleScannerKeyDown, true);
+
+        return () => {
+            window.removeEventListener('keydown', handleScannerKeyDown, true);
+
+            if (scannerTimerRef.current) {
+                clearTimeout(scannerTimerRef.current);
+            }
+        };
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -26,52 +192,69 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 </NavLink>
 
                                 {(user.role === 'super admin' || user.role === 'admin' || user.role === 'member') && (
-                                    <div className='flex justify-center items-center'>
+                                    <div className="flex justify-center items-center">
                                         <Dropdown>
                                             <Dropdown.Trigger>
-                                                <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
+                                                <NavLink className="h-16" onClick={(e) => e.preventDefault()}>
                                                     Inventory
-                                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    <svg
+                                                        className="ms-1 h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
                                                     </svg>
                                                 </NavLink>
                                             </Dropdown.Trigger>
+
                                             <Dropdown.Content>
                                                 <Dropdown.Link href={route('computers.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('computers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Computers
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('serverUps.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('serverUps.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Server / UPS
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('monitors.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('monitors.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Monitors
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('printers.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('printers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Printers
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('tablets.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tablets.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Tablets
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('phones.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Phones
                                                     </div>
                                                 </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('tv.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tv.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Televisions
-                                                        </div>
-                                                        </Dropdown.Link>
+                                                    </div>
+                                                </Dropdown.Link>
+
                                                 <Dropdown.Link href={route('consumables.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('consumables.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                         Consumables
@@ -82,17 +265,27 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
-                                {(user.role === 'hr') && (
-                                    <div className='flex justify-center items-center'>
+                                {user.role === 'hr' && (
+                                    <div className="flex justify-center items-center">
                                         <Dropdown>
                                             <Dropdown.Trigger>
-                                                <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
+                                                <NavLink className="h-16" onClick={(e) => e.preventDefault()}>
                                                     Inventory
-                                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    <svg
+                                                        className="ms-1 h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
                                                     </svg>
                                                 </NavLink>
                                             </Dropdown.Trigger>
+
                                             <Dropdown.Content>
                                                 <Dropdown.Link href={route('phones.index')}>
                                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
@@ -104,33 +297,70 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </div>
                                 )}
 
-                                {(user.role === 'super admin') && (
-                                <>
-                                {/* Network Dropdown */}
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <NavLink className='h-16' onClick={(e) => e.preventDefault()}>
-                                            Network
-                                            <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                            </svg>
-                                        </NavLink>
-                                    </Dropdown.Trigger>
-                                    <Dropdown.Content>
-                                        <Dropdown.Link href={route('firewall.index')}><div className="block px-4 py-2 text-sm">Firewall</div></Dropdown.Link>
-                                        <Dropdown.Link href={route('server.index')}><div className="block px-4 py-2 text-sm">Server</div></Dropdown.Link>
-                                        <Dropdown.Link href={route('l2sw.index')}><div className="block px-4 py-2 text-sm">L2 Switch</div></Dropdown.Link>
-                                        <Dropdown.Link href={route('l3sw.index')}><div className="block px-4 py-2 text-sm">L3 Switch</div></Dropdown.Link>
-                                        <Dropdown.Link href={route('wap.index')}><div className="block px-4 py-2 text-sm">WAP</div></Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
+                                {user.role === 'super admin' && (
+                                    <>
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <NavLink className="h-16" onClick={(e) => e.preventDefault()}>
+                                                    Network
+                                                    <svg
+                                                        className="ms-1 h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </NavLink>
+                                            </Dropdown.Trigger>
 
-                                <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>CCTV</NavLink>
-                                <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>Account Management</NavLink>
-                                <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>MS Account</NavLink>
-                                <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>Printer Password</NavLink>
-                                <NavLink href={route('departments.index')} active={route().current('departments.index')}>Departments</NavLink>
-                                </>
+                                            <Dropdown.Content>
+                                                <Dropdown.Link href={route('firewall.index')}>
+                                                    <div className="block px-4 py-2 text-sm">Firewall</div>
+                                                </Dropdown.Link>
+
+                                                <Dropdown.Link href={route('server.index')}>
+                                                    <div className="block px-4 py-2 text-sm">Server</div>
+                                                </Dropdown.Link>
+
+                                                <Dropdown.Link href={route('l2sw.index')}>
+                                                    <div className="block px-4 py-2 text-sm">L2 Switch</div>
+                                                </Dropdown.Link>
+
+                                                <Dropdown.Link href={route('l3sw.index')}>
+                                                    <div className="block px-4 py-2 text-sm">L3 Switch</div>
+                                                </Dropdown.Link>
+
+                                                <Dropdown.Link href={route('wap.index')}>
+                                                    <div className="block px-4 py-2 text-sm">WAP</div>
+                                                </Dropdown.Link>
+                                            </Dropdown.Content>
+                                        </Dropdown>
+
+                                        <NavLink href={route('cctv.index')} active={route().current('cctv.index')}>
+                                            CCTV
+                                        </NavLink>
+
+                                        <NavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
+                                            Account Management
+                                        </NavLink>
+
+                                        <NavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
+                                            MS Account
+                                        </NavLink>
+
+                                        <NavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
+                                            Printer Password
+                                        </NavLink>
+
+                                        <NavLink href={route('departments.index')} active={route().current('departments.index')}>
+                                            Departments
+                                        </NavLink>
+                                    </>
                                 )}
 
                                 {(user.role === 'super admin' || user.role === 'hr') && (
@@ -139,7 +369,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     </NavLink>
                                 )}
 
-                                {(user.role === 'super admin') && (
+                                {user.role === 'super admin' && (
                                     <NavLink href={route('user.index')} active={route().current('user.index')}>
                                         Users
                                     </NavLink>
@@ -176,8 +406,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
 
                                     <Dropdown.Content>
                                         {(user.role === 'super admin' || user.role === 'admin') && (
-                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                            <Dropdown.Link href={route('profile.edit')}>
+                                                Profile
+                                            </Dropdown.Link>
                                         )}
+
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -188,19 +421,37 @@ export default function AuthenticatedLayout({ user, header, children }) {
 
                         <div className="-me-2 flex items-center sm:hidden">
                             <button
-                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
+                                onClick={() =>
+                                    setShowingNavigationDropdown(
+                                        (previousState) => !previousState
+                                    )
+                                }
                                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
                             >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <svg
+                                    className="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
                                     <path
-                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                        className={
+                                            !showingNavigationDropdown
+                                                ? 'inline-flex'
+                                                : 'hidden'
+                                        }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M4 6h16M4 12h16M4 18h16"
                                     />
+
                                     <path
-                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                        className={
+                                            showingNavigationDropdown
+                                                ? 'inline-flex'
+                                                : 'hidden'
+                                        }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
@@ -214,43 +465,59 @@ export default function AuthenticatedLayout({ user, header, children }) {
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                        <ResponsiveNavLink
+                            href={route('dashboard')}
+                            active={route().current('dashboard')}
+                        >
                             Dashboard
                         </ResponsiveNavLink>
 
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <ResponsiveNavLink className='' onClick={(e) => e.preventDefault()}>
+                                <ResponsiveNavLink onClick={(e) => e.preventDefault()}>
                                     Inventory
-                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    <svg
+                                        className="ms-1 h-4 w-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        />
                                     </svg>
                                 </ResponsiveNavLink>
                             </Dropdown.Trigger>
 
-                            <Dropdown.Content className=''>
-                                <div className='absolute right-4 w-[450px] shadow-lg rounded-lg'>
-                                    <div className=' bg-white dark:bg-blue-900 rounded-lg'>
+                            <Dropdown.Content>
+                                <div className="absolute right-4 w-[450px] shadow-lg rounded-lg">
+                                    <div className="bg-white dark:bg-blue-900 rounded-lg">
                                         <Dropdown.Link href={route('computers.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('computers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Computers
                                             </div>
                                         </Dropdown.Link>
+
                                         <Dropdown.Link href={route('serverUps.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('serverUps.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Server / UPS
                                             </div>
                                         </Dropdown.Link>
+
                                         <Dropdown.Link href={route('monitors.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('monitors.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Monitors
                                             </div>
                                         </Dropdown.Link>
+
                                         <Dropdown.Link href={route('printers.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('printers.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Printers
                                             </div>
                                         </Dropdown.Link>
+
                                         <Dropdown.Link href={route('tablets.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tablets.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Tablets
@@ -260,6 +527,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         <Dropdown.Link href={route('phones.index')}>
                                             <div className={`block px-4 py-2 text-sm leading-5 ${route().current('phones.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                                 Phones
+                                            </div>
+                                        </Dropdown.Link>
+
+                                        <Dropdown.Link href={route('tv.index')}>
+                                            <div className={`block px-4 py-2 text-sm leading-5 ${route().current('tv.index') ? 'text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
+                                                Televisions
                                             </div>
                                         </Dropdown.Link>
 
@@ -273,13 +546,21 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             </Dropdown.Content>
                         </Dropdown>
 
-                        {/* Network (Mobile Dropdown) */}
                         <Dropdown>
                             <Dropdown.Trigger>
                                 <ResponsiveNavLink onClick={(e) => e.preventDefault()}>
                                     Network
-                                    <svg className="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                    <svg
+                                        className="ms-1 h-4 w-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        />
                                     </svg>
                                 </ResponsiveNavLink>
                             </Dropdown.Trigger>
@@ -290,21 +571,25 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         Firewall
                                     </div>
                                 </Dropdown.Link>
+
                                 <Dropdown.Link href={route('server.index')}>
                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('server.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                         Server
                                     </div>
                                 </Dropdown.Link>
+
                                 <Dropdown.Link href={route('l2sw.index')}>
                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l2sw.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                         L2 Switch
                                     </div>
                                 </Dropdown.Link>
+
                                 <Dropdown.Link href={route('l3sw.index')}>
                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('l3sw.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                         L3 Switch
                                     </div>
                                 </Dropdown.Link>
+
                                 <Dropdown.Link href={route('wap.index')}>
                                     <div className={`block px-4 py-2 text-sm leading-5 ${route().current('wap.index') ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-500 dark:border-blue-500 group' : ''}`}>
                                         WAP
@@ -313,41 +598,79 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             </Dropdown.Content>
                         </Dropdown>
 
-                        {/* CCTV (Mobile Link) */}
-                        <ResponsiveNavLink href={route('cctv.index')} active={route().current('cctv.index')}>
+                        <ResponsiveNavLink
+                            href={route('cctv.index')}
+                            active={route().current('cctv.index')}
+                        >
                             CCTV
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('accountManagement.index')} active={route().current('accountManagement.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('accountManagement.index')}
+                            active={route().current('accountManagement.index')}
+                        >
                             Account Management
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('msAccount.index')} active={route().current('msAccount.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('msAccount.index')}
+                            active={route().current('msAccount.index')}
+                        >
                             MS Account
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('printerPassword.index')} active={route().current('printerPassword.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('printerPassword.index')}
+                            active={route().current('printerPassword.index')}
+                        >
                             Printer Password
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('departments.index')} active={route().current('departments.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('departments.index')}
+                            active={route().current('departments.index')}
+                        >
                             Deparments
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('accountUsers.index')} active={route().current('accountUsers.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('accountUsers.index')}
+                            active={route().current('accountUsers.index')}
+                        >
                             Employees
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('user.index')} active={route().current('user.index')}>
+
+                        <ResponsiveNavLink
+                            href={route('user.index')}
+                            active={route().current('user.index')}
+                        >
                             Users
                         </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                         <div className="px-4">
-                            <div className="font-medium text-base text-gray-800 dark:text-gray-200">{user.name}</div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                            <div className="font-medium text-base text-gray-800 dark:text-gray-200">
+                                {user.name}
+                            </div>
+
+                            <div className="font-medium text-sm text-gray-500">
+                                {user.email}
+                            </div>
                         </div>
 
                         <div className="mt-3 space-y-1">
                             {(user.role === 'super admin' || user.role === 'admin') && (
-                                <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('profile.edit')}>
+                                    Profile
+                                </ResponsiveNavLink>
                             )}
-                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
+
+                            <ResponsiveNavLink
+                                method="post"
+                                href={route('logout')}
+                                as="button"
+                            >
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -357,7 +680,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
 
             {header && (
                 <header className="bg-white dark:bg-slate-800 shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {header}
+                    </div>
                 </header>
             )}
 
