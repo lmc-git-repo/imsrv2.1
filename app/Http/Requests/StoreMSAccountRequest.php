@@ -22,9 +22,9 @@ class StoreMSAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             "email" => ['required', 'max:255'],
             "password" => ['required', 'max:255'],
+            "status" => ['required', 'in:Active,Inactive'],
         ];
     }
 }

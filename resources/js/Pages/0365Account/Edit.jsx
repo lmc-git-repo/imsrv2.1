@@ -1,3 +1,4 @@
+
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { Link, useForm } from '@inertiajs/react';
@@ -14,6 +15,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
         managementIp: selectedEdit.managementIp || "",
         email: selectedEdit.email || "",
         password: selectedEdit.password || "",
+        status: selectedEdit.status || "Active",
         _method: 'PUT',
     });
 
@@ -29,6 +31,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                 managementIp: selectedEdit.managementIp || "",
                 email: selectedEdit.email || "",
                 password: selectedEdit.password || "",
+                status: selectedEdit.status || "Active",
                 _method: 'PUT',
             });
             setHasChanges(false);
@@ -43,6 +46,7 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                 managementIp: selectedEdit.managementIp || "",
                 email: selectedEdit.email || "",
                 password: selectedEdit.password || "",
+                status: selectedEdit.status || "Active",
             };
             const isChanged = Object.keys(original).some(key => data[key] !== original[key]);
             setHasChanges(isChanged);
@@ -111,6 +115,24 @@ const EditModalComponent = ({ show, onClose, selectedEdit }) => {
                                 required 
                             />
                             <InputError message={errors.password} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="status" value="Account Status" />
+                            </div>
+                            <select
+                                id="status"
+                                name="status"
+                                value={data.status}
+                                onChange={(e) => setData("status", e.target.value)}
+                                required
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            >
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                            <InputError message={errors.status} className='mt-2' />
                         </div>
 
                         <div className='flex justify-end'>

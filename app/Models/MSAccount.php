@@ -9,7 +9,7 @@ class MSAccount extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-    protected $fillable = ['email', 'password', 'created_by', 'updated_by'];
+    protected $fillable = ['email', 'password', 'status', 'created_by', 'updated_by'];
     public function createdBy(){
         return $this->belongsTo(User::class, 'created_by');
     }

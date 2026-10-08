@@ -19,6 +19,7 @@ class MSAccountResource extends JsonResource
             'id' => $this->id,
             'email' => $this->email,
             'password' => $this->password,
+            'status' => $this->status,
             'createdBy' => $this->whenLoaded('createdBy', function () {
                 return new UserResource($this->createdBy);
             }),
@@ -26,7 +27,6 @@ class MSAccountResource extends JsonResource
                 return new UserResource($this->updatedBy);
             }),
             'created_at'=> (new Carbon($this->created_at))->format('Y-m-d'),
-            // 'updated_at'=> (new Carbon($this->updated_at))->format('Y-m-d'),
         ];
     }
 }

@@ -1,3 +1,4 @@
+
 import InputError from '@/Components/InputError';
 import { Link, useForm } from '@inertiajs/react';
 import { Modal, Button, Label, TextInput } from 'flowbite-react';
@@ -12,6 +13,7 @@ const CreateModalComponent = ({ show, onClose }) => {
     const {data, setData, post, errors, reset} = useForm({
         email: '',
         password: '',
+        status: 'Active',
     })
     const [loading, setLoading] = useState(false);
 
@@ -68,6 +70,24 @@ const CreateModalComponent = ({ show, onClose }) => {
                                 required 
                             />
                             <InputError message={errors.password} className='mt-2' />
+                        </div>
+
+                        <div>
+                            <div className="mb-2 block">
+                                <Label htmlFor="status" value="Account Status" />
+                            </div>
+                            <select
+                                id="status"
+                                name="status"
+                                value={data.status}
+                                onChange={(e) => setData("status", e.target.value)}
+                                required
+                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            >
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                            <InputError message={errors.status} className='mt-2' />
                         </div>
 
                         <div className='flex justify-end'>
